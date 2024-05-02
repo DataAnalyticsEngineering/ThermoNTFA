@@ -1,16 +1,17 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# # Thermo-mechanical NTFA: Generate Plots
-#
-# ## Imports:
+"""
+Created on Fri Jul 28 10:27:52 2023
 
-# +
+@author: fritzen
+"""
 import os
 
 import numpy as np
 import h5py
 import matplotlib
 import matplotlib.pyplot as plt
+#from matplotlib import cbook
 from matplotlib import cm
 from matplotlib.colors import LightSource
 from thermo_ntfa.tabular_interpolation import TabularInterpolation
@@ -35,11 +36,7 @@ def Vec2Tensor(vec):
     return A
 
 
-# -
-
-# ## Read tabular data for NTFA matrices from file
-
-# + read the NTFA data into tabular interpolatoin objects
+#%% read the NTFA data into tabular interpolatoin objects
 mode_file_name = os.path.join("data", "simple_3d_rve_B1-B6_16x16x16_10samples_fix.h5")
 A_bar = TabularInterpolation()
 A_bar.InitH5(mode_file_name, "/ms_9p/dset0_ntfa/temperatures", "/ms_9p/dset0_ntfa/A_bar", transpose=(2, 0, 1))
@@ -62,12 +59,15 @@ A_wsc.data = A_wsc.data[:, :, :(7 + N_modes)]
 
 for I in [A_bar, A_cu, A_wsc]:
     I.dim = I.data.shape
-# -
 
-# ## Analysis of the two-scale simulation
-# ### Determine an element in the notch:
-
-# + Analysis of the two-scale simulation
+#%% Analysis of the two-scale simulation
+"""##############################################################################
+# Analysis of the two-scale simulation
+# - determine an element in the notch
+# - extract the strain, temperature, stress, qbar, xi, sig_cu, sig_wsc history
+# - pass the strain, temperature history to FANS as BC
+# - Compare the results
+##############################################################################"""
 F = h5py.File(os.path.join("data", "NTFA293K_fine_temp_293-800.h5"), "r")
 
 # step 1: find the element with the crucial pieces of information
@@ -87,13 +87,10 @@ for i_el in range(n_el):
 dist = np.linalg.norm(el_center - np.array([5., 0, 2.5])[None, :], axis=1)
 i_min = np.argmin(dist)
 print(f"element closest to [5., 0., 2.5]: {i_min} with element center {el_center[i_min]}")
-# -
 
-# ### Extract the strain, temperature, stress, qbar, xi, sig_cu, sig_wsc history:
-#
+#%% Read the history for the integration point of interest
 # vicinity of the notch (at the center of the specimen)
 
-# + Read the history for the integration point of interest
 n_inc = 16
 theta = np.zeros(n_inc + 1)
 eps = np.zeros((n_inc + 1, 6))
@@ -106,7 +103,7 @@ zeta = np.zeros((n_inc + 1, N_modes + 7))
 idat_start = np.array(F["/Data/step1/n_iD"][:gp_idx[i_min]]).sum()
 idat_end = idat_start + F["/Data/step1/n_iD"][gp_idx[i_min]]
 n_gp = F["/Data/step1/n_gp"][0]
-theta[0] = 293
+theta[0] = 293.
 for i in range(n_inc):
     j = i + 1
     theta[j] = np.array(F[f"/temperature{i + 1}"])[0]
@@ -123,11 +120,9 @@ for i in range(n_inc):
     sig_cu[j, :] = A_cu.Interpolate(theta[j]) @ zeta[j, :]
     sig_wsc[j, :] = A_wsc.Interpolate(theta[j]) @ zeta[j, :]
 F.close()
-# -
+# compute some stress information
 
-# ### Compute and plot some stress information:
-
-# + some plots
+#%% some plots
 sig_h = sig[:, :3].sum(axis=1) / 3
 sig_h_cu = sig_cu[:, :3].sum(axis=1) / 3
 sig_h_wsc = sig_wsc[:, :3].sum(axis=1) / 3
@@ -190,7 +185,7 @@ plt.tight_layout()
 plt.savefig("notchtest_fine_sigyy_ntfa.pdf", format="pdf")
 plt.show()
 
-# +
+#%%
 fig, ax = plt.subplots(1, 2, figsize=(15, 7))
 ax[0].plot(t, sig_III_wsc / 1000, '-.', color='blue', label=r"$\overline{\sigma}_{\sf WSC, 3}$")
 ax[0].plot(t, sig_II_wsc / 1000, '--', color='blue', label=r"$\overline{\sigma}_{\sf WSC, 2}$")
@@ -207,11 +202,8 @@ ax[0].text(1.05, 275, "Entlastung\n& Abkühlung")
 ax[0].annotate("", xy=(1.25, 400), xytext=(1, 400),
                arrowprops=dict(facecolor='black', shrink=0.0, width=2, headwidth=12, headlength=12))
 
-
-def yield_cu(x):
-    return (1.12133e+02 * x + 3.49810e+04 + 1.53393e+05 * np.tanh(
-        (x / 1000 + -6.35754e-01) / -2.06958e-01)) * (x < 1000) + 1200. * (x >= 1000.0)
-
+yield_cu = lambda x: (1.12133e+02 * x + 3.49810e+04 + 1.53393e+05 * np.tanh(
+    (x / 1000 + -6.35754e-01) / -2.06958e-01)) * (x < 1000) + 1200. * (x >= 1000.0)
 
 sig_y = np.zeros_like(t)
 for i, T in enumerate(theta):
@@ -233,11 +225,9 @@ ax[1].set_ylabel(r"Vergleichsspannung und Fließspannung [MPa]")
 plt.tight_layout()
 plt.savefig("notchtest_fine_sigeq_ntfa.pdf", format="pdf")
 plt.show()
-# -
 
-# ### Pass the strain, temperature history to FANS as BC
+#%%
 
-# +
 F = h5py.File(os.path.join("data", "daten_kerbgrund.h5"), "w")
 F.create_dataset("/sig", data=sig)
 F.create_dataset("/sig_cu", data=sig_cu)
@@ -255,14 +245,14 @@ F.close()
 
 # ax2.plot(eps[:,1], sig_cu[:,1]/1000, '--', color='red')
 # ax2.plot(eps[:,1], sig_wsc[:,1]/1000, '-.', color='blue')
-# -
 
 
-# ### Compare the results:
-#
-# #### Load data from hdf5 files:
-
-# + Analysis of the training directions of the temperature range
+#%% Analysis of the training directions of the temperature range
+"""##############################################################################
+# Load data from hdf5 files
+# - compare efficiency of the interpolation over the temperature
+# - show select stress-strain curves
+##############################################################################"""
 # file_name = os.path.join("data", "all_results_ms9p_16x16x16_10s_N24.h5")
 file_name = os.path.join("data", "all_results_ms9p_16x16x16_100s_N24.h5")
 with h5py.File(file_name, "r") as F:
@@ -276,11 +266,9 @@ with h5py.File(file_name, "r") as F:
     ntfa_sig_wsc = np.array(F["/ntfa/sig1"])
     ntfa_q = np.array(F["/ntfa/q"])
     ntfa_xi = np.array(F["/ntfa/xi"])
-# -
 
-# #### Compare efficiency of the interpolation over the temperature:
+#%% rel. error in sig_bar for 300 and 1300 K
 
-# + rel. error in sig_bar for 300 and 1300 K
 fig, axx = plt.subplots(1, 2, figsize=(15, 7))
 ct = 0
 for i_T, T in zip((0, 9), (300., 1300.)):
@@ -300,7 +288,8 @@ for i_T, T in zip((0, 9), (300., 1300.)):
     # fig.savefig( f'rel_error_ms9p_T{T:.0f}.pdf', format='pdf', pad_inches=0.0)
 plt.savefig("rel_err_sig_10s.pdf", format="pdf")
 plt.show()
-# -
+#%%
+
 fig, axx = plt.subplots(1, 2, figsize=(15, 7))
 ct = 0
 for i_T, T in zip((0, 9), (300., 1300.)):
@@ -321,7 +310,7 @@ for i_T, T in zip((0, 9), (300., 1300.)):
 plt.savefig("rel_err_sig_wsc_10s.pdf", format="pdf")
 plt.show()
 
-# + plot for loadcase 2 the relevant curves
+#%% plot for loadcase 2 the relevant curves
 err = np.zeros((theta.size, fans_sig.shape[2]))
 err0 = np.zeros_like(err)
 err1 = np.zeros_like(err)
@@ -352,7 +341,7 @@ for i_T, T in enumerate(theta):
     err_h[i_T, :] = dS[:, :3].sum(axis=1) / 3. / 1000.
     err_eq[i_T, :] = np.maximum(0, np.linalg.norm(dS, axis=1) ** 2 - 3 * err_h[i, :] ** 2) * np.sqrt(1.5) / 1000.
 
-# + 3D Plots
+#%% 3D Plots
 X = np.linspace(0, 1, fans_sig.shape[2])
 Y = theta
 XX, YY = np.meshgrid(X, Y)
@@ -392,16 +381,14 @@ fig.tight_layout()
 plt.savefig("surface_plots_err_sig_sig_wsc.pdf", format="pdf")
 plt.show()
 
+
 # ax[0].plot(theta, err, '-', color='black', label=r"$e_{\overline{\sigma}}$ [%]")
 # ax[0].plot(theta, err0, '--', color='red', label=r"$e_{\overline{\sigma},\sf Cu}$ [%]")
 # ax[0].plot(theta, err1, '-.', color='blue', label=r"$e_{\overline{\sigma},\sf Cu}$ [%]")
 
 # ax[1].plot(theta, err_eq, '-', color='black', label=r"$e_{\overline{\sigma}},\sf eq$ [MPa]")
-# -
 
-# #### Show select stress-strain curves: ????
-
-# +
+#%%
 with h5py.File(os.path.join("data", "daten_kerbgrund_JH_fixed.h5"), "r") as F:  # daten_kerbgrund_NTFA_FE.h5
     eps = np.array(F["/eps"])
     ntfa_S = np.array(F["/sig"]) / 1e3

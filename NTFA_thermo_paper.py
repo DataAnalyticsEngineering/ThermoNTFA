@@ -1,20 +1,23 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-"""
-Created on Thu Apr 18 22:07:08 2024
+# # Thermo-mechanical NTFA: Examples from paper
+#
+# ## Imports:
 
-@author: fritzen
-"""
-
+import os
 import numpy as np
 import h5py
 import matplotlib.pyplot as plt
 
+# ## Twoscale loading plot:
+
+# +
 dpi = 400
 force = []
 temp = []
-for s in ('coarse', 'medium', 'fine'):
-    with h5py.File(f"NTFA293K_{s}_temp_293-800.h5", mode="r") as F:
+for s in ('fine',):  # 'coarse', 'medium', 
+    file_name = os.path.join("data", f"NTFA293K_{s}_temp_293-800.h5")
+    with h5py.File(file_name, mode="r") as F:
         force.append(np.array(F["force28"])/1e6)
         temp.append(np.array(F["temperature28"]))
 
@@ -43,8 +46,11 @@ for f, T in zip((force), (temp)):
     nhalf=int((t.size+1)/2)
     labels = True
 fig.savefig('twoscale_loading.pdf')
+plt.show()
+# -
 
-#%%
+# ## Plot 2:
+
 fig, ax = plt.subplots(1, 1, dpi=dpi)
 ax.plot((1., 1.), (-0.05, 1.05), '--', color='gray', lw=2, zorder=4)
 ax.fill_between((0., 1.), (0., 1.), (0., 0.), color='blue', alpha=0.2, zorder=2)
@@ -57,9 +63,12 @@ ax.set_xlabel('time [s]')
 ax.set_ylabel(r'rel. stretch $u/u_\mathrm{max}$ and force $F/F_\mathrm{max}$ [-]')
 ax.grid(zorder=3)
 fig.savefig('twoscale_loading.pdf')
+plt.show()
 
-#%%
-with h5py.File(f"test_coarse.h5", mode="r") as F:
+# ## Plot:
+
+file_name = os.path.join("data", f"test_coarse.h5")
+with h5py.File(file_name, mode="r") as F:
     u = np.array(F["displacement1/X"])
     uy = u[1::2]
     D = np.array(F["DATA16/cData"]).reshape((-1, 12))
@@ -69,9 +78,12 @@ with h5py.File(f"test_coarse.h5", mode="r") as F:
     print('s_yy mean=', sig[:,2].mean())
     f=np.array(F["force16"])[:17]
     plt.plot(f)
+    plt.show()
 
-#%%
-with h5py.File(f"test_coarse.h5", mode="r") as F:
+# ## Plot:
+
+file_name = os.path.join("data", f"test_coarse.h5")
+with h5py.File(file_name, mode="r") as F:
     d=[]
     for i in range(16):
         D = np.array(F[f"DATA{i+1}/cData"])[:,6:]
@@ -82,3 +94,4 @@ with h5py.File(f"test_coarse.h5", mode="r") as F:
     # f = np.array(F["force32"])
     # print(f)
     # plt.plot(f)
+    plt.show()

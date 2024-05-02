@@ -48,7 +48,7 @@ stiffness_wsc = lambda x: bulk_modulus_wsc(x) * IxI + 2. * shear_modulus_wsc(x) 
 # fname = "new/simple_3d_rve_B1-B6_8x8x8_10samples.h5"
 # fname = "new/simple_3d_rve_4x4x4_2samples_new.h5"
 # fname = "new/simple_3d_rve_B1-B6_8x8x8_10samples.h5"
-fname = "fix/simple_3d_rve_B1-B6_16x16x16_10samples_fix.h5"
+fname = "data/simple_3d_rve_B1-B6_16x16x16_10samples_fix.h5"
 basename = "/ms_9p/dset0_ntfa/"
 
 F = h5py.File(fname, "r")
@@ -134,7 +134,7 @@ xx = alpha*x0+(1-alpha)*x1
 # print('error:', xx/np.linalg.norm(x))
 
 # print((C_bar[0,:,:]), tau_theta[0,:])
-fname = f"modes/ms9p_fix_ntfa16_B1-6_10s_N{Nmax}.h5"
+fname = f"data_new/ms9p_fix_ntfa16_B1-6_10s_N{Nmax}.h5"
 F = h5py.File(fname, "w")
 F.create_dataset("SIG_phases", data=sig_ph)
 F.create_dataset("C_phases", data=C_ph)
