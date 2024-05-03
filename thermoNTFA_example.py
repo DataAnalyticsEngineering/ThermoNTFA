@@ -407,7 +407,7 @@ for k in [0, 1, 2, 3, 4]:
     ax[0].text(.55, 1, 'plastic matrix', backgroundcolor='#004191', color='white')
     ax[1].text(.55, 1, 'elastic particles', backgroundcolor='#004191', color='white')
     fig.tight_layout()
-    plt.savefig(f'rel_error_uniaxial_T{temp:.0f}.jpg')
+    plt.savefig(os.path.join("results", f"rel_error_uniaxial_T{temp:.0f}.jpg"))
     # ax[0].plot(t[:], err_sig[:]*100)
     # ax[1].plot(t[:], err_sig0[:]*100)
     # ax[2].plot(t[:], err_sig1[:]*100)

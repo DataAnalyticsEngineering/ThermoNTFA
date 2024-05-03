@@ -6,7 +6,6 @@
 
 # +
 import os
-
 import numpy as np
 import h5py
 import matplotlib
@@ -94,7 +93,7 @@ print(f"element closest to [5., 0., 2.5]: {i_min} with element center {el_center
 # vicinity of the notch (at the center of the specimen)
 
 # + Read the history for the integration point of interest
-n_inc = 16
+n_inc = max([int(key.replace("DATA", "")) for key in F.keys() if key.startswith("DATA")])
 theta = np.zeros(n_inc + 1)
 eps = np.zeros((n_inc + 1, 6))
 sig = np.zeros((n_inc + 1, 6))
@@ -109,7 +108,7 @@ n_gp = F["/Data/step1/n_gp"][0]
 theta[0] = 293
 for i in range(n_inc):
     j = i + 1
-    theta[j] = np.array(F[f"/temperature{i + 1}"])[0]
+    theta[j] = np.array(F[f"/temperature{j}"])[j]
     cdat = np.array(F[f"/Data/step{i + 1}/cData"][gp_idx[i_min]])
     # cdat = np.array( F[f"/Data/step{i+1}/cData"]).reshape((-1,12))
     eps[j, :] = cdat[:6]
@@ -120,8 +119,8 @@ for i in range(n_inc):
     zeta[j, :6] = eps[j, :]
     zeta[j, 6] = 1
     zeta[j, 7:] = xi[j, :]
-    sig_cu[j, :] = A_cu.Interpolate(theta[j]) @ zeta[j, :]
-    sig_wsc[j, :] = A_wsc.Interpolate(theta[j]) @ zeta[j, :]
+    sig_cu[j, :] = A_cu.interpolate(theta[j]) @ zeta[j, :]
+    sig_wsc[j, :] = A_wsc.interpolate(theta[j]) @ zeta[j, :]
 F.close()
 # -
 
@@ -187,7 +186,7 @@ ax[1].set_ylabel(
     r"$\overline{\sigma}_{\sf yy}, \overline{\sigma}_{\sf Cu, yy}, \overline{\sigma}_{\sf WSC, yy}$  [MPa]")
 ax2.set_ylabel(r"$\overline{Q}$ [-]")
 plt.tight_layout()
-plt.savefig("notchtest_fine_sigyy_ntfa.pdf", format="pdf")
+plt.savefig(os.path.join("results", "notchtest_fine_sigyy_ntfa.pdf"), format="pdf")
 plt.show()
 
 # +
@@ -231,7 +230,7 @@ ax[1].grid()
 ax[1].set_xlabel(r"$t$ [s]")
 ax[1].set_ylabel(r"Vergleichsspannung und Fließspannung [MPa]")
 plt.tight_layout()
-plt.savefig("notchtest_fine_sigeq_ntfa.pdf", format="pdf")
+plt.savefig(os.path.join("results", "notchtest_fine_sigeq_ntfa.pdf"), format="pdf")
 plt.show()
 # -
 
@@ -255,6 +254,7 @@ F.close()
 
 # ax2.plot(eps[:,1], sig_cu[:,1]/1000, '--', color='red')
 # ax2.plot(eps[:,1], sig_wsc[:,1]/1000, '-.', color='blue')
+print(theta)
 # -
 
 
@@ -278,6 +278,29 @@ with h5py.File(file_name, "r") as F:
     ntfa_xi = np.array(F["/ntfa/xi"])
 # -
 
+file_name = os.path.join("data", "daten_kerbgrund_32s_fans.h5")
+with h5py.File(file_name, "r") as F:
+    eps = np.array(F["/eps"])
+    theta = np.array(F["/theta"])
+    fans_sig = np.array(F["/fe/sig"])
+    fans_sig_cu = np.array(F["/fe/sig0"])
+    fans_sig_wsc = np.array(F["/fe/sig1"])
+    ntfa_sig = np.array(F["/sig"])
+    ntfa_sig_cu = np.array(F["/sig_cu"])
+    ntfa_sig_wsc = np.array(F["/sig_wsc"])
+    #ntfa_q = np.array(F["/ntfa/q"])
+    #ntfa_xi = np.array(F["/ntfa/xi"])
+
+for i in [0, 1, 2, 3, 4, 5]:
+    plt.plot(eps[:,1] * 100., fans_sig[:,i] / 1000, 'k-o')
+    plt.plot(eps[:,1] * 100., ntfa_sig[:,i] / 1000, 'r--.')
+plt.legend(['FANS', 'NTFA'])
+plt.xlabel(r'$\varepsilon_{yy}$ [%]')
+plt.ylabel(r'$\sigma$ [MPa]')
+plt.grid()
+plt.tight_layout()
+plt.show()
+
 # #### Compare efficiency of the interpolation over the temperature:
 
 # + rel. error in sig_bar for 300 and 1300 K
@@ -298,7 +321,7 @@ for i_T, T in zip((0, 9), (300., 1300.)):
     ax.legend()
     ax.grid()
     # fig.savefig( f'rel_error_ms9p_T{T:.0f}.pdf', format='pdf', pad_inches=0.0)
-plt.savefig("rel_err_sig_10s.pdf", format="pdf")
+plt.savefig(os.path.join("results", "rel_err_sig_10s.pdf"), format="pdf")
 plt.show()
 # -
 fig, axx = plt.subplots(1, 2, figsize=(15, 7))
@@ -318,7 +341,7 @@ for i_T, T in zip((0, 9), (300., 1300.)):
     ax.legend()
     ax.grid()
     # fig.savefig( f'rel_error_ms9p_T{T:.0f}.pdf', format='pdf', pad_inches=0.0)
-plt.savefig("rel_err_sig_wsc_10s.pdf", format="pdf")
+plt.savefig(os.path.join("results", "rel_err_sig_wsc_10s.pdf"), format="pdf")
 plt.show()
 
 # + plot for loadcase 2 the relevant curves
@@ -389,7 +412,7 @@ ax.set_zlabel(r"rel. Fehler in $\overline{\sigma}_{\sf WSC}$ [%]")
 
 fig.tight_layout()
 
-plt.savefig("surface_plots_err_sig_sig_wsc.pdf", format="pdf")
+plt.savefig(os.path.join("results", "surface_plots_err_sig_sig_wsc.pdf"), format="pdf")
 plt.show()
 
 # ax[0].plot(theta, err, '-', color='black', label=r"$e_{\overline{\sigma}}$ [%]")
@@ -433,6 +456,7 @@ with h5py.File(os.path.join("data", "daten_kerbgrund_JH_fixed.h5"), "r") as F:  
 #         for k in ["/fe/sig", "/fe/sig0", "/fe/sig1"]:
 #             F.create_dataset(k, data=G[k])
 
+# +
 fig, ax = plt.subplots(1, 2, figsize=(15, 7))
 for i in range(6):
     if (i == 0):
@@ -468,5 +492,5 @@ ax.grid()
 ax.set_xlabel("Lastschritt-Nr. [-]")
 ax.set_ylabel(r"rel. Fehler in $\overline{\sigma}, \overline{\sigma}_{\sf WSC}$ [%]")
 fig.tight_layout()
-plt.savefig("kerbgrund_err_sig_sig_wsc.pdf", format="pdf")
+plt.savefig(os.path.join("resuts", "kerbgrund_err_sig_sig_wsc.pdf"), format="pdf")
 plt.show()

@@ -1,10 +1,10 @@
 # Data directory
-./data
-!./data/.gitkeep
+/data
+!/data/.gitkeep
 
 # Results directory
-./results
-!./results/.gitkeep
+/results
+!/results/.gitkeep
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

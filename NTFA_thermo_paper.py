@@ -45,7 +45,7 @@ for f, T in zip((force), (temp)):
         ax2.legend(loc=(0.65,0.7))
     nhalf=int((t.size+1)/2)
     labels = True
-fig.savefig('twoscale_loading.pdf')
+fig.savefig(os.path.join("results", "twoscale_loading.pdf"))
 plt.show()
 # -
 
@@ -62,7 +62,7 @@ ax.text(1.1, 0.1, 'force unloading', color='red', bbox=dict(facecolor='white'))
 ax.set_xlabel('time [s]')
 ax.set_ylabel(r'rel. stretch $u/u_\mathrm{max}$ and force $F/F_\mathrm{max}$ [-]')
 ax.grid(zorder=3)
-fig.savefig('twoscale_loading.pdf')
+fig.savefig(os.path.join("results", "twoscale_loading.pdf"))
 plt.show()
 
 # ## Plot:

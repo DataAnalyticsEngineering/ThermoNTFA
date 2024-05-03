@@ -1,0 +1,237 @@
+#!/usr/bin/env pyth1on3
+# -*- coding: utf-8 -*-
+"""
+Created on Wed Jul  5 13:35:42 2023
+
+@author: fritzen
+"""
+import os
+
+import numpy as np
+import matplotlib.pyplot as plt
+import h5py
+import sys
+
+from itertools import count
+
+#%%
+
+# fname = "/home/fritzen/calc/dvs/NTFAthermo_paper/modes/simple_3d_rve_B3_4x4x4_10samples.h5"
+# fname = "/home/fritzen/calc/dvs/NTFAthermo_paper/modes/simple_3d_rve_B1-6_4x4x4_10samples.h5"
+# fname = "/home/fritzen/calc/dvs/NTFAthermo_paper/modes/simple_3d_rve_B1-B6_16x16x16_2samples.h5"
+# fname = "/home/fritzen/calc/dvs/NTFAthermo_paper/new/simple_3d_rve_4x4x4_2samples_new.h5"
+# fname = "/home/fritzen/calc/dvs/NTFAthermo_paper/fix/simple_3d_rve_B1-B6_16x16x16_10samples_fix.h5"
+file_name = os.path.join("data", "simple_3d_rve_B1-B6_16x16x16_100samples_fix.h5")
+group_name = "/ms_9p/dset0_sim"
+suffix = "_fix16_N24_100s"
+prefix = "loadcases/"
+N_modes = 24
+
+# open the file an get the keys --> extract temperatures!
+F = h5py.File(file_name, "r")
+keylist = F[group_name].keys()
+
+temp_list = []
+temp_str_list = []
+for k in keylist:
+    if k[:13] == "hom_response_":
+        temp_list.append(float(k[13:20]))
+        temp_str_list.append(k[13:20])
+
+# get loadings:
+loadcases = np.array(F[group_name + "/loadcases_" + temp_str_list[0]])[-1, :, :].T
+# find proportional loadings, figure direction and amplitude:
+fans_S = []
+fans_S0 = []
+fans_S1 = []
+for t_str in temp_str_list:
+    fans_S.append(np.transpose(np.array(F[group_name + "/hom_response_" + t_str]), axes=(2, 0, 1)))
+    fans_S0.append(np.transpose(np.array(F[group_name + "/hom_response0_" + t_str]), axes=(2, 0, 1)))
+    fans_S1.append(np.transpose(np.array(F[group_name + "/hom_response1_" + t_str]), axes=(2, 0, 1)))
+F.close()
+
+#%%
+ntfa_S = []
+ntfa_S0 = []
+ntfa_S1 = []
+# modefn="modes/ms9p_ntfa4_B1-6_2s_N12.h5"
+modefn = "modes/ms9p_fix_ntfa16_B1-6_10s_N24.h5"
+# modefn ="modes/ms9p_ntfa16_B1-6_N12_b.h5"
+orig_stdout = sys.stdout
+amplitudes = np.ones(loadcases.shape[0])
+for n, d, amp in zip(count(), loadcases, amplitudes):
+    for T, T_str in zip(temp_list, temp_str_list):
+        f = open(f"{prefix}loadcase{n + 1}_T{T_str}{suffix}.inp", "w")
+        sys.stdout = f
+        print(f"output=\"loadcase{n + 1}_T{T_str}{suffix}.h5\";")
+        print(f"modes=\"{modefn}\";")
+        print(f"epsilon=[{d[0]}, {d[1]}, {d[2]}, {d[3]}, {d[4]}, {d[5]}];")
+        print(f"amplitude={amp};")
+        print("totaltime=1;")
+        print("deltat=0.1;")
+        print(f"tstart={T};")
+        print(f"tend={T};")
+        print("hardeningmodulus=500000.0;")
+        # print("hardeningmodulus=20000000.0;")
+        print("elastic=false;")
+        print("relaxthermo=false;")
+        print("linhardening=true;")
+        f.close()
+        sys.stdout = orig_stdout
+
+#%%
+
+# Post-process results
+
+ntfa_eps = np.zeros((len(temp_list), fans_S[0].shape[0], fans_S[0].shape[1], fans_S[0].shape[2]))
+ntfa_S = np.zeros((len(temp_list), fans_S[0].shape[0], fans_S[0].shape[1], fans_S[0].shape[2]))
+ntfa_S0 = np.zeros((len(temp_list), fans_S[0].shape[0], fans_S[0].shape[1], fans_S[0].shape[2]))
+ntfa_S1 = np.zeros((len(temp_list), fans_S[0].shape[0], fans_S[0].shape[1], fans_S[0].shape[2]))
+ntfa_q = np.zeros((len(temp_list), fans_S[0].shape[0], fans_S[0].shape[1]))
+ntfa_xi = np.zeros((len(temp_list), fans_S[0].shape[0], fans_S[0].shape[1], N_modes))
+ct = 0
+print(ntfa_S1.shape)
+for i_T, (T, T_str) in enumerate(zip(temp_list, temp_str_list)):
+    for n, d, amp in zip(count(), loadcases, amplitudes):
+        ntfa_fname = f"{prefix}loadcase{n + 1}_T{T_str}{suffix}.h5"
+        # print(ntfa_fname)
+        F_ntfa = h5py.File(ntfa_fname, "r")
+        # get references values:
+
+        ntfa_eps[i_T, n, :, :] = np.array(F_ntfa["/eps"])
+        ntfa_S[i_T, n, :, :] = np.array(F_ntfa["/sig"])
+        ntfa_S0[i_T, n, :, :] = np.array(F_ntfa["/sig0"])
+        ntfa_S1[i_T, n, :, :] = np.array(F_ntfa["/sig1"])
+        ntfa_q[i_T, n, :] = np.array(F_ntfa["/sdv"][:, 0])
+        ntfa_xi[i_T, n, :] = np.array(F_ntfa["/sdv"][:, 1:(1 + N_modes)])
+
+        F_ntfa.close()
+#     print(ntfa_S1[i_T][5])
+print(ntfa_S1[0][5])
+print(ntfa_S1[9][5])
+
+#%%
+err = np.linalg.norm(fans_S - ntfa_S, axis=(2, 3)) / np.linalg.norm(fans_S, axis=(2, 3))
+err0 = np.linalg.norm(fans_S0 - ntfa_S0, axis=(2, 3)) / np.linalg.norm(fans_S, axis=(2, 3))
+err1 = np.linalg.norm(fans_S1 - ntfa_S1, axis=(2, 3)) / np.linalg.norm(fans_S, axis=(2, 3))
+
+#%%
+i_T = 9
+for n in range(6):
+    fig, ax1 = plt.subplots(1, 1, figsize=(10, 8))
+    # fig, ax2 = plt.subplots(1,1,figsize=(10,8))
+    # fig, ax3 = plt.subplots(1,1,figsize=(10,8))
+    # for i, dp in zip( (0,),  ('--',) ):
+    for i, dp in enumerate(("-", "--", "-.", "-..", "-", "-.")):
+        ax1.plot(fans_S[i_T][n][:, i], dp, color='black')
+        # ax1.plot( (fans_S[i_T][n][:,i]-ntfa_S[i_T][n][:,i])/1e3, dp, color='black' )
+        # print(fans_S[i_T][n][:,i]-ntfa_S[i_T][n][:,i])
+        ax1.plot(ntfa_S[i_T][n][:, i], dp, color='blue')
+        # ax2.plot( fans_S0[i_T][n][:,i], dp, color='black' )
+        # ax2.plot( ntfa_S0[i_T][n][:,i], dp, color='blue' )
+        # ax1.plot( fans_S1[i_T][n][:,i], dp, color='black' )
+        # ax1.plot( ntfa_S1[i_T][n][:,i], dp, color='blue' )
+
+err
+
+#%%
+n = 5
+for i_T in range(10):
+    fig, ax1 = plt.subplots(1, 1, figsize=(10, 8))
+    # fig, ax2 = plt.subplots(1,1,figsize=(10,8))
+    # fig, ax3 = plt.subplots(1,1,figsize=(10,8))
+    for i, dp in zip((3,), ('-',)):
+        # for i, dp in enumerate(("-", "--", "-.", "-..", "-","-.")):
+        ax1.plot(fans_S[i_T][n][:, 0], dp, color='black')
+        # ax1.plot( (fans_S[i_T][n][:,i]-ntfa_S[i_T][n][:,i])/1e3, dp, color='black' )
+        # print(fans_S[i_T][n][:,i]-ntfa_S[i_T][n][:,i])
+        ax1.plot(ntfa_S[i_T][n][:, 0], dp, color='blue')
+        # ax1.plot( ntfa_q[i_T][n][:], '-', color='red', lw=2)
+        # ax2.plot( fans_S0[i_T][n][:,i], dp, color='black' )
+        # ax2.plot( ntfa_S0[i_T][n][:,i], dp, color='blue' )
+        # ax1.plot( fans_S1[i_T][n][:,i], dp, color='black' )
+        # ax1.plot( ntfa_S1[i_T][n][:,i], dp, color='blue' )
+#%%
+
+fig, axx = plt.subplots(1, 2, figsize=(15, 7))
+ct = 0
+for i_T, T in zip((0, 9), (300., 1300.)):
+    ax = axx[ct]
+    ct += 1
+    ax.set_title(r'Relativer Fehler, $\bar{\sigma}$, T=%.1f K' % T)
+    x = np.linspace(0, 1, 11)
+    ax.set_xlabel('relative Belastung [-]')
+    ax.set_ylabel(r'relativer Fehler in $\bar{\sigma}$ [%]')
+    for n in range(6):
+        myerr = np.linalg.norm(fans_S[i_T][n][:, :] - ntfa_S[i_T][n][:, :], axis=1) \
+                * 100. / np.linalg.norm(fans_S[i_T][n][:, :], axis=1)
+        ax.plot(x, myerr, lw=2, label=f'Last {n + 1}')
+        # print(np.max(myerr))
+    ax.legend()
+    ax.grid()
+    # fig.savefig( f'rel_error_ms9p_T{T:.0f}.pdf', format='pdf', pad_inches=0.0)
+plt.savefig("rel_err_sig_10s.pdf", format="pdf")
+#%%
+
+fig, axx = plt.subplots(1, 2, figsize=(15, 7))
+ct = 0
+for i_T, T in zip((0, 9), (300., 1300.)):
+    ax = axx[ct]
+    ct += 1
+    ax.set_title(r'Relativer Fehler, $\bar{\sigma}_{\rm WSC}$, T=%.1f K' % T)
+    x = np.linspace(0, 1, 11)
+    ax.set_xlabel('relative Belastung [-]')
+    ax.set_ylabel(r'relativer Fehler in $\bar{\sigma}_{\sf WSC}$ [%]')
+    for n in range(6):
+        myerr = np.linalg.norm(fans_S1[i_T][n][:, :] - ntfa_S1[i_T][n][:, :], axis=1) \
+                * 100. / np.linalg.norm(fans_S1[i_T][n][:, :], axis=1)
+        # myerr[0] = 0.
+        ax.plot(x, myerr, lw=2, label=f'Last {n + 1}')
+    ax.legend()
+    ax.grid()
+    # fig.savefig( f'rel_error_ms9p_T{T:.0f}.pdf', format='pdf', pad_inches=0.0)
+plt.savefig("rel_err_sig_wsc_10s.pdf", format="pdf")
+
+#%%
+F = h5py.File("all_results_ms9p_16x16x16_100s_N24.h5", "w")
+
+F.create_dataset("/eps", data=ntfa_eps)
+F.create_group("/ntfa")
+F.create_group("/fans")
+F.create_dataset("/temperature", data=np.array(temp_list))
+F.create_dataset("/fans/sig", data=fans_S)
+F.create_dataset("/fans/sig0", data=fans_S0)
+F.create_dataset("/fans/sig1", data=fans_S1)
+F.create_dataset("/ntfa/sig", data=ntfa_S)
+F.create_dataset("/ntfa/sig0", data=ntfa_S0)
+F.create_dataset("/ntfa/sig1", data=ntfa_S1)
+F.create_dataset("/ntfa/q", data=ntfa_q)
+F.create_dataset("/ntfa/xi", data=ntfa_xi)
+
+F.close()
+# fans_E = np.array(F["ms_9p/dset0_sim/loadcases_0300.00"])[:,20:30]
+# fans_S = np.array(F["ms_9p/dset0_sim/hom_response_0300.00"])[:,20:30]
+# fans_S0 = np.array(F["ms_9p/dset0_sim/hom_response0_0300.00"])[:,20:30]
+# fans_S1 = np.array(F["ms_9p/dset0_sim/hom_response1_0300.00"])[:,20:30]
+# F.close()
+# fname = "/home/fritzen/calc/dvs/NTFAthermo_paper/ntfa_hull_res.h5"
+# F = h5py.File(fname, "r")
+# ntfa_E = np.array(F["eps"])
+# ntfa_S = np.array(F["sig"])
+# ntfa_S0 = np.array(F["sig0"])
+# ntfa_S1 = np.array(F["sig1"])
+# F.close()
+
+# #%%
+# fig, ax = plt.subplots(1,3,figsize=(20,6))
+# icomp = 3
+# ax[0].plot(fans_E[icomp,:], fans_S[icomp,:], 'x-', color='black')
+# ax[0].plot(ntfa_E[icomp,:], ntfa_S[icomp,:], 'o-', color='blue')
+# ax[1].plot(fans_E[icomp,:], fans_S0[icomp,:],'x-',  color='black')
+# ax[1].plot(ntfa_E[icomp,:], ntfa_S0[icomp,:], 'o-', color='blue')
+# ax[2].plot(fans_E[icomp,:], fans_S1[icomp,:], 'x-', color='black')
+# ax[2].plot(ntfa_E[icomp,:], ntfa_S1[icomp,:], 'o-', color='blue')
+
+# fig, ax = plt.subplots(1,1)
+# ax.plot(fans_E[icomp,:3], fans_S[icomp,:3],'x-',  color='black')
+# ax.plot(ntfa_E[icomp,:20], ntfa_S[icomp,:20], 'o-', color='blue')
