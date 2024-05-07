@@ -9,7 +9,7 @@ Thermo-mechanical NTFA
 import numpy as np
 import h5py
 import matplotlib.pyplot as plt
-from tabular_interpolation import TabularInterpolation
+from thermo_ntfa.tabular_interpolation import TabularInterpolation
 from typing import Optional, Callable, Tuple
 
 
@@ -34,12 +34,16 @@ class ThermoMechNTFA:
 
         self.A_bar = TabularInterpolation()
         self.A_bar.InitH5(self.file_name, self.group_name + "/temperatures", self.group_name + "/A_bar")
+
         self.C_bar = TabularInterpolation()
         self.C_bar.InitH5(self.file_name, self.group_name + "/temperatures", self.group_name + "/C_bar")
+
         self.D_xi = TabularInterpolation()
         self.D_xi.InitH5(self.file_name, self.group_name + "/temperatures", self.group_name + "/D_xi")
+
         self.tau_th = TabularInterpolation()
         self.tau_th.InitH5(self.file_name, self.group_name + "/temperatures", self.group_name + "/tau_theta")
+
         self.tau_xi = TabularInterpolation()
         self.tau_xi.InitH5(self.file_name, self.group_name + "/temperatures", self.group_name + "/tau_xi")
 
@@ -71,7 +75,7 @@ class ThermoMechNTFA:
 
     def interpolate(self, theta: float):
         """
-        interpolate NTFA matrices to current temperature `theta` if the given tolerance is exceeded
+        Interpolate NTFA matrices to current temperature `theta` if the given tolerance is exceeded
 
         :param theta: temperature
         """
@@ -102,12 +106,13 @@ class ThermoMechNTFA:
 
     def solve(self, eps: np.ndarray, deps, theta: float, q_n: float, xi_n: np.ndarray) -> Tuple[np.ndarray, float, np.ndarray, np.ndarray]:
         """
+        Solve
         
-        :param eps: strain
-        :param deps: ...
-        :param theta: temperature
-        :param q_n:
-        :param xi_n:
+        :param eps: Strain
+        :param deps: Strain increment
+        :param theta: Temperature
+        :param q_n: Hardening variable at the beginning of the time increment
+        :param xi_n: Reduced coefficients at the end of the time increment
         :return:
         """
         self.interpolate(theta)
@@ -176,8 +181,7 @@ class ThermoMechNTFA:
             J[:n, :n] = - self.D
             J[n:(2*n), :n] = np.eye(n)
             J[:n, n:(2*n)] = np.eye(n)
-            J[n:(2*n), n:(2*n)] = -dlambda/tau_eq * \
-                (np.eye(n) - normal[:, None]*normal[None, :])
+            J[n:(2*n), n:(2*n)] = -dlambda / tau_eq * (np.eye(n) - normal[:, None] * normal[None, :])
             J[2*n, 2*n] = -2/3*c_p*dsf
             J[-1, n:(2*n)] = normal
             J[n:(2*n), -1] = normal
@@ -192,27 +196,32 @@ class ThermoMechNTFA:
             S = self.stress(eps, theta, xi_n)
         return S, q, xi, C
 
-    def UMAT_mixed(self, eps_idx, eps_n, deps, sig_bc, theta, q_n, xi_n):
+    def UMAT_mixed(self,
+                   eps_idx: np.ndarray,
+                   eps_n: np.ndarray,
+                   deps: np.ndarray,
+                   sig_bc: np.ndarray,
+                   theta: float,
+                   q_n: float,
+                   xi_n: np.ndarray) -> Tuple[np.ndarray, np.ndarray, np.ndarray, float, np.ndarray]:
         """
         Run the UMAT using partial eps-BC, e.g., uniaxial tension test.
 
-        Parameters
-        ----------
-        eps_idx : nd-array, dtype=int
+        :param eps_idx: nd-array, dtype=int
             Indices of eps that are prescribed. If None, then all
             components of sigma are prescribed.
-        eps_n : nd-array, dtype=float, shape=[6]
+        :param eps_n: nd-array, dtype=float, shape=[6]
             Strain at the beginning of the increment.
-        deps : nd-array, dtype=float, shape=[6]
+        :param deps: nd-array, dtype=float, shape=[6]
             Strain increment. Only deps[eps_idx] is used.
-        sig_bc : nd-array, dtype=float, shape=[6]
+        :param sig_bc: nd-array, dtype=float, shape=[6]
             Stress at the end of the increment. Only non eps_idx
             entires are used.
-        theta : float
+        :param theta: float
             Temperature at the end of the time increment.
-        q_n : float
+        :param q_n: float
             Hardening variable at the beginning of the time increment.
-        xi_n : TYPE
+        :param xi_n:
             Reduced coefficients at the beginning of the time increment.
         Returns
         -------

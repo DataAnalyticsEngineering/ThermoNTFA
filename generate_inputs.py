@@ -1,26 +1,33 @@
 #!/usr/bin/env pyth1on3
 # -*- coding: utf-8 -*-
-"""
-Created on Wed Jul  5 13:35:42 2023
+# # Thermo-mechanical NTFA - Generate input files
+#
+# (c) 2024, 
+# Felix Fritzen <fritzen@simtech.uni-stuttgart.de>,
+# Julius Herb <julius.herb@mib.uni-stuttgart.de>,
+# Shadi Sharba <shadi.sharba@isc.fraunhofer.de>
+#
+# University of Stuttgart, Institute of Applied Mechanics, Chair for Data Analytics in Engineering
+#
+#
+# > **Funding acknowledgment**
+# > The IGF-Project no.: 21.079 N / DVS-No.: 06.3341 of the “Forschungsvereinigung Schweißen und verwandte Verfahren e.V.” of the German Welding Society (DVS), Aachener Str. 172, 40223 Düsseldorf, Germany, was funded by the Federal Ministry for Economic Affairs and Climate Action (BMWK) via the German Federation of Industrial Research Associations (AiF) in accordance with the policy to support the Industrial Collective Research (IGF) on the orders of the German Bundestag.</br>
+# > <img src="data/bmwk.png" width="20%"></img>
+# >
+# > Felix Fritzen is funded by the German Research Foundation (DFG) -- 390740016 (EXC-2075); 406068690 (FR2702/8-1); 517847245 (FR2702/10-1).
+#
+# ## Imports
 
-@author: fritzen
-"""
 import os
-
 import numpy as np
 import matplotlib.pyplot as plt
 import h5py
 import sys
-
 from itertools import count
 
-#%%
+# ## Load H5 file with training simulations (snapshots)
 
-# fname = "/home/fritzen/calc/dvs/NTFAthermo_paper/modes/simple_3d_rve_B3_4x4x4_10samples.h5"
-# fname = "/home/fritzen/calc/dvs/NTFAthermo_paper/modes/simple_3d_rve_B1-6_4x4x4_10samples.h5"
-# fname = "/home/fritzen/calc/dvs/NTFAthermo_paper/modes/simple_3d_rve_B1-B6_16x16x16_2samples.h5"
-# fname = "/home/fritzen/calc/dvs/NTFAthermo_paper/new/simple_3d_rve_4x4x4_2samples_new.h5"
-# fname = "/home/fritzen/calc/dvs/NTFAthermo_paper/fix/simple_3d_rve_B1-B6_16x16x16_10samples_fix.h5"
+# +
 file_name = os.path.join("data", "simple_3d_rve_B1-B6_16x16x16_100samples_fix.h5")
 group_name = "/ms_9p/dset0_sim"
 suffix = "_fix16_N24_100s"
@@ -49,8 +56,12 @@ for t_str in temp_str_list:
     fans_S0.append(np.transpose(np.array(F[group_name + "/hom_response0_" + t_str]), axes=(2, 0, 1)))
     fans_S1.append(np.transpose(np.array(F[group_name + "/hom_response1_" + t_str]), axes=(2, 0, 1)))
 F.close()
+# -
 
-#%%
+# ## Generate input files (*.inp) for FE simulation on macroscale
+#
+# The thermo-mechanical NTFA is used as effective material model in the FE simulation on macroscale.
+
 ntfa_S = []
 ntfa_S0 = []
 ntfa_S1 = []
@@ -79,10 +90,9 @@ for n, d, amp in zip(count(), loadcases, amplitudes):
         f.close()
         sys.stdout = orig_stdout
 
-#%%
+# ## Post-process results of FE simulation on macroscale
 
-# Post-process results
-
+# +
 ntfa_eps = np.zeros((len(temp_list), fans_S[0].shape[0], fans_S[0].shape[1], fans_S[0].shape[2]))
 ntfa_S = np.zeros((len(temp_list), fans_S[0].shape[0], fans_S[0].shape[1], fans_S[0].shape[2]))
 ntfa_S0 = np.zeros((len(temp_list), fans_S[0].shape[0], fans_S[0].shape[1], fans_S[0].shape[2]))
@@ -106,16 +116,25 @@ for i_T, (T, T_str) in enumerate(zip(temp_list, temp_str_list)):
         ntfa_xi[i_T, n, :] = np.array(F_ntfa["/sdv"][:, 1:(1 + N_modes)])
 
         F_ntfa.close()
-#     print(ntfa_S1[i_T][5])
+
 print(ntfa_S1[0][5])
 print(ntfa_S1[9][5])
+# -
 
-#%%
+# ## Compute error of stresses
+#
+# Overall stress: $S$,
+# Stress in phase 0: $S_0$,
+# Stress in phase 1: $S_1$
+
 err = np.linalg.norm(fans_S - ntfa_S, axis=(2, 3)) / np.linalg.norm(fans_S, axis=(2, 3))
 err0 = np.linalg.norm(fans_S0 - ntfa_S0, axis=(2, 3)) / np.linalg.norm(fans_S, axis=(2, 3))
 err1 = np.linalg.norm(fans_S1 - ntfa_S1, axis=(2, 3)) / np.linalg.norm(fans_S, axis=(2, 3))
 
-#%%
+# ## Plot stresses (NTFA vs. reference)
+#
+# ### Incremenent $i_T = 9$; all loading directions $1 \leq n \leq 6$
+
 i_T = 9
 for n in range(6):
     fig, ax1 = plt.subplots(1, 1, figsize=(10, 8))
@@ -132,9 +151,8 @@ for n in range(6):
         # ax1.plot( fans_S1[i_T][n][:,i], dp, color='black' )
         # ax1.plot( ntfa_S1[i_T][n][:,i], dp, color='blue' )
 
-err
+# ### Loading direction $n = 5$; all increments $0 \leq i_T \leq 9$
 
-#%%
 n = 5
 for i_T in range(10):
     fig, ax1 = plt.subplots(1, 1, figsize=(10, 8))
@@ -151,7 +169,9 @@ for i_T in range(10):
         # ax2.plot( ntfa_S0[i_T][n][:,i], dp, color='blue' )
         # ax1.plot( fans_S1[i_T][n][:,i], dp, color='black' )
         # ax1.plot( ntfa_S1[i_T][n][:,i], dp, color='blue' )
-#%%
+# ## Plot relative error (NTFA vs. reference)
+#
+# ### Overall stress
 
 fig, axx = plt.subplots(1, 2, figsize=(15, 7))
 ct = 0
@@ -171,7 +191,7 @@ for i_T, T in zip((0, 9), (300., 1300.)):
     ax.grid()
     # fig.savefig( f'rel_error_ms9p_T{T:.0f}.pdf', format='pdf', pad_inches=0.0)
 plt.savefig("rel_err_sig_10s.pdf", format="pdf")
-#%%
+# ### Stress in phase 1 (WSC)
 
 fig, axx = plt.subplots(1, 2, figsize=(15, 7))
 ct = 0
@@ -192,7 +212,9 @@ for i_T, T in zip((0, 9), (300., 1300.)):
     # fig.savefig( f'rel_error_ms9p_T{T:.0f}.pdf', format='pdf', pad_inches=0.0)
 plt.savefig("rel_err_sig_wsc_10s.pdf", format="pdf")
 
-#%%
+# ## Save all results to H5 file
+
+# +
 F = h5py.File("all_results_ms9p_16x16x16_100s_N24.h5", "w")
 
 F.create_dataset("/eps", data=ntfa_eps)
@@ -209,6 +231,8 @@ F.create_dataset("/ntfa/q", data=ntfa_q)
 F.create_dataset("/ntfa/xi", data=ntfa_xi)
 
 F.close()
+
+# +
 # fans_E = np.array(F["ms_9p/dset0_sim/loadcases_0300.00"])[:,20:30]
 # fans_S = np.array(F["ms_9p/dset0_sim/hom_response_0300.00"])[:,20:30]
 # fans_S0 = np.array(F["ms_9p/dset0_sim/hom_response0_0300.00"])[:,20:30]

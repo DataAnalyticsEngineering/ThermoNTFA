@@ -1,0 +1,12 @@
+output="loadcase5_T0744.44_fix16_N24_100s.h5";
+modes="modes/ms9p_fix_ntfa16_B1-6_10s_N24.h5";
+epsilon=[0.0, 0.0, 0.0, 0.0, 0.0, 0.02];
+amplitude=1.0;
+totaltime=1;
+deltat=0.1;
+tstart=744.44;
+tend=744.44;
+hardeningmodulus=500000.0;
+elastic=false;
+relaxthermo=false;
+linhardening=true;

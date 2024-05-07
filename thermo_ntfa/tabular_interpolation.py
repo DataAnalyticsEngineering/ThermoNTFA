@@ -6,6 +6,7 @@ Tabular interpolation
 
 import numpy as np
 import h5py
+from typing import Optional
 
 
 class TabularInterpolation:
@@ -16,8 +17,9 @@ class TabularInterpolation:
     data = np.array([])
     const_extrapolate = False
 
-    def __init__(self, data=None, param=None):
+    def __init__(self, data: Optional[np.ndarray]=None, param: Optional[np.ndarray]=None):
         """
+        Initialize the tabular interpolator
 
         :param data:
         :param param:
@@ -31,7 +33,16 @@ class TabularInterpolation:
             self.t_max = self.t[-1]
             self.dim = data[0].shape
 
-    def InitH5(self, file_name, dset_param, dset_data, extrapolate='linear', transpose=None):
+    def InitH5(self, file_name: str, dset_param: str, dset_data: str, extrapolate: str='linear', transpose=None):
+        """
+        Initialize the tabular interpolator using data in a H5 file
+
+        :param file_name: path of the H5 file
+        :param dset_param: path to the desired dataset in the H5 file
+        :param dset_data:
+        :param extrapolate:
+        :param transpose:
+        """
         F = h5py.File(file_name, "r")
         self.t = np.array(F[dset_param])
         if transpose is None:
@@ -47,8 +58,7 @@ class TabularInterpolation:
             if extrapolate == 'constant':
                 self.const_extrapolate = True
             else:
-                raise ValueError(
-                    f"extrapolate can only take values \"linear\" or \"constant\" (received: \"{extrapolate}\"")
+                raise ValueError(f"extrapolate can only take values \"linear\" or \"constant\" (received: \"{extrapolate}\"")
 
         if self.data.ndim == 1:
             self.data = self.data.reshape((-1, 1))
@@ -63,7 +73,13 @@ class TabularInterpolation:
         self.t_min = self.t[0]
         self.t_max = self.t[-1]
 
-    def interpolate(self, t: float):
+    def interpolate(self, t: float) -> np.ndarray:
+        """
+        Perform a linear interpolation at a given temperature t
+
+        :param t: temperature point for interpolation
+        :return: interpolated quantity
+        """
         if t < self.t_min:
             if self.const_extrapolate:
                 return self.data[0, :]

@@ -1,8 +1,22 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# # Thermo-mechanical NTFA: Generate Plots
+# # Thermo-mechanical NTFA - Generate plots
 #
-# ## Imports:
+# (c) 2024, 
+# Felix Fritzen <fritzen@simtech.uni-stuttgart.de>,
+# Julius Herb <julius.herb@mib.uni-stuttgart.de>,
+# Shadi Sharba <shadi.sharba@isc.fraunhofer.de>
+#
+# University of Stuttgart, Institute of Applied Mechanics, Chair for Data Analytics in Engineering
+#
+#
+# > **Funding acknowledgment**
+# > The IGF-Project no.: 21.079 N / DVS-No.: 06.3341 of the “Forschungsvereinigung Schweißen und verwandte Verfahren e.V.” of the German Welding Society (DVS), Aachener Str. 172, 40223 Düsseldorf, Germany, was funded by the Federal Ministry for Economic Affairs and Climate Action (BMWK) via the German Federation of Industrial Research Associations (AiF) in accordance with the policy to support the Industrial Collective Research (IGF) on the orders of the German Bundestag.</br>
+# > <img src="data/bmwk.png" width="20%"></img>
+# >
+# > Felix Fritzen is funded by the German Research Foundation (DFG) -- 390740016 (EXC-2075); 406068690 (FR2702/8-1); 517847245 (FR2702/10-1).
+#
+# ## Imports
 
 # +
 import os
@@ -262,22 +276,6 @@ print(theta)
 #
 # #### Load data from hdf5 files:
 
-# + Analysis of the training directions of the temperature range
-# file_name = os.path.join("data", "all_results_ms9p_16x16x16_10s_N24.h5")
-file_name = os.path.join("data", "all_results_ms9p_16x16x16_100s_N24.h5")
-with h5py.File(file_name, "r") as F:
-    eps = np.array(F["/eps"])
-    theta = np.array(F["/temperature"])
-    fans_sig = np.array(F["/fans/sig"])
-    fans_sig_cu = np.array(F["/fans/sig0"])
-    fans_sig_wsc = np.array(F["/fans/sig1"])
-    ntfa_sig = np.array(F["/ntfa/sig"])
-    ntfa_sig_cu = np.array(F["/ntfa/sig0"])
-    ntfa_sig_wsc = np.array(F["/ntfa/sig1"])
-    ntfa_q = np.array(F["/ntfa/q"])
-    ntfa_xi = np.array(F["/ntfa/xi"])
-# -
-
 file_name = os.path.join("data", "daten_kerbgrund_32s_fans.h5")
 with h5py.File(file_name, "r") as F:
     eps = np.array(F["/eps"])
@@ -301,9 +299,28 @@ plt.grid()
 plt.tight_layout()
 plt.show()
 
+# ### Load H5 file with all results:
+
+# + Analysis of the training directions of the temperature range
+# file_name = os.path.join("data", "all_results_ms9p_16x16x16_10s_N24.h5")
+file_name = os.path.join("data", f"all_results_ms9p_16x16x16_100s_N{N_modes}.h5")
+with h5py.File(file_name, "r") as F:
+    eps = np.array(F["/eps"])
+    theta = np.array(F["/temperature"])
+    fans_sig = np.array(F["/fans/sig"])
+    fans_sig_cu = np.array(F["/fans/sig0"])
+    fans_sig_wsc = np.array(F["/fans/sig1"])
+    ntfa_sig = np.array(F["/ntfa/sig"])
+    ntfa_sig_cu = np.array(F["/ntfa/sig0"])
+    ntfa_sig_wsc = np.array(F["/ntfa/sig1"])
+    ntfa_q = np.array(F["/ntfa/q"])
+    ntfa_xi = np.array(F["/ntfa/xi"])
+# -
+
 # #### Compare efficiency of the interpolation over the temperature:
 
 # + rel. error in sig_bar for 300 and 1300 K
+print(fans_sig.shape)
 fig, axx = plt.subplots(1, 2, figsize=(15, 7))
 ct = 0
 for i_T, T in zip((0, 9), (300., 1300.)):
@@ -360,8 +377,8 @@ for i_T, T in enumerate(theta):
     zeta[:, :6] = eps[i_T, iload]
     zeta[:, 6] = 1
     zeta[:, 7:] = ntfa_xi[i_T, iload]
-    ntfa_S0 = zeta @ (A_cu.Interpolate(T)).T
-    ntfa_S1 = zeta @ (A_wsc.Interpolate(T)).T
+    ntfa_S0 = zeta @ (A_cu.interpolate(T)).T
+    ntfa_S1 = zeta @ (A_wsc.interpolate(T)).T
     dS = Sref - ntfa_sig[i_T, iload, :, :]
     dS0 = Sref0 - ntfa_S0
     dS1 = Sref1 - ntfa_S1
@@ -422,7 +439,7 @@ plt.show()
 # ax[1].plot(theta, err_eq, '-', color='black', label=r"$e_{\overline{\sigma}},\sf eq$ [MPa]")
 # -
 
-# #### Show select stress-strain curves: ????
+# #### Show select stress-strain curves:
 
 # +
 with h5py.File(os.path.join("data", "daten_kerbgrund_JH_fixed.h5"), "r") as F:  # daten_kerbgrund_NTFA_FE.h5
@@ -492,5 +509,8 @@ ax.grid()
 ax.set_xlabel("Lastschritt-Nr. [-]")
 ax.set_ylabel(r"rel. Fehler in $\overline{\sigma}, \overline{\sigma}_{\sf WSC}$ [%]")
 fig.tight_layout()
-plt.savefig(os.path.join("resuts", "kerbgrund_err_sig_sig_wsc.pdf"), format="pdf")
+plt.savefig(os.path.join("results", "kerbgrund_err_sig_sig_wsc.pdf"), format="pdf")
 plt.show()
+# -
+
+
