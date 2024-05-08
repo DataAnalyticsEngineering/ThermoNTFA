@@ -3,6 +3,9 @@
 """
 Thermo-mechanical NTFA
 
+Represents a material routine that describes the effective behavior of a thermo-elasto-plastic composite material
+with temperature-dependent material parameters in both phases.
+
 @author: fritzen
 """
 
@@ -21,7 +24,7 @@ class ThermoMechNTFA:
         The following datasets are expected:
 
         :param file_name: path to the H5 file
-        :param group_name: group in the H5 file that contains the NTFA data
+        :param group_name: group in the H5 file that contains the NTFA tabular data
         :param sig_y: function/callable that returns the yield stress sig_y(theta, q_n)
             given the temperature `theta` and the current isotropic hardening variable `q_n`
         :param N_max: maximum number of NTFA modes that should be used. If None, all available modes are used.

@@ -1,2 +1,2 @@
-from tabular_interpolation import TabularInterpolation
-from thermoNTFA import ThermoMechNTFA
+from .tabular_interpolation import *
+from .thermoNTFA import *

@@ -10,29 +10,11 @@ import numpy as np
 import h5py
 from matplotlib import pyplot as plt
 
-from thermo_ntfa.thermoNTFA import ThermoMechNTFA
+from thermo_ntfa import ThermoMechNTFA
+from material_parameters import my_sig_y
 
 
 # -
-
-# # Define yield stress function:
-
-def my_sig_y(theta: float, q: float, derivative=False) -> Union[float, Tuple[float, float]]:
-    """
-
-    :param theta: temperature
-    :param q: hardening
-    :param derivative: if derivative should be returned
-    """
-    if theta < 966.06:
-        sig0 = 1.12133e+02 * theta + 3.49810e+04 + 1.53393e+05 * np.tanh((635.754 - theta) / 206.958)
-    else:
-        sig0 = 2023.286
-    H = 5e5  # equivalent to 500 MPa
-    if derivative is False:
-        return sig0 + H * q
-    else:
-        return sig0 + H * q, H
 
 
 # # Instantiate ThermoMechNTFA material routine:
