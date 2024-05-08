@@ -1,20 +1,27 @@
-.. ThermoNTFA documentation master file, created by
-   sphinx-quickstart on Wed May  8 08:18:57 2024.
-   You can adapt this file completely to your liking, but it should at least
-   contain the root `toctree` directive.
-
 Welcome to ThermoNTFA's documentation!
 ======================================
+.. role:: python(code)
+   :language: python
+   :class: highlight
+
+-------------------------------------------------------
+Thermo-Plastic Nonuniform Transformation Field Analysis
+-------------------------------------------------------
+
+TODO: abstract
+
+.. image:: ../data/ntfa_workflow.jpg
 
 .. toctree::
    :maxdepth: 2
    :caption: Contents:
 
+   Installation<installation>
+   ThermoNTFA Documentation<api>
+   Tutorial<tutorial_material/tutorial>
+   Examples<examples>
+   MarkdownLinks/license
+   MarkdownLinks/citation
+   MarkdownLinks/changelog
 
-
-Indices and tables
-==================
-
-* :ref:`genindex`
-* :ref:`modindex`
-* :ref:`search`
+.. include:: copyright.rst

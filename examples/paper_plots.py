@@ -44,7 +44,7 @@ import matplotlib.pyplot as plt
 #from matplotlib import cbook
 from matplotlib import cm
 from matplotlib.colors import LightSource
-from thermo_ntfa import ThermoMechNTFA, TabularInterpolation
+from thermontfa import ThermoMechNTFA, TabularInterpolation
 
 
 matplotlib.rc('font', size=14)

@@ -10,7 +10,7 @@ import numpy as np
 import h5py
 from matplotlib import pyplot as plt
 
-from thermo_ntfa import ThermoMechNTFA
+from thermontfa import ThermoMechNTFA
 from material_parameters import my_sig_y
 
 

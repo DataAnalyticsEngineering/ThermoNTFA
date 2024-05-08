@@ -26,7 +26,7 @@ import matplotlib
 import matplotlib.pyplot as plt
 from matplotlib import cm
 from matplotlib.colors import LightSource
-from thermo_ntfa import TabularInterpolation
+from thermontfa import TabularInterpolation
 
 matplotlib.rc('font', size=14)
 
