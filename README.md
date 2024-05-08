@@ -21,7 +21,9 @@ TODO: abstract
 
 ## Documentation
 
-The full documentation of this software, including a detailed tutorial on how to use EPI and the api documentation, can be found under [Documentation](https://Systems-Theory-in-Systems-Biology.github.io/EPI/).
+TODO: deployment of documentation on Github
+
+The documentation of this software, including examples on how to use **ThermoNTFA**, can be found under [Documentation](https://DataAnalyticsEngineering.github.io/ThermoNTFA/).
 
 ## Features
 
