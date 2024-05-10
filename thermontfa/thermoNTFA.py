@@ -22,10 +22,12 @@ Felix Fritzen is funded by the German Research Foundation (DFG) --
 390740016 (EXC-2075); 406068690 (FR2702/8-1); 517847245 (FR2702/10-1).
 """
 
-import numpy as np
+from typing import Callable, Optional, Tuple
+
 import h5py
+import numpy as np
+
 from .tabular_interpolation import TabularInterpolation
-from typing import Optional, Callable, Tuple
 
 
 class ThermoMechNTFA:
@@ -35,6 +37,7 @@ class ThermoMechNTFA:
     Represents a material routine that describes the effective behavior of a thermo-elasto-plastic composite material
     with temperature-dependent material parameters in both phases.
     """
+
     def __init__(
         self,
         file_name: str,
@@ -179,7 +182,12 @@ class ThermoMechNTFA:
             return self.sig_phases[i_phase].interpolate(theta) @ zeta
 
     def solve(
-        self, eps: np.ndarray, deps: np.ndarray, theta: float, q_n: float, xi_n: np.ndarray
+        self,
+        eps: np.ndarray,
+        deps: np.ndarray,
+        theta: float,
+        q_n: float,
+        xi_n: np.ndarray,
     ) -> Tuple[np.ndarray, float, np.ndarray, np.ndarray]:
         """
         Solve for stress S, hardening variable q, reduced coefficients xi, and stiffness C given the
@@ -240,7 +248,7 @@ class ThermoMechNTFA:
                 normal = tau / tau_eq
                 sf, dsf = self.sig_y(theta, q, derivative=True)
                 if self.verbose:
-                    print(f'sf: {sf/1000}')
+                    print(f"sf: {sf/1000}")
                 F[:n] = F1_0 + dlambda * normal - Di @ tau
                 F[-1] = tau_eq - s23 * c_p * sf
                 dF[:n, -1] = normal
@@ -258,7 +266,9 @@ class ThermoMechNTFA:
                     tau += dx[:-1]
                     q = q_n + s23 * dlambda
                 if self.verbose:
-                    print(f'it {n_it:5d} res {res:12.2e} phi {F[-1]/1000:12.2e} MPa ;  dlambda {dlambda:10.6f}')
+                    print(
+                        f"it {n_it:5d} res {res:12.2e} phi {F[-1]/1000:12.2e} MPa ;  dlambda {dlambda:10.6f}"
+                    )
 
             xi = xi_n + dlambda * normal
             q = q_n + s23 * dlambda
@@ -374,8 +384,8 @@ class ThermoMechNTFA:
             sig, q, xi, C = self.solve(eps, deps, theta, q_n, xi_n)
             err_sig = np.linalg.norm(sig[sig_idx])
             it = it + 1
-            # print(
-            #     f'it {it:3d} .. err_eps {err_eps:10.3e} (self.tol: {self.tol_eps:8.3e}) .. err_sig {err_sig:10.3e} (self.tol: {self.tol_sig:8.3e}) ')
+            # print(f'it {it:3d} .. err_eps {err_eps:10.3e} (self.tol: {self.tol_eps:8.3e}) "
+            #       + ".. err_sig {err_sig:10.3e} (self.tol: {self.tol_sig:8.3e}) ')
         eps = eps_n + deps
         # print(f'needed {it} iterations...')
         return eps, sig, C, q, xi

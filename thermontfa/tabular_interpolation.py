@@ -19,15 +19,17 @@ Felix Fritzen is funded by the German Research Foundation (DFG) --
 390740016 (EXC-2075); 406068690 (FR2702/8-1); 517847245 (FR2702/10-1).
 """
 
-import numpy as np
-import h5py
 from typing import Optional, Tuple
+
+import h5py
+import numpy as np
 
 
 class TabularInterpolation:
     """
     Tabular interpolation for the NTFA
     """
+
     t_min: float = 0.0
     t_max: float = 0.0
     dim: Tuple[int, ...] = ()
@@ -102,7 +104,7 @@ class TabularInterpolation:
         ), "ERROR: parameter must be an array of scalars (i.e. shape=[n] or [n, 1] or [n, 1, 1] or ...)"
         assert (
             self.data.shape[0] == n
-        ), f"ERROR: number of scalar parameters not matching dimension of the available data ({n} vs. {self.data.shape[0]}."
+        ), f"ERROR: number of scalar parameters not matching dimension of available data ({n} vs. {self.data.shape[0]}."
         idx = np.argsort(self.t)
         self.t = self.t[idx]
         self.data = self.data[idx, :]

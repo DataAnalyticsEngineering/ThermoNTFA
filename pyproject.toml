@@ -3,5 +3,46 @@ requires = ["setuptools"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "thermo_ntfa"
-version = "1.0.0"
+name = "thermontfa"
+version = "0.0.3"
+description = ""
+authors = [
+    {name="Felix Fritzen", email="fritzen@simtech.uni-stuttgart.de"},
+    {name="Julius Herb", email="julius.herb@mib.uni-stuttgart.de"},
+    {name="Shadi Sharba", email="shadi.sharba@isc.fraunhofer.de"}
+]
+readme = "README.md"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+]
+license = {text = "MIT License"}
+requires-python = ">=3.10"
+keywords = ["NTFA", "MOR", "mechanics", "composite materials", "temperature-dependence", "plasticity"]
+dependencies = [
+    'numpy~=1.26.4',
+    'h5py~=3.11.0',
+    'matplotlib~=3.8.4',
+]
+
+[project.optional-dependencies]
+jupyter = [
+    'jupytext~=1.16.1',
+    'jupyterlab~=4.1.8',
+]
+ci = [
+    'pre_commit~=3.7.0'
+]
+
+[tool.flake8]
+ignore = ['E731', 'E203', 'W503', 'F403', 'F405']
+per-file-ignores = [
+    '__init__.py:F401',
+]
+max-line-length = 120
+count = true
+
+[tool.isort]
+profile = "hug"
+src_paths = ["thermontfa", "examples", "test"]

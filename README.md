@@ -12,12 +12,18 @@ Thermomechanical Nonuniform Transformation Field Analysis
 [![black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](./LICENSE.md)
 [![Python](https://img.shields.io/badge/python-3.10-purple.svg)](https://www.python.org/)
-![PyPI](https://img.shields.io/pypi/v/eulerpi)
+![PyPI](https://img.shields.io/pypi/v/thermontfa)
  -->
+
+This repository contains a material routine written in *Python* for the thermo-elasto-plastic NTFA published in ...
 
 TODO: abstract
 
+## Workflow
+
 ![thermoNTFA](https://github.com/DataAnalyticsEngineering/ThermoNTFA/blob/main/docs/images/ntfa_workflow.jpg?raw=True "workflow")
+
+1. 
 
 ## Documentation
 
