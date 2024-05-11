@@ -1,5 +1,4 @@
 # ThermoNTFA
-Thermomechanical Nonuniform Transformation Field Analysis
 
 <!-- The badges we want to display
 [![pages-build-deployment](https://github.com/Systems-Theory-in-Systems-Biology/EPI/actions/workflows/pages/pages-build-deployment/badge.svg)](https://github.com/Systems-Theory-in-Systems-Biology/EPI/actions/workflows/pages/pages-build-deployment)
@@ -14,9 +13,22 @@ Thermomechanical Nonuniform Transformation Field Analysis
 ![PyPI](https://img.shields.io/pypi/v/thermontfa)
  -->
 
-This repository contains a material routine written in *Python* for the thermo-elasto-plastic NTFA published in ...
+This repository contains a material routine written in *Python* for the thermo-elasto-plastic Nonuniform Transformation Field Analysis (**ThermoNTFA**) published in ...
 
 TODO: abstract
+
+## Documentation
+
+TODO: deployment of documentation on Github
+
+The documentation of this software, including examples on how to use **ThermoNTFA**, can be found under [Documentation](https://DataAnalyticsEngineering.github.io/ThermoNTFA/).
+
+## Features
+
+- The **ThermoNTFA** acts as a reduced order model (ROM) and approximates the effective behavior of composite materials that consist of thermoelastic and thermoplastic constituents.
+- The material parameters of all constituents are allowed to depend strongly on the temperature.
+- This temperature-dependence is reflected in the ROM that is based on interpolated space-saving tabular data at arbitrarily many temperature points.
+- Possible application: Eigenstress Analysis of Laser Dispersed Materials
 
 ## Workflow
 
@@ -50,12 +62,6 @@ This is done using the class [`thermontfa.TabularInterpolation`](https://github.
 3. Use the tabular data to initialize the thermo-mechanical NTFA UMAT that is implemented in the class [`thermontfa.ThermoMechNTFA`](https://github.com/DataAnalyticsEngineering/ThermoNTFA/blob/main/thermontfa/thermoNTFA.py).
 This reference implementation in Python can be transcribed to an UMAT for other academic or commercial simulation softwares.
 The numerical experiments in our paper are conducted using an implementation of the thermo-mechanical NTFA UMAT in C++ for an in-house FE solver.
-
-## Documentation
-
-TODO: deployment of documentation on Github
-
-The documentation of this software, including examples on how to use **ThermoNTFA**, can be found under [Documentation](https://DataAnalyticsEngineering.github.io/ThermoNTFA/).
 
 ## Installation
 
