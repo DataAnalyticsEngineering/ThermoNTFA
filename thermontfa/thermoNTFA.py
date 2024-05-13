@@ -22,7 +22,7 @@ Felix Fritzen is funded by the German Research Foundation (DFG) --
 390740016 (EXC-2075); 406068690 (FR2702/8-1); 517847245 (FR2702/10-1).
 """
 
-from typing import Callable, Optional, Tuple
+from typing import Callable, Optional, Tuple, List
 
 import h5py
 import numpy as np
@@ -39,6 +39,17 @@ class ThermoMechNTFA:
     """
 
     # TODO: Document properties
+    file_name: str
+    group_name: str
+    sig_y: Callable[[float, float, bool], float]
+    tol: float
+    verbose: bool = False
+    A_bar: TabularInterpolation
+    C_bar: TabularInterpolation
+    D_xi: TabularInterpolation
+    tau_theta: TabularInterpolation
+    tau_xi: TabularInterpolation
+    sig_phases: List
 
     def __init__(
         self,

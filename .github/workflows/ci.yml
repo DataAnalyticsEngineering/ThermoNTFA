@@ -66,8 +66,8 @@ jobs:
       - name: Install pandoc
         #uses: docker://pandoc/core:2.9
         run: |
-          apt update
-          apt install pandoc -y
+          sudo apt update
+          sudo apt install pandoc -y
       - name: Install thermontfa
         run: pip install .[dev]
       - name: Build documentation
