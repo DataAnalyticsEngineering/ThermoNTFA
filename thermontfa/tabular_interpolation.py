@@ -19,7 +19,7 @@ Felix Fritzen is funded by the German Research Foundation (DFG) --
 390740016 (EXC-2075); 406068690 (FR2702/8-1); 517847245 (FR2702/10-1).
 """
 
-from typing import Optional, Tuple, Self
+from typing import Optional, Self, Tuple
 
 import h5py
 import numpy as np
@@ -42,7 +42,10 @@ class TabularInterpolation:
     const_extrapolate: bool = False
 
     def __init__(
-        self, temps: np.ndarray = None, data: np.ndarray = None, const_extrapolate: bool = False
+        self,
+        temps: np.ndarray = None,
+        data: np.ndarray = None,
+        const_extrapolate: bool = False,
     ) -> None:
         """
         Initialize the tabular interpolator for given `data` at prescribed temperatures `temps`.
@@ -120,7 +123,7 @@ class TabularInterpolation:
                 data = np.array(file[dset_data])
             else:
                 data = np.array(file[dset_data]).transpose(transpose_dims)
-        
+
         return cls(temps=temps, data=data, const_extrapolate=const_extrapolate)
 
     def interpolate(self, temp: float) -> np.ndarray:
@@ -138,7 +141,9 @@ class TabularInterpolation:
             else:
                 # linear extrapolation
                 alpha = (self.temp_min - temp) / (self.temp[1] - self.temp[0])
-                return self.data[0, ...] - alpha * (self.data[1, ...] - self.data[0, ...])
+                return self.data[0, ...] - alpha * (
+                    self.data[1, ...] - self.data[0, ...]
+                )
 
         if temp >= self.temp_max:
             if self.const_extrapolate:
@@ -146,11 +151,15 @@ class TabularInterpolation:
             else:
                 # linear extrapolation
                 alpha = (temp - self.temp_max) / (self.temp[-1] - self.temp[-2])
-                return self.data[-1, ...] + alpha * (self.data[-1, ...] - self.data[-2, ...])
+                return self.data[-1, ...] + alpha * (
+                    self.data[-1, ...] - self.data[-2, ...]
+                )
 
         idx = np.searchsorted(self.temp > temp, 1) - 1
         t1 = self.t[idx]
         t2 = self.t[idx + 1]
         alpha = (temp - t1) / (t2 - t1)
-        interp_data = self.data[idx, ...] + alpha * (self.data[idx + 1, ...] - self.data[idx, ...])
+        interp_data = self.data[idx, ...] + alpha * (
+            self.data[idx + 1, ...] - self.data[idx, ...]
+        )
         return interp_data

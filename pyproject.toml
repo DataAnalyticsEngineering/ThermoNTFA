@@ -27,11 +27,9 @@ dependencies = [
 ]
 
 [project.optional-dependencies]
-jupyter = [
+dev = [
     'jupytext~=1.16.1',
     'jupyterlab~=4.1.8',
-]
-ci = [
     'pre_commit~=3.7.0'
 ]
 

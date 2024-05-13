@@ -10,7 +10,8 @@
 #
 # University of Stuttgart, Institute of Applied Mechanics, Chair for Data Analytics in Engineering
 #
-# > **Funding acknowledgment**
+# > <table border="0"><tr><td>
+# > <h4>Funding acknowledgment</h4>
 # > The IGF-Project no.: 21.079 N / DVS-No.: 06.3341 of the
 # > “Forschungsvereinigung Schweißen und verwandte Verfahren e.V.” of the
 # > German Welding Society (DVS), Aachener Str. 172, 40223 Düsseldorf, Germany,
@@ -18,10 +19,10 @@
 # > via the German Federation of Industrial Research Associations (AiF) in accordance
 # > with the policy to support the Industrial Collective Research (IGF)
 # > on the orders of the German Bundestag.
-# > <img src="data/bmwk.png" width="20%"></img>
-# >
+# > <br><br>
 # > Felix Fritzen is funded by the German Research Foundation (DFG) --
 # > 390740016 (EXC-2075); 406068690 (FR2702/8-1); 517847245 (FR2702/10-1).
+# > </td><td><img src="../docs/images/bmwk.png" width="40%"></img></td></tr></table>
 #
 # ## Imports
 
@@ -30,19 +31,20 @@ import os
 import sys
 from itertools import count
 
-# %%
 import h5py
 import matplotlib.pyplot as plt
 import numpy as np
+
+data_path = "../data"
 
 # %% [markdown]
 # ## Load H5 file with training simulations (snapshots)
 
 # %%
-file_name = os.path.join("data", "simple_3d_rve_B1-B6_16x16x16_100samples_fix.h5")
+file_name = os.path.join(data_path, "simple_3d_rve_B1-B6_16x16x16_100samples_fix.h5")
 group_name = "/ms_9p/dset0_sim"
 suffix = "_fix16_N24_100s"
-prefix = "loadcases/"
+prefix = os.path.join(data_path, "loadcases")
 N_modes = 24
 
 # open the file an get the keys --> extract temperatures!
@@ -94,7 +96,7 @@ orig_stdout = sys.stdout
 amplitudes = np.ones(loadcases.shape[0])
 for n, d, amp in zip(count(), loadcases, amplitudes):
     for T, T_str in zip(temp_list, temp_str_list):
-        f = open(f"{prefix}loadcase{n + 1}_T{T_str}{suffix}.inp", "w")
+        f = open(os.path.join(prefix, f"loadcase{n + 1}_T{T_str}{suffix}.inp"), "w")
         sys.stdout = f
         print(f'output="loadcase{n + 1}_T{T_str}{suffix}.h5";')
         print(f'modes="{modefn}";')
@@ -134,7 +136,7 @@ ct = 0
 print(ntfa_S1.shape)
 for i_T, (T, T_str) in enumerate(zip(temp_list, temp_str_list)):
     for n, d, amp in zip(count(), loadcases, amplitudes):
-        ntfa_fname = f"{prefix}loadcase{n + 1}_T{T_str}{suffix}.h5"
+        ntfa_fname = os.path.join(prefix, f"loadcase{n + 1}_T{T_str}{suffix}.h5")
         # print(ntfa_fname)
         F_ntfa = h5py.File(ntfa_fname, "r")
         # get references values:
@@ -264,7 +266,7 @@ plt.savefig("rel_err_sig_wsc_10s.pdf", format="pdf")
 # ## Save all results to H5 file
 
 # %%
-F = h5py.File("all_results_ms9p_16x16x16_100s_N24.h5", "w")
+F = h5py.File(os.path.join(data_path, "all_results_ms9p_16x16x16_100s_N24.h5"), "w")
 
 F.create_dataset("/eps", data=ntfa_eps)
 F.create_group("/ntfa")

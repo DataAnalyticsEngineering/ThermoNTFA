@@ -5,6 +5,7 @@ Test tabular interpolation
 
 import h5py
 import numpy as np
+
 from thermontfa import TabularInterpolation
 
 
@@ -30,7 +31,9 @@ def test_tab_inter_from_h5():
         file.create_dataset("/theta", data=theta_perm)
         file.create_dataset("/data", data=val_perm)
 
-    tab_inter = TabularInterpolation.from_h5(file_name="test.h5", dset_temps="/theta", dset_data="/data")
+    tab_inter = TabularInterpolation.from_h5(
+        file_name="test.h5", dset_temps="/theta", dset_data="/data"
+    )
     assert tab_inter.temp_min == theta.min()
     assert tab_inter.temp_max == theta.max()
     assert np.allclose(tab_inter.temps.ravel(), theta.ravel())

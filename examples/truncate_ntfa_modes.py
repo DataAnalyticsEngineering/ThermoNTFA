@@ -1,17 +1,33 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# %%
-"""
-Created on Tue Jun 13 09:26:08 2023
-
-@author: fritzen
-"""
+# %% [markdown]
+# # Truncate NTFA modes
+#
+# (c) 2024,
+# Felix Fritzen <fritzen@simtech.uni-stuttgart.de>,
+# Julius Herb <julius.herb@mib.uni-stuttgart.de>,
+# Shadi Sharba <shadi.sharba@isc.fraunhofer.de>
+#
+# University of Stuttgart, Institute of Applied Mechanics, Chair for Data Analytics in Engineering
+#
+# > <table border="0"><tr><td>
+# > <h4>Funding acknowledgment</h4>
+# > The IGF-Project no.: 21.079 N / DVS-No.: 06.3341 of the
+# > “Forschungsvereinigung Schweißen und verwandte Verfahren e.V.” of the
+# > German Welding Society (DVS), Aachener Str. 172, 40223 Düsseldorf, Germany,
+# > was funded by the Federal Ministry for Economic Affairs and Climate Action (BMWK)
+# > via the German Federation of Industrial Research Associations (AiF) in accordance
+# > with the policy to support the Industrial Collective Research (IGF)
+# > on the orders of the German Bundestag.
+# > <br><br>
+# > Felix Fritzen is funded by the German Research Foundation (DFG) --
+# > 390740016 (EXC-2075); 406068690 (FR2702/8-1); 517847245 (FR2702/10-1).
+# > </td><td><img src="../docs/images/bmwk.png" width="40%"></img></td></tr></table>
 
 # %%
 import h5py
 import numpy as np
 
-# %%
 from material_parameters import *
 
 # %%
@@ -36,8 +52,6 @@ tau_theta = np.array(F[basename + "tau_theta"])
 tau_xi = np.array(F[basename + "tau_xi"])
 temperatures = np.array(F[basename + "temperatures"])
 vol_frac = np.array(F["ms_9p/dset0_ntfa"].attrs["combo_volume_fraction"])
-
-# %%
 # vol_frac = np.zeros(2)
 # vol_frac[1] = np.mean(F["ms_1p/dset0_sim/mat_id"])
 # vol_frac[0] = 1. - vol_frac[1]
@@ -45,18 +59,11 @@ vol_frac = np.array(F["ms_9p/dset0_ntfa"].attrs["combo_volume_fraction"])
 mu = np.array(F["/ms_9p/dset0_sim/plastic_modes"])
 mu_eff = np.linalg.norm(mu, axis=2).sum(axis=0)
 # print(mu_eff/vol_frac[0])
-
-# %% [markdown]
-# print(np.mean(mu[:,:12,:], axis=0))
-
-# %%
+print(np.mean(mu[:, :12, :], axis=0))
 F.close()
-
 
 # %%
 Ntemp = temperatures.size
-
-# %%
 Nmax = 24
 # truncate and change order of the data
 # print(A_bar.shape)
@@ -95,9 +102,10 @@ tau_theta = np.transpose(tau_theta)
 C_bar = np.transpose(C_bar, axes=[2, 0, 1])
 A = A_bar[0]
 XX = A.T @ np.linalg.pinv(A @ A.T) @ A
+print(XX)
 
 # %% [markdown]
-# print(XX)
+#
 
 # %%
 # print(( vol_frac[1]*A1[0,:,:7]+vol_frac[0]*A0[0,:,:7]) )
@@ -109,17 +117,19 @@ x1 = A1[0, :, :6].flatten()
 alpha = np.dot(x - x1, x0 - x1) / np.dot(x0 - x1, x0 - x1)
 # print(alpha, vol_frac)
 alpha = 37 / 64
+print("c_Bar:")
+print(C_bar[0, :, :])
 
 # %% [markdown]
-# print("c_Bar:")
-# print(C_bar[0,:,:])
+#
 
 # %%
 xx = alpha * x0 + (1 - alpha) * x1
 # print(xx.reshape((6,6))-C_bar[0,:,:])
+print("error:", xx / np.linalg.norm(x))
 
 # %% [markdown]
-# print('error:', xx/np.linalg.norm(x))
+#
 
 # %%
 # print((C_bar[0,:,:]), tau_theta[0,:])
@@ -137,10 +147,6 @@ F.create_dataset("tau_xi", data=tau_xi)
 F.create_dataset("tau_theta", data=tau_theta)
 F.create_dataset("temperatures", data=temperatures)
 F.close()
-
-# %% [markdown]
-# eps_th_500 = np.linalg.solve(C_bar[20,:,:], tau_theta[20,:])
-# print(eps_th_500)
-
-# %% [markdown]
-# print(tau_theta)
+eps_th_500 = np.linalg.solve(C_bar[20, :, :], tau_theta[20, :])
+print(eps_th_500)
+print(tau_theta)

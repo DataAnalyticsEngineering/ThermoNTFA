@@ -244,7 +244,7 @@ class ThermoMechNTFA:
 
         # eleminate thermo-elastic effects and approximate deps
         sig = self.stress(eps_n, theta, xi_n)
-        
+
         # initial guess for eps asserting elastic behaviour
         C = self.C
         deps[sig_idx] += np.linalg.solve(
@@ -269,14 +269,16 @@ class ThermoMechNTFA:
 
             if self.verbose:
                 err_eps = np.linalg.norm(ddeps)
-                print(f'it {it:3d} .. err_eps {err_eps:10.3e} (self.tol: {self.tol_eps:8.3e}) "
-                      + ".. err_sig {err_sig:10.3e} (self.tol: {self.tol_sig:8.3e})')
-        
+                print(
+                    f"it {it:3d} .. err_eps {err_eps:10.3e} (self.tol: {self.tol_eps:8.3e}) "
+                    + ".. err_sig {err_sig:10.3e} (self.tol: {self.tol_sig:8.3e})"
+                )
+
         eps = eps_n + deps
 
         if self.verbose:
-            print(f'needed {it} iterations...')
-        
+            print(f"UMAT_mixed completed after {it} iterations...")
+
         return eps, sig, C, q, xi
 
     def solve(
@@ -288,8 +290,9 @@ class ThermoMechNTFA:
         xi_n: np.ndarray,
     ) -> Tuple[np.ndarray, float, np.ndarray, np.ndarray]:
         """
-        Solve for stress S, hardening variable q, reduced coefficients xi, and stiffness C given the
-        strain eps, strain increment deps, temperature theta, hardening variable q_n, and reduced coefficients xi_n.
+        Solve for stress `S`, hardening variable `q`, reduced coefficients `xi`, and stiffness `C` given the
+        strain `eps`, strain increment `deps`, temperature `theta`, hardening variable `q_n`,
+        and reduced coefficients `xi_n`.
 
         :param eps: Strain
         :type eps: np.ndarray

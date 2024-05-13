@@ -2,11 +2,11 @@
 # jupyter:
 #   jupytext:
 #     cell_metadata_json: true
-#     formats: ipynb,py:light
+#     formats: ipynb,py:percent
 #     text_representation:
 #       extension: .py
-#       format_name: light
-#       format_version: '1.5'
+#       format_name: percent
+#       format_version: '1.3'
 #       jupytext_version: 1.14.7
 #   kernelspec:
 #     display_name: Python 3 (ipykernel)
@@ -14,6 +14,7 @@
 #     name: python3
 # ---
 
+# %% [markdown]
 # # Thermo-mechanical NTFA - plots for the CMAME paper
 #
 # (c) 2024,
@@ -23,7 +24,8 @@
 #
 # University of Stuttgart, Institute of Applied Mechanics, Chair for Data Analytics in Engineering
 #
-# > **Funding acknowledgment**
+# > <table border="0"><tr><td>
+# > <h4>Funding acknowledgment</h4>
 # > The IGF-Project no.: 21.079 N / DVS-No.: 06.3341 of the
 # > “Forschungsvereinigung Schweißen und verwandte Verfahren e.V.” of the
 # > German Welding Society (DVS), Aachener Str. 172, 40223 Düsseldorf, Germany,
@@ -31,18 +33,17 @@
 # > via the German Federation of Industrial Research Associations (AiF) in accordance
 # > with the policy to support the Industrial Collective Research (IGF)
 # > on the orders of the German Bundestag.
-# > <img src="data/bmwk.png" width="20%"></img>
-# >
+# > <br><br>
 # > Felix Fritzen is funded by the German Research Foundation (DFG) --
 # > 390740016 (EXC-2075); 406068690 (FR2702/8-1); 517847245 (FR2702/10-1).
-#
+# > </td><td><img src="../docs/images/bmwk.png" width="40%"></img></td></tr></table>
 # ## Mode study
 # ## Training reproduction tests
 # ## Random loading
 # ## Stress-driven simulation
 # ## Twoscale simulation
 
-# +
+# %%
 import os
 
 import h5py
@@ -82,11 +83,10 @@ def rel_error(A, A_ref, r_min=None):
         )
 
 
-# -
-
+# %% [markdown]
 # **Load the NTFA data**
 
-# +
+# %%
 mode_fn = os.path.join("data", "simple_3d_rve_B1-B6_16x16x16_10samples_fix.h5")
 # read the tabularized data for all operators individually
 # this also happens inside of the ThermoNTFA class during initialization
@@ -141,11 +141,12 @@ A_wsc.data = A_wsc.data[:, :, : (7 + N_modes)]
 
 for A in [A_bar, A_cu, A_wsc]:
     A.dim = A.data.shape
-# -
 
+# %% [markdown]
 # ## Mode study
 
 
+# %% [markdown]
 # ## Training reproduction tests
 #
 # ## Analysis of the training directions of the temperature range
@@ -155,6 +156,7 @@ for A in [A_bar, A_cu, A_wsc]:
 # - show select stress-strain curves
 # - results are generated based on `generate_inputs.py` and external C/C++ UMAT
 
+# %%
 # fname = "all_results_ms9p_16x16x16_10s_N24.h5"
 fname = os.path.join("data", f"all_results_ms9p_16x16x16_100s_N{N_modes}.h5")
 with h5py.File(fname, "r") as F:
@@ -169,10 +171,10 @@ with h5py.File(fname, "r") as F:
     ntfa_q = np.array(F["/ntfa/q"])
     ntfa_xi = np.array(F["/ntfa/xi"])
 
-# +
+# %%
 # ### Relative error in sig_bar for 300 and 1300 K
-# -
 
+# %%
 fig, axx = plt.subplots(1, 2, figsize=(15, 7))
 ct = 0
 for i_T, T in zip((0, 9), (300.0, 1300.0)):
@@ -197,6 +199,7 @@ for i_T, T in zip((0, 9), (300.0, 1300.0)):
     # fig.savefig( f'rel_error_ms9p_T{T:.0f}.pdf', format='pdf', pad_inches=0.0)
 plt.savefig(os.path.join("results", "rel_err_sig_10s.pdf"), format="pdf")
 
+# %%
 fig, axx = plt.subplots(1, 2, figsize=(15, 7))
 ct = 0
 for i_T, T in zip((0, 9), (300.0, 1300.0)):
@@ -221,8 +224,10 @@ for i_T, T in zip((0, 9), (300.0, 1300.0)):
     # fig.savefig( f'rel_error_ms9p_T{T:.0f}.pdf', format='pdf', pad_inches=0.0)
 plt.savefig(os.path.join("results", "rel_err_sig_ftc_10s.pdf"), format="pdf")
 
+# %% [markdown]
 # ### Plot the for loadcase no. 2 relevant curves
 
+# %%
 err = np.zeros((theta.size, fans_sig.shape[2]))
 err0 = np.zeros_like(err)
 err1 = np.zeros_like(err)
@@ -257,9 +262,10 @@ for i_T, T in enumerate(theta):
         / 1000.0
     )
 
+# %% [markdown]
 # ### 3D Plots
 
-# +
+# %%
 X = np.linspace(0, 1, fans_sig.shape[2])
 Y = theta
 XX, YY = np.meshgrid(X, Y)
@@ -322,11 +328,11 @@ fig.suptitle(
     r"load case 2, temperature sweep 300K-1300K; rel. errors in $\overline{\sigma}$ and $\overline{\sigma}_{\sf FTC}$"
 )
 plt.savefig("surface_plots_err_sig_sig_ftc.pdf", format="pdf")
-# -
 
+# %% [markdown]
 # ## Random loading
 
-# +
+# %%
 file_name = os.path.join("data", "ms9p_fix_ntfa16_B1-6_10s_N24.h5")
 ntfa_material = ThermoMechNTFA(file_name, group_name="/", sigf=my_sigf, Nmax=24)
 
@@ -388,11 +394,11 @@ with h5py.File("random_loadings_vol1e-3_dev2e-2_paper_10increments.h5", "r") as 
     for a in ax:
         fig.legend()
     fig.tight_layout()
-# -
 
+# %% [markdown]
 # ## Uniaxial stress-driven simulation
 
-# +
+# %%
 theta_list = np.linspace(300, 1300, 5)
 eps_list = []
 sig_list = []
@@ -404,8 +410,8 @@ xi_list = []
 ntfa_material = ThermoMechNTFA(
     "modes/ms9p_fix_ntfa16_B1-6_10s_N24.h5", "/", sigf=my_sigf, Nmax=24
 )
-# -
 
+# %%
 # generate and store data
 # uniaxial stress loading for all 6 directions
 # starting from initial thermoelastic relaxed deformation state
@@ -494,7 +500,7 @@ with h5py.File("ms9p_uniaxial_stress_data_mod.h5", "w") as F:
             GG.create_dataset("q", data=q)
             GG.create_dataset("xi", data=xi)
 
-# +
+# %%
 # run uniaxial strain controlled tests at different temperatures
 # the initial state is gained by ramping up the temperature from 293 K
 # subsequently, a strain controlled loading is superimposed in the iload-th
@@ -604,7 +610,7 @@ with h5py.File("ms9p_uniaxial_stress_data_mod.h5", "w") as F:
             GG.create_dataset("xi", data=xi)
 
 
-# + Figuring when palsticity kicks in using the mixed UMAT
+# %% Figuring when palsticity kicks in using the mixed UMAT
 # 1. set the stress to 0
 # 2. ramp the temperature from 293K
 # 3. check for q >= q_crit_0, q_crit_1, ...
@@ -657,7 +663,7 @@ with h5py.File("ms9p_thermal_rampup.h5", "w") as F:
     F.create_dataset("q", data=q)
     F.create_dataset("xi", data=xi)
 
-# +
+# %%
 q_crit = [1e-5, 0.002, 0.005, 0.01]
 with h5py.File("ms9p_thermal_rampup.h5", "r") as F:
     q = np.array(F["q"])
@@ -683,7 +689,7 @@ ax.set_xlim(T[0], T[-1])
 ax.set_xlabel(r"temperature $T$ [K]")
 ax.set_ylabel(r"hardening variable $\overline{q}$ [%]")
 
-# +
+# %%
 
 
 sig_fe_list = []
@@ -748,12 +754,12 @@ for k in [0, 1, 2, 3, 4]:
     # print(f'rel. error in sig   {100*err_sig}%')
     # print(f'rel. error in sig0  {100*err_sig0}%')
     # print(f'rel. error in sig1  {100*err_sig1}%')
-# -
 
+# %% [markdown]
 # ## Twoscale simulation
 
 
-# + Analysis of the two-scale simulation
+# %% Analysis of the two-scale simulation
 """##############################################################################
 # Analysis of the two-scale simulation
 # - determine an element in the notch
@@ -783,7 +789,7 @@ with h5py.File("vtk_notch/NTFA293K_fine_temp_293-800.h5", "r") as F:
     )
 
 
-# + Read the history for the integration point of interest
+# %% Read the history for the integration point of interest
 # vicinity of the noth (at the center of the specimen)
 with h5py.File("vtk_notch/NTFA293K_fine_temp_293-800.h5", "r") as F:
     N_modes = 24
@@ -816,7 +822,7 @@ with h5py.File("vtk_notch/NTFA293K_fine_temp_293-800.h5", "r") as F:
         sig_cu[j, :] = A_cu.Interpolate(theta[j]) @ zeta[j, :]
         sig_wsc[j, :] = A_wsc.Interpolate(theta[j]) @ zeta[j, :]
 
-# + some plots
+# %% some plots
 # compute some stress information
 sig_h = sig[:, :3].sum(axis=1) / 3
 sig_h_cu = sig_cu[:, :3].sum(axis=1) / 3
@@ -844,7 +850,7 @@ for i in range(n_inc + 1):
     )
 
 
-# +
+# %%
 t = np.linspace(0, 2, n_inc + 1)
 fig, ax = plt.subplots(1, 2, dpi=dpi, figsize=(15, 5))
 ax[0].plot(
@@ -895,20 +901,20 @@ ax[0].annotate("", xy=(eyy_max, syy_cu), xytext=(0.0275, 975), arrowprops=arrowp
 # ax[1].plot(t, sig_cu[:,1]/1000, '--', color='red', label=r"$\overline{\sigma}_{\sf Cu,yy}$")
 # ax[1].plot(t, sig_wsc[:,1]/1000, '-.', color='blue', label=r"$\overline{\sigma}_{\sf WSC,yy}$")
 # ax[1].set_title(r"$\overline{\sigma}_{\sf yy}$, $\overline{\sigma}_{\sf Cu, yy}$, "
-# + "$\overline {"incorrectly_encoded_metadata": "{\\sigma}_{\\sf WSC, yy}$, $\\overline{Q}$ vs. time $t$\")"}
+# %% "$\overline {"incorrectly_encoded_metadata": "{\\sigma}_{\\sf WSC, yy}$, $\\overline{Q}$ vs. time $t$\")"}
 # ax2 = ax[1].twinx()
 # ax[1].legend(loc='center right')
 # ax[1].grid()
 # ax2.plot(t, qbar, label=r"$\overline{Q}$", color='olive', lw=2)
 # ax[1].set_xlabel(r"$t$ [s]")
 # ax[1].set_ylabel(r"$\overline{\sigma}_{\sf yy}, \overline{\sigma}_{\sf Cu, yy}, "
-# + "\overline {"incorrectly_encoded_metadata": "{\\sigma}_{\\sf WSC, yy}$  [MPa]\")"}
+# %% "\overline {"incorrectly_encoded_metadata": "{\\sigma}_{\\sf WSC, yy}$  [MPa]\")"}
 # ax2.set_ylabel(r"$\overline{Q}$ [-]")
 # plt.tight_layout()
 # plt.savefig("notchtest_fine_sigyy_ntfa.pdf", format="pdf")
 
 
-# +
+# %%
 fig, ax = plt.subplots(1, 2, dpi=400, figsize=(15, 7))
 ax[0].plot(
     t, sig_III_wsc / 1000, "-.", color="blue", label=r"$\overline{\sigma}_{\sf WSC, 3}$"
@@ -977,7 +983,7 @@ ax[1].set_ylabel(r"Vergleichsspannung und Fließspannung [MPa]")
 fig.tight_layout()
 fig.savefig("notchtest_fine_sigeq_ntfa.pdf", format="pdf")
 
-# +
+# %%
 
 F = h5py.File("daten_kerbgrund.h5", "w")
 F.create_dataset("/sig", data=sig)
@@ -997,7 +1003,7 @@ F.close()
 # ax2.plot(eps[:,1], sig_cu[:,1]/1000, '--', color='red')
 # ax2.plot(eps[:,1], sig_wsc[:,1]/1000, '-.', color='blue')
 
-# +
+# %%
 
 dpi = 400
 force = []
@@ -1041,8 +1047,8 @@ for f, T in zip((force), (temp)):
     nhalf = int((t.size + 1) / 2)
     labels = True
 fig.savefig("twoscale_loading.pdf")
-# -
 
+# %%
 fig, ax = plt.subplots(1, 1, dpi=dpi, figsize=(7.5, 5))
 ax.plot((1.0, 1.0), (-0.05, 1.05), "--", color="gray", lw=2, zorder=4)
 ax.fill_between((0.0, 1.0), (0.0, 1.0), (0.0, 0.0), color="blue", alpha=0.2, zorder=2)
