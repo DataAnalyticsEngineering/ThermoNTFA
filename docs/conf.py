@@ -27,6 +27,7 @@ extensions = [
 ]
 myst_enable_extensions = ["dollarmath", "amsmath"]
 nbsphinx_allow_errors = True
+autodoc_member_order = "bysource"
 
 templates_path = ["_templates"]
 exclude_patterns = ["build", "Thumbs.db", ".DS_Store"]
