@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ThermoNTFA Documentation &mdash; ThermoNTFA 1.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="_static/jquery.js?v=5d32c60e"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="_static/documentation_options.js?v=f2a433a1"></script>
+        <script src="_static/doctools.js?v=9a2dae69"></script>
+        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="copyright" title="Copyright" href="copyright.html" />
+    <link rel="next" title="License" href="MarkdownLinks/license.html" />
+    <link rel="prev" title="Installation" href="installation.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            ThermoNTFA
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">ThermoNTFA Documentation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#thermontfa.TabularInterpolation"><code class="docutils literal notranslate"><span class="pre">TabularInterpolation</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#thermontfa.TabularInterpolation.__init__"><code class="docutils literal notranslate"><span class="pre">TabularInterpolation.__init__()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#thermontfa.TabularInterpolation.const_extrapolate"><code class="docutils literal notranslate"><span class="pre">TabularInterpolation.const_extrapolate</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#thermontfa.TabularInterpolation.data"><code class="docutils literal notranslate"><span class="pre">TabularInterpolation.data</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#thermontfa.TabularInterpolation.dim"><code class="docutils literal notranslate"><span class="pre">TabularInterpolation.dim</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#thermontfa.TabularInterpolation.from_h5"><code class="docutils literal notranslate"><span class="pre">TabularInterpolation.from_h5()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#thermontfa.TabularInterpolation.interpolate"><code class="docutils literal notranslate"><span class="pre">TabularInterpolation.interpolate()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#thermontfa.TabularInterpolation.temp_max"><code class="docutils literal notranslate"><span class="pre">TabularInterpolation.temp_max</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#thermontfa.TabularInterpolation.temp_min"><code class="docutils literal notranslate"><span class="pre">TabularInterpolation.temp_min</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#thermontfa.TabularInterpolation.temps"><code class="docutils literal notranslate"><span class="pre">TabularInterpolation.temps</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#thermontfa.ThermoMechNTFA"><code class="docutils literal notranslate"><span class="pre">ThermoMechNTFA</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#thermontfa.ThermoMechNTFA.UMAT_mixed"><code class="docutils literal notranslate"><span class="pre">ThermoMechNTFA.UMAT_mixed()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#thermontfa.ThermoMechNTFA.__init__"><code class="docutils literal notranslate"><span class="pre">ThermoMechNTFA.__init__()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#thermontfa.ThermoMechNTFA.interpolate"><code class="docutils literal notranslate"><span class="pre">ThermoMechNTFA.interpolate()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#thermontfa.ThermoMechNTFA.solve"><code class="docutils literal notranslate"><span class="pre">ThermoMechNTFA.solve()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#thermontfa.ThermoMechNTFA.stress"><code class="docutils literal notranslate"><span class="pre">ThermoMechNTFA.stress()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="MarkdownLinks/license.html">License</a></li>
+<li class="toctree-l1"><a class="reference internal" href="MarkdownLinks/citation.html">Citation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="MarkdownLinks/changelog.html">Changelog</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">ThermoNTFA</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">ThermoNTFA Documentation</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/api.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-thermontfa">
+<span id="thermontfa-documentation"></span><h1>ThermoNTFA Documentation<a class="headerlink" href="#module-thermontfa" title="Link to this heading"></a></h1>
+<p>The python package <cite>thermontfa</cite> with our reference implementation of the thermo-plastic NTFA contains following classes:</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="thermontfa.TabularInterpolation">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">thermontfa.</span></span><span class="sig-name descname"><span class="pre">TabularInterpolation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">temps</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">const_extrapolate</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#thermontfa.TabularInterpolation" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Tabular interpolation for the thermo-mechanical NTFA</p>
+<p>Performs a linear interpolation of the NTFA system matrices for a given temperature
+given tabular data for sufficiently many temperature points.
+It can be initialized for given data or based on a HDF5 file.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="thermontfa.TabularInterpolation.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">temps</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">const_extrapolate</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#thermontfa.TabularInterpolation.__init__" title="Link to this definition"></a></dt>
+<dd><p>Initialize the tabular interpolator for given <cite>data</cite> at prescribed temperatures <cite>temps</cite>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>temps</strong> (<em>np.ndarray</em>) – temperature points on which tabular data is available.
+The shape of the <cite>numpy</cite> array is expected to be <cite>(N_t,)</cite>.</p></li>
+<li><p><strong>data</strong> (<em>np.ndarray</em>) – tabular data, e.g., a batch of NTFA system matrices with shape <cite>(N_t, …)</cite>.</p></li>
+<li><p><strong>const_extrapolate</strong> – If true, a constant extrapolation instead of a linear extrapolation is performed.
+The default value is false.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="thermontfa.TabularInterpolation.const_extrapolate">
+<span class="sig-name descname"><span class="pre">const_extrapolate</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">False</span></em><a class="headerlink" href="#thermontfa.TabularInterpolation.const_extrapolate" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="thermontfa.TabularInterpolation.data">
+<span class="sig-name descname"><span class="pre">data</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ndarray</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">array([],</span> <span class="pre">dtype=float64)</span></em><a class="headerlink" href="#thermontfa.TabularInterpolation.data" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="thermontfa.TabularInterpolation.dim">
+<span class="sig-name descname"><span class="pre">dim</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="p"><span class="pre">...</span></span><span class="p"><span class="pre">]</span></span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">()</span></em><a class="headerlink" href="#thermontfa.TabularInterpolation.dim" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="thermontfa.TabularInterpolation.from_h5">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">from_h5</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dset_temps</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dset_data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">transpose_dims</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="p"><span class="pre">...</span></span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">const_extrapolate</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Self</span></span></span><a class="headerlink" href="#thermontfa.TabularInterpolation.from_h5" title="Link to this definition"></a></dt>
+<dd><p>Initialize the tabular interpolator based on tabular data stored in a HDF5 file (<a href="#id1"><span class="problematic" id="id2">*</span></a>.h5).</p>
+<p>This is a factory method and returns a new instance of the <cite>TabularInterpolation</cite> class.
+It is expected that the HDF5 file contains a data set with path <cite>dset_temps</cite> that contains
+a list of the temperature points on which tabular data is available. The shape of this
+dataset is expected to be <cite>(N_t,)</cite>.
+Additionaly, the HDF5 file must contain a data set with path <cite>dset_data</cite> that contains the
+tabular data, e.g., a batch of NTFA system matrices with shape <cite>(N_t, …)</cite>.
+The order of axes/dimensions of the data set with path <cite>dset_data</cite> can be changed by transposing
+to the axis order given in <cite>transpose_dims</cite>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>file_name</strong> (<em>str</em>) – path of the HDF5 file</p></li>
+<li><p><strong>dset_param</strong> (<em>str</em>) – path to the desired dataset in the HDF5 file</p></li>
+<li><p><strong>dset_data</strong></p></li>
+<li><p><strong>const_extrapolate</strong> – “linear” or “constant”</p></li>
+<li><p><strong>transpose_dims</strong> (<em>Tuple</em><em>[</em><em>int</em><em>, </em><em>...</em><em>]</em><em>, </em><em>optional</em>) – axis order for transposition</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>new instance  of the <cite>TabularInterpolation</cite> class</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#thermontfa.TabularInterpolation" title="thermontfa.TabularInterpolation">TabularInterpolation</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="thermontfa.TabularInterpolation.interpolate">
+<span class="sig-name descname"><span class="pre">interpolate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">temp</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">ndarray</span></span></span><a class="headerlink" href="#thermontfa.TabularInterpolation.interpolate" title="Link to this definition"></a></dt>
+<dd><p>Perform a linear interpolation based on the available tabular data at a given temperature <cite>temp</cite></p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>temp</strong> (<em>float</em>) – temperature point for interpolation</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>interpolated quantity</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>np.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="thermontfa.TabularInterpolation.temp_max">
+<span class="sig-name descname"><span class="pre">temp_max</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">0.0</span></em><a class="headerlink" href="#thermontfa.TabularInterpolation.temp_max" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="thermontfa.TabularInterpolation.temp_min">
+<span class="sig-name descname"><span class="pre">temp_min</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">0.0</span></em><a class="headerlink" href="#thermontfa.TabularInterpolation.temp_min" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="thermontfa.TabularInterpolation.temps">
+<span class="sig-name descname"><span class="pre">temps</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ndarray</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">array([],</span> <span class="pre">dtype=float64)</span></em><a class="headerlink" href="#thermontfa.TabularInterpolation.temps" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="thermontfa.ThermoMechNTFA">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">thermontfa.</span></span><span class="sig-name descname"><span class="pre">ThermoMechNTFA</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">group_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sig_y</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">bool</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">N_max</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tol</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.0001</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#thermontfa.ThermoMechNTFA" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Thermo-mechanical NTFA</p>
+<p>Represents a material routine that describes the effective behavior of a thermo-elasto-plastic composite material
+with temperature-dependent material parameters in both phases.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="thermontfa.ThermoMechNTFA.UMAT_mixed">
+<span class="sig-name descname"><span class="pre">UMAT_mixed</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">eps_idx</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">eps_n</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">deps</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sig_bc</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">theta</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">q_n</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">xi_n</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">ndarray</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">ndarray</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">ndarray</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">ndarray</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#thermontfa.ThermoMechNTFA.UMAT_mixed" title="Link to this definition"></a></dt>
+<dd><p>Run the UMAT using partial eps-BC, e.g., uniaxial tension test.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>eps_idx</strong> (<em>nd-array</em><em>, </em><em>dtype=int</em>) – Indices of eps that are prescribed. If <cite>None</cite>, then all components of <cite>sig_bc</cite> are prescribed.</p></li>
+<li><p><strong>eps_n</strong> (<em>nd-array</em><em>, </em><em>dtype=float</em><em>, </em><em>shape=</em><em>[</em><em>6</em><em>]</em>) – Strain at the beginning of the increment.</p></li>
+<li><p><strong>deps</strong> (<em>nd-array</em><em>, </em><em>dtype=float</em><em>, </em><em>shape=</em><em>[</em><em>6</em><em>]</em>) – Strain increment. Only deps[eps_idx] is used.</p></li>
+<li><p><strong>sig_bc</strong> (<em>nd-array</em><em>, </em><em>dtype=float</em><em>, </em><em>shape=</em><em>[</em><em>6</em><em>]</em>) – Stress at the end of the increment. Only non <cite>eps_idx</cite> components are used.</p></li>
+<li><p><strong>theta</strong> (<em>float</em>) – Temperature at the end of the time increment.</p></li>
+<li><p><strong>q_n</strong> (<em>float</em>) – Hardening variable at the beginning of the time increment.</p></li>
+<li><p><strong>xi_n</strong> (<em>nd-array</em><em>, </em><em>dtype=float</em>) – Reduced coefficients at the beginning of the time increment.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>E</strong> -
+Full strain tensor at the end of the increment, i.e.
+the entries not within eps_idx are set</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>np.ndarray, dtype=float, shape=[6]</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>S</strong> -
+Stress at the end of the increment. Only S[eps_idx] is non-zero.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>np.ndarray, dtype=float</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>C</strong> -
+Stiffness tensor at the end of the increment</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><cite>np.ndarray</cite>, <cite>dtype=float</cite>, <cite>shape=[6, 6]</cite></p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>q</strong> -
+Hardening variable at the end of the time increment</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>xi</strong> -
+Reduced coefficients at the end of the time increment</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><cite>nd.ndarray</cite>, <cite>dtype=float</cite></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="thermontfa.ThermoMechNTFA.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">group_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sig_y</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">bool</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">N_max</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tol</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.0001</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#thermontfa.ThermoMechNTFA.__init__" title="Link to this definition"></a></dt>
+<dd><p>Initialize the thermo-mechanical NTFA from an HDF5 file (<a href="#id3"><span class="problematic" id="id4">*</span></a>.h5)</p>
+<p>Seek the data in HDF5 file named <cite>file_name</cite> within the group <cite>group_name</cite>.
+The following data sets containing tabular data for the NTFA are expected in the group:
+- <cite>temperatures</cite>: list of temperature points of the tabular data, shape: <cite>(N_temp,)</cite>
+- <cite>A_bar</cite>: shape: <cite>(N_temp, N_modes, 6)</cite>
+- <cite>C_bar</cite>: shape: <cite>(N_temp, 6, 6)</cite>
+- <cite>D_xi</cite>: shape: <cite>(N_temp, N_modes, N_modes)</cite>
+- <cite>tau_theta</cite>: shape: <cite>(N_temp, 6)</cite>
+- <cite>tau_xi</cite>: shape: <cite>(N_temp, N_modes)</cite></p>
+<p>In addition, the group in the HDF5 file must contain the following data sets:
+- <cite>v_frac</cite>: volume fraction of the different phases
+- <cite>SIG_phases</cite>: stress data different phases</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>file_name</strong> (<em>str</em>) – path to the HDF5 file</p></li>
+<li><p><strong>group_name</strong> (<em>str</em>) – group in the HDF5 file that contains the NTFA tabular data</p></li>
+<li><p><strong>sig_y</strong> (<em>Callable</em><em>[</em><em>[</em><em>float</em><em>, </em><em>float</em><em>, </em><em>bool</em><em>]</em><em>, </em><em>float</em><em>]</em>) – function/callable that returns the yield stress <cite>sig_y(theta, q_n, derivative)</cite>
+given the temperature <cite>theta</cite> and the current isotropic hardening variable <cite>q_n</cite>.
+If <cite>derivative = True</cite>, the derivative should also be returned.</p></li>
+<li><p><strong>N_max</strong> (<em>int</em>) – maximum number of NTFA modes that should be used. If None, all available modes are used.</p></li>
+<li><p><strong>verbose</strong> (<em>bool</em>) – If debug information should be printed.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="thermontfa.ThermoMechNTFA.interpolate">
+<span class="sig-name descname"><span class="pre">interpolate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">theta</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#thermontfa.ThermoMechNTFA.interpolate" title="Link to this definition"></a></dt>
+<dd><p>Interpolate NTFA matrices to current temperature <cite>theta</cite> if the given tolerance is exceeded</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>theta</strong> – Temperature</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="thermontfa.ThermoMechNTFA.solve">
+<span class="sig-name descname"><span class="pre">solve</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">eps</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">deps</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">theta</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">q_n</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">xi_n</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">ndarray</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">ndarray</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">ndarray</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#thermontfa.ThermoMechNTFA.solve" title="Link to this definition"></a></dt>
+<dd><p>Solve for stress <cite>S</cite>, hardening variable <cite>q</cite>, reduced coefficients <cite>xi</cite>, and stiffness <cite>C</cite> given the
+strain <cite>eps</cite>, strain increment <cite>deps</cite>, temperature <cite>theta</cite>, hardening variable <cite>q_n</cite>,
+and reduced coefficients <cite>xi_n</cite>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>eps</strong> (<em>np.ndarray</em>) – Strain</p></li>
+<li><p><strong>deps</strong> (<em>np.ndarray</em>) – Strain increment</p></li>
+<li><p><strong>theta</strong> (<em>float</em>) – Temperature</p></li>
+<li><p><strong>q_n</strong> (<em>float</em>) – Hardening variable at the beginning of the time increment</p></li>
+<li><p><strong>xi_n</strong> (<em>np.ndarray</em>) – Reduced coefficients at the beginning of the time increment</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>S</strong> - Stress</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>np.ndarray</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>q</strong> - Hardening variable at the end of the time increment</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>xi</strong> - Reduced coefficients at the end of the time increment</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>np.ndarray</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>C</strong> - Stiffness</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>np.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="thermontfa.ThermoMechNTFA.stress">
+<span class="sig-name descname"><span class="pre">stress</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">eps</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">theta</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">xi</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">i_phase</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#thermontfa.ThermoMechNTFA.stress" title="Link to this definition"></a></dt>
+<dd><p>Compute the stress given strain <cite>eps</cite>, plastic mode activations <cite>xi</cite>.
+If <cite>i_phase</cite> is given, the stress is computed only for the phase with index <cite>i_phase</cite>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>eps</strong> (<em>int</em><em>, </em><em>optional</em>) – Strain</p></li>
+<li><p><strong>theta</strong> – Temperature</p></li>
+<li><p><strong>xi</strong> – Plastic mode activations</p></li>
+<li><p><strong>i_phase</strong> – Phase index for the stress computation. If None, overall stress is computed.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Computed stress</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="installation.html" class="btn btn-neutral float-left" title="Installation" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="MarkdownLinks/license.html" class="btn btn-neutral float-right" title="License" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; <a href="copyright.html">Copyright</a> 2024, Felix Fritzen, Julius Herb, Shadi Sharba.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

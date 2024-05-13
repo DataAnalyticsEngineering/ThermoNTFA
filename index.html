@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Welcome to ThermoNTFA’s documentation! &mdash; ThermoNTFA 1.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="_static/jquery.js?v=5d32c60e"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="_static/documentation_options.js?v=f2a433a1"></script>
+        <script src="_static/doctools.js?v=9a2dae69"></script>
+        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+        <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="copyright" title="Copyright" href="copyright.html" />
+    <link rel="next" title="Installation" href="installation.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="#" class="icon icon-home">
+            ThermoNTFA
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api.html">ThermoNTFA Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="MarkdownLinks/license.html">License</a></li>
+<li class="toctree-l1"><a class="reference internal" href="MarkdownLinks/citation.html">Citation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="MarkdownLinks/changelog.html">Changelog</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="#">ThermoNTFA</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="#" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Welcome to ThermoNTFA’s documentation!</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/index.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="welcome-to-thermontfa-s-documentation">
+<h1>Welcome to ThermoNTFA’s documentation!<a class="headerlink" href="#welcome-to-thermontfa-s-documentation" title="Link to this heading"></a></h1>
+<section id="thermo-plastic-nonuniform-transformation-field-analysis">
+<h2>Thermo-Plastic Nonuniform Transformation Field Analysis<a class="headerlink" href="#thermo-plastic-nonuniform-transformation-field-analysis" title="Link to this heading"></a></h2>
+<p>TODO: abstract</p>
+<img alt="_images/ntfa_workflow.jpg" src="_images/ntfa_workflow.jpg" />
+<section id="offline-phase-training-of-the-thermo-mechanical-ntfa">
+<h3>Offline phase: Training of the thermo-mechanical NTFA<a class="headerlink" href="#offline-phase-training-of-the-thermo-mechanical-ntfa" title="Link to this heading"></a></h3>
+<p>1. Generate data using thermo-elasto-plastic simulations on the microscale at select temperatures <span class="math notranslate nohighlight">\(\theta \in \mathcal{T}\)</span>.
+For that, we used an in-house FE solver. However, any other suitable simulation software could be used.</p>
+<p>2. Compute a reduced basis consisting of plastic modes <span class="math notranslate nohighlight">\(\underline{\underline{P}}_{\mathsf{p}}\)</span> via snapshot POD of the simulated plastic strain fields <span class="math notranslate nohighlight">\(\{\varepsilon_\mathsf{p}(x | \theta)\}^n_{i=1}\)</span>.
+The corresponding implementation is available in our [AdaptiveThermoMechROM](<a class="reference external" href="https://github.com/DataAnalyticsEngineering/AdaptiveThermoMechROM">https://github.com/DataAnalyticsEngineering/AdaptiveThermoMechROM</a>) repository in the module [ntfa.py](<a class="reference external" href="https://github.com/DataAnalyticsEngineering/AdaptiveThermoMechROM/blob/ntfa/ntfa.py">https://github.com/DataAnalyticsEngineering/AdaptiveThermoMechROM/blob/ntfa/ntfa.py</a>).</p>
+<p>3. Perform additional linear-elastic simulations to determined self-equilibrated fields for the plastic modes <span class="math notranslate nohighlight">\(\underline{\underline{P}}_\mathsf{p}\)</span> at select temperatures <span class="math notranslate nohighlight">\(\theta \in \mathcal{T}\)</span>.
+Again, we used our in-house FE solver for that.</p>
+<p>4. Based on the generated data at select temperatures <span class="math notranslate nohighlight">\(\theta \in \mathcal{T}\)</span> we perform an interpolation to arbitrarily many intermediate temperatures <span class="math notranslate nohighlight">\(\theta_j\)</span>.
+This method is published in our paper [“Reduced order homogenization of thermoelastic materials with strong temperature-dependence and comparison to a machine-learned model”](<a class="reference external" href="https://doi.org/10.1007/s00419-023-02411-6">https://doi.org/10.1007/s00419-023-02411-6</a>), where we show that it produces highly accurate results while the effort is almost on par with linear interpolation.</p>
+<p>5. Using the interpolated data, the NTFA system matrices <span class="math notranslate nohighlight">\(\underline{\underline{A}}(\theta_j)\)</span>, <span class="math notranslate nohighlight">\(\underline{\underline{D}}(\theta_j)\)</span>, <span class="math notranslate nohighlight">\(\bar{\underline{\underline{C}}}(\theta_j)\)</span>, <span class="math notranslate nohighlight">\(\underline{\tau}_{\mathrm{\theta}}(\theta_j)\)</span>, and <span class="math notranslate nohighlight">\(\underline{\tau}_{\mathsf{p}}(\theta_j)\)</span> are computed and stored as tabular data.
+The corresponding implementation is available in our [AdaptiveThermoMechROM](<a class="reference external" href="https://github.com/DataAnalyticsEngineering/AdaptiveThermoMechROM">https://github.com/DataAnalyticsEngineering/AdaptiveThermoMechROM</a>) repository in the module [ntfa.py](<a class="reference external" href="https://github.com/DataAnalyticsEngineering/AdaptiveThermoMechROM/blob/ntfa/ntfa.py">https://github.com/DataAnalyticsEngineering/AdaptiveThermoMechROM/blob/ntfa/ntfa.py</a>).</p>
+</section>
+<section id="online-phase-usage-of-the-thermo-mechanical-ntfa-in-simulations-on-the-macroscale">
+<h3>Online phase: Usage of the thermo-mechanical NTFA in simulations on the macroscale<a class="headerlink" href="#online-phase-usage-of-the-thermo-mechanical-ntfa-in-simulations-on-the-macroscale" title="Link to this heading"></a></h3>
+<p>1. Load the tabular data for the NTFA matrices <span class="math notranslate nohighlight">\(\underline{\underline{A}}(\theta_j)\)</span>, <span class="math notranslate nohighlight">\(\underline{\underline{D}}(\theta_j)\)</span>, <span class="math notranslate nohighlight">\(\bar{\underline{\underline{C}}}(\theta_j)\)</span>, <span class="math notranslate nohighlight">\(\underline{\tau}_{\mathrm{\theta}}(\theta_j)\)</span>, and <span class="math notranslate nohighlight">\(\underline{\tau}_{\mathsf{p}}(\theta_j)\)</span> that are generated in the offline phase based on direct numerical simulations on the microscale.
+Optionally truncate the NTFA modes <span class="math notranslate nohighlight">\(N_{\mathrm{modes}}\)</span> to be used.</p>
+<p>2. Perform a linear interpolation to determine the NTFA matrices at the current model temperature based on the tabular data.
+Given that the tabular data is available at sufficiently many temperatures, the linear interpolation provides results with decent accuracy.
+This is done using the class [<cite>thermontfa.TabularInterpolation</cite>](<a class="reference external" href="https://github.com/DataAnalyticsEngineering/ThermoNTFA/blob/main/thermontfa/tabular_interpolation.py">https://github.com/DataAnalyticsEngineering/ThermoNTFA/blob/main/thermontfa/tabular_interpolation.py</a>).</p>
+<p>3. Use the tabular data to initialize the thermo-mechanical NTFA UMAT that is implemented in the class [<cite>thermontfa.ThermoMechNTFA</cite>](<a class="reference external" href="https://github.com/DataAnalyticsEngineering/ThermoNTFA/blob/main/thermontfa/thermoNTFA.py">https://github.com/DataAnalyticsEngineering/ThermoNTFA/blob/main/thermontfa/thermoNTFA.py</a>).
+This reference implementation in Python can be transcribed to an UMAT for other academic or commercial simulation softwares.
+The numerical experiments in our paper are conducted using an implementation of the thermo-mechanical NTFA UMAT in C++ for an in-house FE solver.</p>
+<div class="toctree-wrapper compound">
+<p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api.html">ThermoNTFA Documentation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="api.html#thermontfa.TabularInterpolation"><code class="docutils literal notranslate"><span class="pre">TabularInterpolation</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="api.html#thermontfa.ThermoMechNTFA"><code class="docutils literal notranslate"><span class="pre">ThermoMechNTFA</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="MarkdownLinks/license.html">License</a></li>
+<li class="toctree-l1"><a class="reference internal" href="MarkdownLinks/citation.html">Citation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="MarkdownLinks/changelog.html">Changelog</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="MarkdownLinks/changelog.html#id1">[1.0.0]</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<p><strong>© Copyright 2024</strong></p>
+<blockquote>
+<div><ul class="simple">
+<li><p>Felix Fritzen (<a class="reference external" href="mailto:fritzen&#37;&#52;&#48;simtech&#46;uni-stuttgart&#46;de">fritzen<span>&#64;</span>simtech<span>&#46;</span>uni-stuttgart<span>&#46;</span>de</a>),</p></li>
+<li><p>Julius Herb (<a class="reference external" href="mailto:julius&#46;herb&#37;&#52;&#48;mib&#46;uni-stuttgart&#46;de">julius<span>&#46;</span>herb<span>&#64;</span>mib<span>&#46;</span>uni-stuttgart<span>&#46;</span>de</a>),</p></li>
+<li><p>Shadi Sharba (<a class="reference external" href="mailto:shadi&#46;sharba&#37;&#52;&#48;isc&#46;fraunhofer&#46;de">shadi<span>&#46;</span>sharba<span>&#64;</span>isc<span>&#46;</span>fraunhofer<span>&#46;</span>de</a>)</p></li>
+</ul>
+<p>University of Stuttgart, Institute of Applied Mechanics, Chair for Data Analytics in Engineering</p>
+</div></blockquote>
+<p><strong>Funding acknowledgment</strong></p>
+<blockquote>
+<div><p>The IGF-Project no.: 21.079 N / DVS-No.: 06.3341 of the “Forschungsvereinigung Schweißen und verwandte Verfahren e.V.”
+of the German Welding Society (DVS), Aachener Str. 172, 40223 Düsseldorf, Germany, was funded by the Federal Ministry
+for Economic Affairs and Climate Action (BMWK) via the German Federation of Industrial Research Associations (AiF)
+in accordance with the policy to support the Industrial Collective Research (IGF) on the orders of the German Bundestag.</p>
+<a class="reference internal image-reference" href="../data/bmwk.png"><img alt="../data/bmwk.png" src="../data/bmwk.png" style="width: 30%;" /></a>
+<p>Felix Fritzen is funded by the German Research Foundation (DFG) –
+390740016 (EXC-2075); 406068690 (FR2702/8-1); 517847245 (FR2702/10-1).</p>
+</div></blockquote>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="installation.html" class="btn btn-neutral float-right" title="Installation" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; <a href="copyright.html">Copyright</a> 2024, Felix Fritzen, Julius Herb, Shadi Sharba.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
