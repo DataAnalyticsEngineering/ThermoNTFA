@@ -2,7 +2,7 @@
 
 <!-- The badges we want to display -->
 [![pages-build-deployment](https://github.com/DataAnalyticsEngineering/ThermoNTFA/actions/workflows/pages/pages-build-deployment/badge.svg)](https://github.com/DataAnalyticsEngineering/ThermoNTFA/actions/workflows/pages/pages-build-deployment)
-[![Build & Publish Documentation](https://github.com/DataAnalyticsEngineering/ThermoNTFA/actions/workflows/sphinx.yml/badge.svg)](https://github.com/Systems-Theory-in-Systems-Biology/EPI/actions/workflows/sphinx.yml)
+[![Build & Publish Documentation](https://github.com/DataAnalyticsEngineering/ThermoNTFA/actions/workflows/sphinx.yml/badge.svg)](https://github.com/DataAnalyticsEngineering/ThermoNTFA/actions/workflows/sphinx.yml)
 [![Publish to PyPI](https://github.com/DataAnalyticsEngineering/ThermoNTFA/actions/workflows/publish.yml/badge.svg)](https://github.com/DataAnalyticsEngineering/ThermoNTFA/actions/workflows/publish.yml)
 [![pytest](https://img.shields.io/github/actions/workflow/status/DataAnalyticsEngineering/ThermoNTFA/ci.yml?label=pytest&logo=pytest)](https://github.com/DataAnalyticsEngineering/ThermoNTFA/actions/workflows/ci.yml)
 
