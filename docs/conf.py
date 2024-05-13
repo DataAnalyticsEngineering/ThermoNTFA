@@ -24,7 +24,6 @@ extensions = [
     "sphinx.ext.autosectionlabel",
     "nbsphinx",
     "sphinx_gallery.load_style",
-    "nbsphinx_link",
 ]
 myst_enable_extensions = ["dollarmath", "amsmath"]
 nbsphinx_allow_errors = True

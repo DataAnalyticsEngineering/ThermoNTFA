@@ -2,10 +2,10 @@ Examples
 --------
 
 .. nbgallery::
-   examples/material_parameters.nblink
-   examples/truncate_ntfa_modes.nblink
-   examples/paper_plots.nblink
-   examples/generate_inputs.nblink
-   examples/generate_plots.nblink
-   examples/NTFA_thermo_paper.nblink
-   examples/thermoNTFA_example.nblink
+   examples/material_parameters
+   examples/truncate_ntfa_modes
+   examples/paper_plots
+   examples/generate_inputs
+   examples/generate_plots
+   examples/NTFA_thermo_paper
+   examples/thermoNTFA_example
