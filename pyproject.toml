@@ -28,13 +28,15 @@ dependencies = [
 
 [project.optional-dependencies]
 dev = [
-    'jupytext~=1.16.1',
-    'jupyterlab~=4.1.8',
-    'pre_commit~=3.7.0',
-    'pytest',
+    'jupyterlab~=4.2.0',
+    'jupytext~=1.16.2',
+    'pre-commit~=3.7.1',
+    'pytest~=8.2.0',
     'sphinx',
-    'myst_parser',
-    'sphinx_rtd_theme'
+    'myst-parser~=3.0.1',
+    'nbsphinx~=0.9.4',
+    'sphinx-gallery~=0.16.0',
+    'sphinx-rtd-theme~=2.0.0'
 ]
 
 [tool.flake8]
