@@ -70,6 +70,12 @@ A PIP package is available on pypi and can be installed with:
 pip install thermontfa
 ```
 
+If you want to install optional dependencies for development:
+
+```bash
+pip install thermontfa[dev]
+```
+
 ### From this repository
 
 The most recent version of the PIP package can also be installed directly after cloning this repository.
@@ -78,6 +84,14 @@ The most recent version of the PIP package can also be installed directly after 
 git clone https://github.com/DataAnalyticsEngineering/ThermoNTFA.git
 cd ThermoNTFA
 pip install -e .
+```
+
+If you want to install optional dependencies for development:
+
+```bash
+git clone https://github.com/DataAnalyticsEngineering/ThermoNTFA.git
+cd ThermoNTFA
+pip install -e .[dev]
 ```
 
 ### Requirements

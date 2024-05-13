@@ -3,15 +3,13 @@
 # %% [markdown]
 # # Thermo-mechanical NTFA - Generate plots
 #
-# (c) 2024,
 # Felix Fritzen <fritzen@simtech.uni-stuttgart.de>,
 # Julius Herb <julius.herb@mib.uni-stuttgart.de>,
 # Shadi Sharba <shadi.sharba@isc.fraunhofer.de>
 #
 # University of Stuttgart, Institute of Applied Mechanics, Chair for Data Analytics in Engineering
 #
-# > <table border="0"><tr><td>
-# > <h4>Funding acknowledgment</h4>
+# > **Funding acknowledgment**
 # > The IGF-Project no.: 21.079 N / DVS-No.: 06.3341 of the
 # > “Forschungsvereinigung Schweißen und verwandte Verfahren e.V.” of the
 # > German Welding Society (DVS), Aachener Str. 172, 40223 Düsseldorf, Germany,
@@ -19,10 +17,9 @@
 # > via the German Federation of Industrial Research Associations (AiF) in accordance
 # > with the policy to support the Industrial Collective Research (IGF)
 # > on the orders of the German Bundestag.
-# > <br><br>
+# >
 # > Felix Fritzen is funded by the German Research Foundation (DFG) --
 # > 390740016 (EXC-2075); 406068690 (FR2702/8-1); 517847245 (FR2702/10-1).
-# > </td><td><img src="../docs/images/bmwk.png" width="40%"></img></td></tr></table>
 #
 # ## Imports
 
@@ -60,41 +57,43 @@ def Vec2Tensor(vec):
 # ## Read tabular data for NTFA matrices from file
 
 # %% read the NTFA data into tabular interpolatoin objects
-mode_file_name = os.path.join("data", "simple_3d_rve_B1-B6_16x16x16_10samples_fix.h5")
+mode_file_name = os.path.join(
+    "data", "", "simple_3d_rve_B1-B6_16x16x16_10samples_fix.h5"
+)
 A_bar = TabularInterpolation.from_h5(
     mode_file_name,
-    "/ms_9p/dset0_ntfa/temperatures",
-    "/ms_9p/dset0_ntfa/A_bar",
+    dset_temps="/ms_9p/dset0_ntfa/temperatures",
+    dset_data="/ms_9p/dset0_ntfa/A_bar",
     transpose_dims=(2, 0, 1),
 )
 C_bar = TabularInterpolation.from_h5(
     mode_file_name,
-    "/ms_9p/dset0_ntfa/temperatures",
-    "/ms_9p/dset0_ntfa/C_bar",
+    dset_temps="/ms_9p/dset0_ntfa/temperatures",
+    dset_data="/ms_9p/dset0_ntfa/C_bar",
     transpose_dims=(2, 0, 1),
 )
 A_cu = TabularInterpolation.from_h5(
     mode_file_name,
-    "/ms_9p/dset0_ntfa/temperatures",
-    "/ms_9p/dset0_ntfa/A0",
+    dset_temps="/ms_9p/dset0_ntfa/temperatures",
+    dset_data="/ms_9p/dset0_ntfa/A0",
     transpose_dims=(2, 0, 1),
 )
 A_wsc = TabularInterpolation.from_h5(
     mode_file_name,
-    "/ms_9p/dset0_ntfa/temperatures",
-    "/ms_9p/dset0_ntfa/A1",
+    dset_temps="/ms_9p/dset0_ntfa/temperatures",
+    dset_data="/ms_9p/dset0_ntfa/A1",
     transpose_dims=(2, 0, 1),
 )
 C_cu = TabularInterpolation.from_h5(
     mode_file_name,
-    "/ms_9p/dset0_ntfa/temperatures",
-    "/ms_9p/dset0_ntfa/C0",
+    dset_temps="/ms_9p/dset0_ntfa/temperatures",
+    dset_data="/ms_9p/dset0_ntfa/C0",
     transpose_dims=(2, 0, 1),
 )
 C_wsc = TabularInterpolation.from_h5(
     mode_file_name,
-    "/ms_9p/dset0_ntfa/temperatures",
-    "/ms_9p/dset0_ntfa/C1",
+    dset_temps="/ms_9p/dset0_ntfa/temperatures",
+    dset_data="/ms_9p/dset0_ntfa/C1",
     transpose_dims=(2, 0, 1),
 )
 

@@ -18,7 +18,16 @@ release = "1.0"
 # -- General configuration ---------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration
 
-extensions = ["myst_parser", "sphinx.ext.autodoc"]
+extensions = [
+    "myst_parser",
+    "sphinx.ext.autodoc",
+    "sphinx.ext.autosectionlabel",
+    "nbsphinx",
+    "sphinx_gallery.load_style",
+    "nbsphinx_link",
+]
+myst_enable_extensions = ["dollarmath", "amsmath"]
+nbsphinx_allow_errors = True
 
 templates_path = ["_templates"]
 exclude_patterns = ["build", "Thumbs.db", ".DS_Store"]
@@ -37,4 +46,7 @@ def skip(app, what, name, obj, would_skip, options):
 
 
 def setup(app):
+    if not os.path.exists("examples"):
+        os.symlink(os.path.join("..", "examples"), "examples")
+
     app.connect("autodoc-skip-member", skip)

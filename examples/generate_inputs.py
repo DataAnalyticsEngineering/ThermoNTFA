@@ -3,15 +3,13 @@
 # %% [markdown]
 # # Thermo-mechanical NTFA - Generate input files
 #
-# (c) 2024,
 # Felix Fritzen <fritzen@simtech.uni-stuttgart.de>,
 # Julius Herb <julius.herb@mib.uni-stuttgart.de>,
 # Shadi Sharba <shadi.sharba@isc.fraunhofer.de>
 #
 # University of Stuttgart, Institute of Applied Mechanics, Chair for Data Analytics in Engineering
 #
-# > <table border="0"><tr><td>
-# > <h4>Funding acknowledgment</h4>
+# > **Funding acknowledgment**
 # > The IGF-Project no.: 21.079 N / DVS-No.: 06.3341 of the
 # > “Forschungsvereinigung Schweißen und verwandte Verfahren e.V.” of the
 # > German Welding Society (DVS), Aachener Str. 172, 40223 Düsseldorf, Germany,
@@ -19,10 +17,9 @@
 # > via the German Federation of Industrial Research Associations (AiF) in accordance
 # > with the policy to support the Industrial Collective Research (IGF)
 # > on the orders of the German Bundestag.
-# > <br><br>
+# >
 # > Felix Fritzen is funded by the German Research Foundation (DFG) --
 # > 390740016 (EXC-2075); 406068690 (FR2702/8-1); 517847245 (FR2702/10-1).
-# > </td><td><img src="../docs/images/bmwk.png" width="40%"></img></td></tr></table>
 #
 # ## Imports
 
@@ -38,10 +35,15 @@ import numpy as np
 data_path = "../data"
 
 # %% [markdown]
-# ## Load H5 file with training simulations (snapshots)
+# ## Load H5 file with validation simulations
+#
+# While the NTFA is trained based on snapshots at 10 temperature points,
+# this data set contains snapshots at 100 temperature points.
 
 # %%
-file_name = os.path.join(data_path, "simple_3d_rve_B1-B6_16x16x16_100samples_fix.h5")
+file_name = os.path.join(
+    data_path, "validation", "simple_3d_rve_B1-B6_16x16x16_100samples_fix.h5"
+)
 group_name = "/ms_9p/dset0_sim"
 suffix = "_fix16_N24_100s"
 prefix = os.path.join(data_path, "loadcases")
@@ -89,9 +91,7 @@ F.close()
 ntfa_S = []
 ntfa_S0 = []
 ntfa_S1 = []
-# modefn="modes/ms9p_ntfa4_B1-6_2s_N12.h5"
-modefn = "modes/ms9p_fix_ntfa16_B1-6_10s_N24.h5"
-# modefn ="modes/ms9p_ntfa16_B1-6_N12_b.h5"
+modefn = os.path.join(data_path, "ntfa", "ms9p_fix_ntfa16_B1-6_10s_N24.h5")
 orig_stdout = sys.stdout
 amplitudes = np.ones(loadcases.shape[0])
 for n, d, amp in zip(count(), loadcases, amplitudes):
@@ -266,7 +266,9 @@ plt.savefig("rel_err_sig_wsc_10s.pdf", format="pdf")
 # ## Save all results to H5 file
 
 # %%
-F = h5py.File(os.path.join(data_path, "all_results_ms9p_16x16x16_100s_N24.h5"), "w")
+F = h5py.File(
+    os.path.join(data_path, "results", "all_results_ms9p_16x16x16_100s_N24.h5"), "w"
+)
 
 F.create_dataset("/eps", data=ntfa_eps)
 F.create_group("/ntfa")

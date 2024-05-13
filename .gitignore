@@ -1,7 +1,8 @@
 # Data directory
 /data
-!/data/.gitkeep
+!.gitkeep
 /vtk
+/docs/examples
 
 # Results directory
 /results
