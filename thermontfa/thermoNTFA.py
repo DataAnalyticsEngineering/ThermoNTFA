@@ -38,6 +38,8 @@ class ThermoMechNTFA:
     with temperature-dependent material parameters in both phases.
     """
 
+    # TODO: Document properties
+
     def __init__(
         self,
         file_name: str,
@@ -46,12 +48,12 @@ class ThermoMechNTFA:
         N_max: Optional[int] = None,
         tol: float = 1e-4,
         verbose: bool = False,
-    ):
+    ) -> None:
         """
-        Initialize the thermo-mechanical NTFA from an H5 file
+        Initialize the thermo-mechanical NTFA from an HDF5 file (*.h5)
 
-        Seek the data in H5-file named `file_name` within the group `group_name`.
-        The following datasets containing tabular data for the NTFA are expected:
+        Seek the data in HDF5 file named `file_name` within the group `group_name`.
+        The following data sets containing tabular data for the NTFA are expected in the group:
         - `temperatures`: list of temperature points of the tabular data, shape: `(N_temp,)`
         - `A_bar`: shape: `(N_temp, N_modes, 6)`
         - `C_bar`: shape: `(N_temp, 6, 6)`
@@ -59,9 +61,13 @@ class ThermoMechNTFA:
         - `tau_theta`: shape: `(N_temp, 6)`
         - `tau_xi`: shape: `(N_temp, N_modes)`
 
-        :param file_name: path to the H5 file
+        In addition, the group in the HDF5 file must contain the following data sets:
+        - `v_frac`: volume fraction of the different phases
+        - `SIG_phases`: stress data different phases
+
+        :param file_name: path to the HDF5 file
         :type file_name: str
-        :param group_name: group in the H5 file that contains the NTFA tabular data
+        :param group_name: group in the HDF5 file that contains the NTFA tabular data
         :type group_name: str
         :param sig_y: function/callable that returns the yield stress `sig_y(theta, q_n, derivative)`
             given the temperature `theta` and the current isotropic hardening variable `q_n`.
@@ -79,57 +85,55 @@ class ThermoMechNTFA:
         self.N_max = N_max
         self.verbose = verbose
 
-        self.A_bar = TabularInterpolation()
-        self.A_bar.init_h5(
-            self.file_name,
-            self.group_name + "/temperatures",
-            self.group_name + "/A_bar",
+        self.A_bar = TabularInterpolation.from_h5(
+            file_name=self.file_name,
+            dset_temps=self.group_name + "/temperatures",
+            dset_data=self.group_name + "/A_bar",
         )
 
-        self.C_bar = TabularInterpolation()
-        self.C_bar.init_h5(
-            self.file_name,
-            self.group_name + "/temperatures",
-            self.group_name + "/C_bar",
+        self.C_bar = TabularInterpolation.from_h5(
+            file_name=self.file_name,
+            dset_temps=self.group_name + "/temperatures",
+            dset_data=self.group_name + "/C_bar",
         )
 
-        self.D_xi = TabularInterpolation()
-        self.D_xi.init_h5(
-            self.file_name, self.group_name + "/temperatures", self.group_name + "/D_xi"
+        self.D_xi = TabularInterpolation.from_h5(
+            file_name=self.file_name,
+            dset_temps=self.group_name + "/temperatures",
+            dset_data=self.group_name + "/D_xi",
         )
 
-        self.tau_th = TabularInterpolation()
-        self.tau_th.init_h5(
-            self.file_name,
-            self.group_name + "/temperatures",
-            self.group_name + "/tau_theta",
+        self.tau_theta = TabularInterpolation.from_h5(
+            file_name=self.file_name,
+            dset_temps=self.group_name + "/temperatures",
+            dset_data=self.group_name + "/tau_theta",
         )
 
-        self.tau_xi = TabularInterpolation()
-        self.tau_xi.init_h5(
-            self.file_name,
-            self.group_name + "/temperatures",
-            self.group_name + "/tau_xi",
+        self.tau_xi = TabularInterpolation.from_h5(
+            file_name=self.file_name,
+            dset_temps=self.group_name + "/temperatures",
+            dset_data=self.group_name + "/tau_xi",
         )
 
-        with h5py.File(self.file_name, "r") as F:
-            self.v_frac = np.array(F[self.group_name + "/v_frac"])
-            sig_phases_data = np.array(F[self.group_name + "/SIG_phases"])
+        with h5py.File(self.file_name, "r") as file:
+            self.v_frac = np.array(file[self.group_name + "/v_frac"])
+            sig_phases_data = np.array(file[self.group_name + "/SIG_phases"])
 
-        N_input = self.A_bar.data.shape[1]
+        N_input = self.A_bar.dim[0]
         if self.N_max is not None:
             # truncate modes if needed
             assert (
                 self.N_max <= N_input
             ), f"N_modes on input ({N_input}) is smaller than the provided N_max ({self.N_max})"
+            # TODO: truncate in tabular interpolation?
             self.A_bar.data = self.A_bar.data[:, : self.N_max, :]
             self.D_xi.data = self.D_xi.data[:, : self.N_max, : self.N_max]
             self.tau_xi.data = self.tau_xi.data[:, : self.N_max]
             sig_phases_data = sig_phases_data[:, :, :, : (self.N_max + 7)]
 
         self.sig_phases = []
-        for d in sig_phases_data:
-            self.sig_phases.append(TabularInterpolation(self.A_bar.t, d))
+        for sig_data in sig_phases_data:
+            self.sig_phases.append(TabularInterpolation(self.A_bar.temps, sig_data))
 
         self.theta_i = 0.0  # last interpolation temperature
         self.C = self.C_bar.interpolate(self.theta_i)
@@ -139,7 +143,7 @@ class ThermoMechNTFA:
         self.t_xi = self.tau_xi.interpolate(self.theta_i)
         self.n_modes = self.D_xi.data.shape[-1]
 
-    def interpolate(self, theta: float):
+    def interpolate(self, theta: float) -> None:
         """
         Interpolate NTFA matrices to current temperature `theta` if the given tolerance is exceeded
 
@@ -180,6 +184,100 @@ class ThermoMechNTFA:
         else:
             zeta = np.hstack((eps, 1, xi))
             return self.sig_phases[i_phase].interpolate(theta) @ zeta
+
+    def UMAT_mixed(
+        self,
+        eps_idx: np.ndarray,
+        eps_n: np.ndarray,
+        deps: np.ndarray,
+        sig_bc: np.ndarray,
+        theta: float,
+        q_n: float,
+        xi_n: np.ndarray,
+    ) -> Tuple[np.ndarray, np.ndarray, np.ndarray, float, np.ndarray]:
+        """
+        Run the UMAT using partial eps-BC, e.g., uniaxial tension test.
+
+        :param eps_idx: Indices of eps that are prescribed. If `None`, then all components of `sig_bc` are prescribed.
+        :type eps_idx: nd-array, dtype=int
+        :param eps_n: Strain at the beginning of the increment.
+        :type eps_n: nd-array, dtype=float, shape=[6]
+        :param deps: Strain increment. Only deps[eps_idx] is used.
+        :type deps: nd-array, dtype=float, shape=[6]
+        :param sig_bc: Stress at the end of the increment. Only non `eps_idx` components are used.
+        :type sig_bc: nd-array, dtype=float, shape=[6]
+        :param theta: Temperature at the end of the time increment.
+        :type theta: float
+        :param q_n: Hardening variable at the beginning of the time increment.
+        :type q_n: float
+        :param xi_n: Reduced coefficients at the beginning of the time increment.
+        :type xi_n: nd-array, dtype=float
+        :return: **E** -
+            Full strain tensor at the end of the increment, i.e.
+            the entries not within eps_idx are set
+        :rtype: np.ndarray, dtype=float, shape=[6]
+        :return: **S** -
+            Stress at the end of the increment. Only S[eps_idx] is non-zero.
+        :rtype: np.ndarray, dtype=float
+        :return: **C** -
+            Stiffness tensor at the end of the increment
+        :rtype: `np.ndarray`, `dtype=float`, `shape=[6, 6]`
+        :return: **q** -
+            Hardening variable at the end of the time increment
+        :rtype: float
+        :return: **xi** -
+            Reduced coefficients at the end of the time increment
+        :rtype: `nd.ndarray`, `dtype=float`
+        """
+        q = q_n
+        # partial strain update:
+        sig_idx = np.setdiff1d(np.arange(6), eps_idx)
+
+        eps = eps_n.copy()
+        eps[eps_idx] += deps[eps_idx]
+        deps[sig_idx] = 0.0
+
+        self.tol_sig = 1e-7 * self.sig_y(theta, q_n, derivative=False)
+        err_sig = 1000.0 * self.tol_sig
+        it = 0
+        it_max = 100
+
+        # eleminate thermo-elastic effects and approximate deps
+        sig = self.stress(eps_n, theta, xi_n)
+        
+        # initial guess for eps asserting elastic behaviour
+        C = self.C
+        deps[sig_idx] += np.linalg.solve(
+            C[sig_idx][:, sig_idx],
+            -(sig[sig_idx] - sig_bc[sig_idx]) - C[sig_idx, :] @ deps,
+        )
+
+        # compute the actual stress state
+        eps = eps_n + deps
+        sig, q, xi, C = self.solve(eps, deps, theta, q_n, xi_n)
+        err_sig = np.linalg.norm(sig[sig_idx])
+        while (err_sig > self.tol_sig) and (it < it_max):
+            ddeps = -np.linalg.solve(
+                C[sig_idx][:, sig_idx], sig[sig_idx] - sig_bc[sig_idx]
+            )
+            factor = 1.0
+            deps[sig_idx] += factor * ddeps
+            eps = eps_n + deps
+            sig, q, xi, C = self.solve(eps, deps, theta, q_n, xi_n)
+            err_sig = np.linalg.norm(sig[sig_idx])
+            it = it + 1
+
+            if self.verbose:
+                err_eps = np.linalg.norm(ddeps)
+                print(f'it {it:3d} .. err_eps {err_eps:10.3e} (self.tol: {self.tol_eps:8.3e}) "
+                      + ".. err_sig {err_sig:10.3e} (self.tol: {self.tol_sig:8.3e})')
+        
+        eps = eps_n + deps
+
+        if self.verbose:
+            print(f'needed {it} iterations...')
+        
+        return eps, sig, C, q, xi
 
     def solve(
         self,
@@ -303,89 +401,3 @@ class ThermoMechNTFA:
             # self.dxi_deps = np.zeros((self.n_modes, 6))
             S = self.stress(eps, theta, xi_n)
         return S, q, xi, C
-
-    def UMAT_mixed(
-        self,
-        eps_idx: np.ndarray,
-        eps_n: np.ndarray,
-        deps: np.ndarray,
-        sig_bc: np.ndarray,
-        theta: float,
-        q_n: float,
-        xi_n: np.ndarray,
-    ) -> Tuple[np.ndarray, np.ndarray, np.ndarray, float, np.ndarray]:
-        """
-        Run the UMAT using partial eps-BC, e.g., uniaxial tension test.
-
-        :param eps_idx: Indices of eps that are prescribed. If None, then all components of sigma are prescribed.
-        :type eps_idx: nd-array, dtype=int
-        :param eps_n: Strain at the beginning of the increment.
-        :type eps_n: nd-array, dtype=float, shape=[6]
-        :param deps: Strain increment. Only deps[eps_idx] is used.
-        :type deps: nd-array, dtype=float, shape=[6]
-        :param sig_bc: Stress at the end of the increment. Only non eps_idx entries are used.
-        :type sig_bc: nd-array, dtype=float, shape=[6]
-        :param theta: Temperature at the end of the time increment.
-        :type theta: float
-        :param q_n: Hardening variable at the beginning of the time increment.
-        :type q_n: float
-        :param xi_n: Reduced coefficients at the beginning of the time increment.
-        :type xi_n: nd-array, dtype=float
-        :return: **E** -
-            Full strain tensor at the end of the increment, i.e.
-            the entries not within eps_idx are set
-        :rtype: np.ndarray, dtype=float, shape=[6]
-        :return: **S** -
-            Stress at the end of the increment. Only S[eps_idx] is non-zero.
-        :rtype: np.ndarray, dtype=float
-        :return: **C** -
-            Stiffness tensor at the end of the increment
-        :rtype: `np.ndarray`, `dtype=float`, `shape=[6, 6]`
-        :return: **q** -
-            Hardening variable at the end of the time increment
-        :rtype: float
-        :return: **xi** -
-            Reduced coefficients at the end of the time increment
-        :rtype: `nd.ndarray`, `dtype=float`
-        """
-        q = q_n
-        # partial strain update:
-        sig_idx = np.setdiff1d(np.arange(6), eps_idx)
-
-        eps = eps_n.copy()
-        eps[eps_idx] += deps[eps_idx]
-        deps[sig_idx] = 0.0
-
-        self.tol_sig = 1e-7 * self.sig_y(theta, q_n, derivative=False)
-        err_sig = 1000.0 * self.tol_sig
-        it = 0
-        it_max = 100
-
-        # eleminate thermo-elastic effects and approximate deps
-        sig = self.stress(eps_n, theta, xi_n)
-        # initial guess for eps asserting elastic behaviour
-        C = self.C
-        deps[sig_idx] += np.linalg.solve(
-            C[sig_idx][:, sig_idx],
-            -(sig[sig_idx] - sig_bc[sig_idx]) - C[sig_idx, :] @ deps,
-        )
-        # compute the actual stress state
-        eps = eps_n + deps
-        sig, q, xi, C = self.solve(eps, deps, theta, q_n, xi_n)
-        err_sig = np.linalg.norm(sig[sig_idx])
-        while (err_sig > self.tol_sig) and (it < it_max):
-            ddeps = -np.linalg.solve(
-                C[sig_idx][:, sig_idx], sig[sig_idx] - sig_bc[sig_idx]
-            )
-            factor = 1.0
-            deps[sig_idx] += factor * ddeps
-            eps = eps_n + deps
-            # err_eps = np.linalg.norm(ddeps)
-            sig, q, xi, C = self.solve(eps, deps, theta, q_n, xi_n)
-            err_sig = np.linalg.norm(sig[sig_idx])
-            it = it + 1
-            # print(f'it {it:3d} .. err_eps {err_eps:10.3e} (self.tol: {self.tol_eps:8.3e}) "
-            #       + ".. err_sig {err_sig:10.3e} (self.tol: {self.tol_sig:8.3e}) ')
-        eps = eps_n + deps
-        # print(f'needed {it} iterations...')
-        return eps, sig, C, q, xi

@@ -53,7 +53,7 @@ The corresponding implementation is available in our [AdaptiveThermoMechROM](htt
 
 ### Online phase: Usage of the thermo-mechanical NTFA in simulations on the macroscale
 
-1. Load the tabular data for the NTFA matrices $`\underline{\underline{A}}(\theta_j)`$, $`\underline{\underline{D}}(\theta_j)`$, $`\bar{\underline{\underline{C}}}(\theta_j)`$, $`\underline{\tau}\_{\mathrm{\theta}}(\theta_j)`$, and $`\underline{\tau}_{\mathsf{p}}(\theta_j)`$ that are generated in the offline phase based on direct numerical simulations on the microscale.
+1. Load the tabular data for the NTFA matrices $`\underline{\underline{A}}(\theta_j)`$, $`\underline{\underline{D}}(\theta_j)`$, $`\bar{\underline{\underline{C}}}(\theta_j)`$, $`\underline{\tau}_{\mathrm{\theta}}(\theta_j)`$, and $`\underline{\tau}_{\mathsf{p}}(\theta_j)`$ that are generated in the offline phase based on direct numerical simulations on the microscale.
 Optionally truncate the NTFA modes $`N_{\mathrm{modes}}`$ to be used.
 
 2. Perform a linear interpolation to determine the NTFA matrices at the current model temperature based on the tabular data.
@@ -86,7 +86,11 @@ pip install -e .
 
 ### Requirements
 
-TODO: update
+TODO: update dependencies
+
+TODO: upload dataset to Darus
+
+TODO: provide functionality for download from Darus
 
 - Python 3.9 or later
 - `numpy` and `h5py` (installed as part of the `thermontfa` PIP package)
