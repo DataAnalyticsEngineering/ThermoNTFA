@@ -38,7 +38,7 @@ jobs:
         with:
           python-version: ${{ matrix.python-version }}
       - name: Install thermontfa
-        run: pip install .
+        run: pip install .[dev]
       - name: Run pytest
         run: |
           pip install pytest
