@@ -70,7 +70,7 @@ jobs:
       - name: Build documentation
         run: |
           cd docs
-          make html
+          TZ=UTC make html
       - name: Upload artifacts
         uses: actions/upload-artifact@v3
         with:

@@ -14,10 +14,10 @@ TODO: abstract
    :maxdepth: 2
    :caption: Contents:
 
-   Workflow<workflow>
-   Installation<installation>
-   ThermoNTFA Documentation<api>
-   Examples<examples>
+   workflow
+   installation
+   api
+   examples
    MarkdownLinks/license
    MarkdownLinks/citation
    MarkdownLinks/changelog
