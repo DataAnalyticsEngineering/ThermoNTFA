@@ -26,7 +26,7 @@ jobs:
           - ubuntu-latest
           # - windows-latest Reason: get it running on ubuntu-latest first
           # - macOS-latest   Reason: get it running on ubuntu-latest first
-        python-version: ["3.11", "3.10"]
+        python-version: ["3.11",]
     name: Run tests
     runs-on: ${{ matrix.os }}
     steps:
@@ -64,7 +64,10 @@ jobs:
         with:
           python-version: ${{ matrix.python-version }}
       - name: Install pandoc
-        uses: docker://pandoc/core:2.9
+        #uses: docker://pandoc/core:2.9
+        run: |
+          apt update
+          apt install pandoc -y
       - name: Install thermontfa
         run: pip install .[dev]
       - name: Build documentation

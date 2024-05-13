@@ -35,11 +35,7 @@
 # > Felix Fritzen is funded by the German Research Foundation (DFG) --
 # > 390740016 (EXC-2075); 406068690 (FR2702/8-1); 517847245 (FR2702/10-1).
 #
-# ## Mode study
-# ## Training reproduction tests
-# ## Random loading
-# ## Stress-driven simulation
-# ## Twoscale simulation
+# ## Imports:
 
 # %%
 import os
@@ -80,6 +76,13 @@ def rel_error(A, A_ref, r_min=None):
             np.maximum(r_min, np.linalg.norm(A_ref, axis=1))
         )
 
+
+# %% [markdown]
+# ## Mode study
+# ## Training reproduction tests
+# ## Random loading
+# ## Stress-driven simulation
+# ## Twoscale simulation
 
 # %% [markdown]
 # **Load the NTFA data**
@@ -169,7 +172,7 @@ with h5py.File(fname, "r") as F:
     ntfa_q = np.array(F["/ntfa/q"])
     ntfa_xi = np.array(F["/ntfa/xi"])
 
-# %%
+# %% [markdown]
 # ### Relative error in sig_bar for 300 and 1300 K
 
 # %%
@@ -608,13 +611,14 @@ with h5py.File("ms9p_uniaxial_stress_data_mod.h5", "w") as F:
             GG.create_dataset("xi", data=xi)
 
 
-# %% Figuring when palsticity kicks in using the mixed UMAT
+# %% [markdown]
 # 1. set the stress to 0
 # 2. ramp the temperature from 293K
 # 3. check for q >= q_crit_0, q_crit_1, ...
 #    e.g. q_crit_0 = 0.002 (i.e. 0.2%)
-# draw the results of theta
+# 4. draw the results of theta
 
+# %% Figuring when palsticity kicks in using the mixed UMAT
 n_ramp = 1300 - 293 + 1
 with h5py.File("ms9p_thermal_rampup.h5", "w") as F:
     eps_idx = None
