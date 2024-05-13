@@ -31,7 +31,10 @@ dev = [
     'jupytext~=1.16.1',
     'jupyterlab~=4.1.8',
     'pre_commit~=3.7.0',
-    'pytest'
+    'pytest',
+    'sphinx',
+    'myst_parser',
+    'sphinx_rtd_theme'
 ]
 
 [tool.flake8]
