@@ -1,7 +1,7 @@
 # ThermoNTFA
 
 <!-- The badges we want to display -->
-<!--[![pytest](https://img.shields.io/github/actions/workflow/status/DataAnalyticsEngineering/ThermoNTFA/ci.yml?label=pytest&logo=pytest)](https://github.com/DataAnalyticsEngineering/ThermoNTFA/actions/workflows/ci.yml)-->
+[![pytest](https://github.com/DataAnalyticsEngineering/ThermoNTFA/actions/workflows/ci.yml/badge.svg)](https://github.com/DataAnalyticsEngineering/ThermoNTFA/actions/workflows/ci.yml)
 [![flake8](https://img.shields.io/badge/flake8-checked-blue.svg)](https://flake8.pycqa.org/)
 [![black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](./LICENSE.md)
