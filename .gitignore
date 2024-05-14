@@ -1,6 +1,4 @@
 # Data directory
-/data
-!.gitkeep
 /vtk
 /docs/examples
 

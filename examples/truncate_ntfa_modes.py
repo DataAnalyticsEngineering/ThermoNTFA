@@ -26,18 +26,18 @@
 # %%
 import h5py
 import numpy as np
+import os
 
 from material_parameters import *
 
-# %%
-# fname = "modes/simple_3d_rve_B1-6_4x4x4_10samples.h5"
-# fname = "new/simple_3d_rve_B1-B6_8x8x8_10samples.h5"
-# fname = "new/simple_3d_rve_4x4x4_2samples_new.h5"
-# fname = "new/simple_3d_rve_B1-B6_8x8x8_10samples.h5"
-fname = "data/simple_3d_rve_B1-B6_16x16x16_10samples_fix.h5"
-basename = "/ms_9p/dset0_ntfa/"
+data_path = "../data"
 
 # %%
+fname = os.path.join(
+    data_path, "validation", "simple_3d_rve_B1-B6_16x16x16_10samples_fix.h5"
+)
+basename = "/ms_9p/dset0_ntfa/"
+
 F = h5py.File(fname, "r")
 A_bar = np.array(F[basename + "A_bar"])
 A0 = np.array(F[basename + "A0"])

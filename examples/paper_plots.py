@@ -56,6 +56,8 @@ from thermontfa import TabularInterpolation, ThermoMechNTFA
 matplotlib.rc("font", size=14)
 plt.rcParams["figure.dpi"] = 400
 
+data_path = "../data"
+
 
 def Vec2Tensor(vec):
     """Convert a 6-vector (in Mandel notation) into a sym. 3x3 Matrix"""
@@ -85,50 +87,46 @@ def rel_error(A, A_ref, r_min=None):
 # **Load the NTFA data**
 
 # %%
-mode_fn = os.path.join("data", "simple_3d_rve_B1-B6_16x16x16_10samples_fix.h5")
+mode_fn = os.path.join(
+    data_path, "validation", "simple_3d_rve_B1-B6_16x16x16_10samples_fix.h5"
+)
 # read the tabularized data for all operators individually
 # this also happens inside of the ThermoNTFA class during initialization
-A_bar = TabularInterpolation()
-A_bar.InitH5(
+A_bar = TabularInterpolation.from_h5(
     mode_fn,
     "/ms_9p/dset0_ntfa/temperatures",
     "/ms_9p/dset0_ntfa/A_bar",
-    transpose=(2, 0, 1),
+    transpose_dims=(2, 0, 1),
 )
-C_bar = TabularInterpolation()
-C_bar.InitH5(
+C_bar = TabularInterpolation.from_h5(
     mode_fn,
     "/ms_9p/dset0_ntfa/temperatures",
     "/ms_9p/dset0_ntfa/C_bar",
-    transpose=(2, 0, 1),
+    transpose_dims=(2, 0, 1),
 )
-A_cu = TabularInterpolation()
-A_cu.InitH5(
+A_cu = TabularInterpolation.from_h5(
     mode_fn,
     "/ms_9p/dset0_ntfa/temperatures",
     "/ms_9p/dset0_ntfa/A0",
-    transpose=(2, 0, 1),
+    transpose_dims=(2, 0, 1),
 )
-A_wsc = TabularInterpolation()
-A_wsc.InitH5(
+A_wsc = TabularInterpolation.from_h5(
     mode_fn,
     "/ms_9p/dset0_ntfa/temperatures",
     "/ms_9p/dset0_ntfa/A1",
-    transpose=(2, 0, 1),
+    transpose_dims=(2, 0, 1),
 )
-C_cu = TabularInterpolation()
-C_cu.InitH5(
+C_cu = TabularInterpolation.from_h5(
     mode_fn,
     "/ms_9p/dset0_ntfa/temperatures",
     "/ms_9p/dset0_ntfa/C0",
-    transpose=(2, 0, 1),
+    transpose_dims=(2, 0, 1),
 )
-C_wsc = TabularInterpolation()
-C_wsc.InitH5(
+C_wsc = TabularInterpolation.from_h5(
     mode_fn,
     "/ms_9p/dset0_ntfa/temperatures",
     "/ms_9p/dset0_ntfa/C1",
-    transpose=(2, 0, 1),
+    transpose_dims=(2, 0, 1),
 )
 
 # number of modes - needed to truncate A!
@@ -155,8 +153,9 @@ for A in [A_bar, A_cu, A_wsc]:
 # - results are generated based on `generate_inputs.py` and external C/C++ UMAT
 
 # %%
-# fname = "all_results_ms9p_16x16x16_10s_N24.h5"
-fname = os.path.join("data", f"all_results_ms9p_16x16x16_100s_N{N_modes}.h5")
+fname = os.path.join(
+    data_path, "results", f"all_results_ms9p_16x16x16_100s_N{N_modes}.h5"
+)
 with h5py.File(fname, "r") as F:
     eps = np.array(F["/eps"])
     theta = np.array(F["/temperature"])
@@ -169,7 +168,7 @@ with h5py.File(fname, "r") as F:
     ntfa_q = np.array(F["/ntfa/q"])
     ntfa_xi = np.array(F["/ntfa/xi"])
 
-# %%
+# %% [markdown]
 # ### Relative error in sig_bar for 300 and 1300 K
 
 # %%
@@ -195,7 +194,7 @@ for i_T, T in zip((0, 9), (300.0, 1300.0)):
     ax.legend()
     ax.grid()
     # fig.savefig( f'rel_error_ms9p_T{T:.0f}.pdf', format='pdf', pad_inches=0.0)
-plt.savefig(os.path.join("results", "rel_err_sig_10s.pdf"), format="pdf")
+plt.savefig(os.path.join(data_path, "figures", "rel_err_sig_10s.pdf"), format="pdf")
 
 # %%
 fig, axx = plt.subplots(1, 2, figsize=(15, 7))
@@ -220,7 +219,7 @@ for i_T, T in zip((0, 9), (300.0, 1300.0)):
     ax.legend()
     ax.grid()
     # fig.savefig( f'rel_error_ms9p_T{T:.0f}.pdf', format='pdf', pad_inches=0.0)
-plt.savefig(os.path.join("results", "rel_err_sig_ftc_10s.pdf"), format="pdf")
+plt.savefig(os.path.join(data_path, "figures", "rel_err_sig_ftc_10s.pdf"), format="pdf")
 
 # %% [markdown]
 # ### Plot the for loadcase no. 2 relevant curves
@@ -325,16 +324,21 @@ fig.tight_layout()
 fig.suptitle(
     r"load case 2, temperature sweep 300K-1300K; rel. errors in $\overline{\sigma}$ and $\overline{\sigma}_{\sf FTC}$"
 )
-plt.savefig("surface_plots_err_sig_sig_ftc.pdf", format="pdf")
+plt.savefig(
+    os.path.join(data_path, "figures", "surface_plots_err_sig_sig_ftc.pdf"),
+    format="pdf",
+)
 
 # %% [markdown]
 # ## Random loading
 
 # %%
-file_name = os.path.join("data", "ms9p_fix_ntfa16_B1-6_10s_N24.h5")
-ntfa_material = ThermoMechNTFA(file_name, group_name="/", sigf=my_sigf, Nmax=24)
+file_name = os.path.join(data_path, "loadcases", "ms9p_fix_ntfa16_B1-6_10s_N24.h5")
+ntfa_material = ThermoMechNTFA(file_name, group_name="/", sig_y=my_sig_y, N_max=24)
 
-with h5py.File("random_loadings_vol1e-3_dev2e-2_paper_10increments.h5", "r") as F:
+with h5py.File(
+    data_path, "loadcases", "random_loadings_vol1e-3_dev2e-2_paper_10increments.h5", "r"
+) as F:
     # load the random loadings from file and run NTFA; compare to full model
     eps_rand = np.array(F["/eps_random"][:3, :])
     fig, ax = plt.subplots(2, 3, figsize=(15, 10))
@@ -406,7 +410,7 @@ q_list = []
 xi_list = []
 
 ntfa_material = ThermoMechNTFA(
-    "modes/ms9p_fix_ntfa16_B1-6_10s_N24.h5", "/", sigf=my_sigf, Nmax=24
+    "modes/ms9p_fix_ntfa16_B1-6_10s_N24.h5", "/", sig_y=my_sig_y, N_max=24
 )
 
 # %%
@@ -663,7 +667,7 @@ with h5py.File("ms9p_thermal_rampup.h5", "w") as F:
 
 # %%
 q_crit = [1e-5, 0.002, 0.005, 0.01]
-with h5py.File("ms9p_thermal_rampup.h5", "r") as F:
+with h5py.File(data_path, "loadcases", "ms9p_thermal_rampup.h5", "r") as F:
     q = np.array(F["q"])
     T = np.array(F["T"])
     eps = np.array(F["eps"])
@@ -695,7 +699,9 @@ sig0_fe_list = []
 sig1_fe_list = []
 
 # with h5py.File("ms9p_uniaxial_stress_data_loading0-5.h5", "r") as F:
-with h5py.File("ms9p_uniaxial_stress_data_mod_loading0.h5", "r") as F:
+with h5py.File(
+    data_path, "loadcases", "ms9p_uniaxial_stress_data_mod_loading0.h5", "r"
+) as F:
     for iload in range(1):
         G = F[f"loading{iload:1d}"]
         for theta in theta_list:
