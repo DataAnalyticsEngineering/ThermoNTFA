@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-Tabular interpolation for the NTFA
+Tabular interpolation for the thermo-mechanical NTFA
 
 (c) 2024,
 Felix Fritzen <fritzen@simtech.uni-stuttgart.de>,

@@ -63,12 +63,17 @@ jobs:
         uses: actions/setup-python@v5
         with:
           python-version: ${{ matrix.python-version }}
+      - name: Install pandoc
+        #uses: docker://pandoc/core:2.9
+        run: |
+          sudo apt update
+          sudo apt install pandoc -y
       - name: Install thermontfa
         run: pip install .[dev]
       - name: Build documentation
         run: |
           cd docs
-          make html
+          TZ=UTC make html
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
         with:
