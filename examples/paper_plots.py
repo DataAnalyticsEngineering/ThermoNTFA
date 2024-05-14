@@ -50,7 +50,8 @@ from material_parameters import *
 from thermontfa import TabularInterpolation, ThermoMechNTFA
 
 matplotlib.rc("font", size=14)
-plt.rcParams["figure.dpi"] = 400
+dpi = 400
+plt.rcParams["figure.dpi"] = dpi
 
 data_path = "../data"
 
@@ -336,12 +337,13 @@ plt.savefig(
 # ## Random loading
 
 # %%
-file_name = os.path.join(data_path, "loadcases", "ms9p_fix_ntfa16_B1-6_10s_N24.h5")
+file_name = os.path.join(data_path, "ntfa", "ms9p_fix_ntfa16_B1-6_10s_N24.h5")
 ntfa_material = ThermoMechNTFA(file_name, group_name="/", sig_y=my_sig_y, N_max=24)
 
-with h5py.File(
-    data_path, "loadcases", "random_loadings_vol1e-3_dev2e-2_paper_10increments.h5", "r"
-) as F:
+loadings_file_name = os.path.join(
+    data_path, "loadcases", "random_loadings_vol1e-3_dev2e-2_paper_10increments.h5"
+)
+with h5py.File(loadings_file_name, "r") as F:
     # load the random loadings from file and run NTFA; compare to full model
     eps_rand = np.array(F["/eps_random"][:3, :])
     fig, ax = plt.subplots(2, 3, figsize=(15, 10))
@@ -353,7 +355,7 @@ with h5py.File(
             ntfa_xi = np.zeros((11, ntfa_material.n_modes))
             ntfa_q = np.zeros(11)
             theta = float(T)
-            ntfa_material.Interpolate(theta)
+            ntfa_material.interpolate(theta)
             e = np.zeros(6)
             de = np.zeros(6)
             s = np.zeros(6)
@@ -412,15 +414,19 @@ sig1_list = []
 q_list = []
 xi_list = []
 
-ntfa_material = ThermoMechNTFA(
-    "modes/ms9p_fix_ntfa16_B1-6_10s_N24.h5", "/", sig_y=my_sig_y, N_max=24
-)
+file_name = os.path.join(data_path, "ntfa", "ms9p_fix_ntfa16_B1-6_10s_N24.h5")
+ntfa_material = ThermoMechNTFA(file_name, "/", sig_y=my_sig_y, N_max=24)
+
+# %% [markdown]
+# - generate and store data
+# - uniaxial stress loading for all 6 directions
+# - starting from initial thermoelastic relaxed deformation state
 
 # %%
-# generate and store data
-# uniaxial stress loading for all 6 directions
-# starting from initial thermoelastic relaxed deformation state
-with h5py.File("ms9p_uniaxial_stress_data_mod.h5", "w") as F:
+stress_file_name = os.path.join(
+    data_path, "results", "ms9p_uniaxial_stress_data_mod.h5"
+)
+with h5py.File(stress_file_name, "w") as F:
     for iload in range(6):
         G = F.create_group(f"loading{iload:1d}")
         # part 1: theta ramp up in 1 step
@@ -435,7 +441,7 @@ with h5py.File("ms9p_uniaxial_stress_data_mod.h5", "w") as F:
             eps = np.zeros(6)
             eps[eps_idx] = 1.0
             eps = np.linspace(0, 0.02, 11)[:, None] * eps
-            ntfa_material.Interpolate(theta)
+            ntfa_material.interpolate(theta)
             # relaxed thermo-elastic strain
             eps_th_el = -np.linalg.solve(ntfa_material.C, ntfa_material.s_th)
 
@@ -505,13 +511,12 @@ with h5py.File("ms9p_uniaxial_stress_data_mod.h5", "w") as F:
             GG.create_dataset("q", data=q)
             GG.create_dataset("xi", data=xi)
 
+# %% [markdown]
+# - run uniaxial strain controlled tests at different temperatures
+# - the initial state is gained by ramping up the temperature from 293 K
+# - subsequently, a strain controlled loading is superimposed in the iload-th component (2% loading).
+
 # %%
-# run uniaxial strain controlled tests at different temperatures
-# the initial state is gained by ramping up the temperature from 293 K
-# subsequently, a strain controlled loading is superimposed in the iload-th
-# component (2% loading).
-
-
 theta_list = np.linspace(300, 1300, 5)
 eps_list = []
 sig_list = []
@@ -520,7 +525,11 @@ sig1_list = []
 q_list = []
 xi_list = []
 n_ramp = 10
-with h5py.File("ms9p_uniaxial_stress_data_mod.h5", "w") as F:
+
+stress_file_name_new = os.path.join(
+    data_path, "results", "ms9p_uniaxial_stress_data_mod_new.h5"
+)
+with h5py.File(stress_file_name_new, "w") as F:
     for iload in range(6):
         G = F.create_group(f"loading{iload:1d}")
         # part 1: theta ramp up in 5 steps
@@ -624,7 +633,9 @@ with h5py.File("ms9p_uniaxial_stress_data_mod.h5", "w") as F:
 
 # %% Figuring when palsticity kicks in using the mixed UMAT
 n_ramp = 1300 - 293 + 1
-with h5py.File("ms9p_thermal_rampup.h5", "w") as F:
+
+thermal_rampup_file = os.path.join(data_path, "loadcases", "ms9p_thermal_rampup.h5")
+with h5py.File(thermal_rampup_file, "w") as F:
     eps_idx = None
     sig_idx = np.arange(6)
     eps = np.zeros(6)
@@ -671,7 +682,8 @@ with h5py.File("ms9p_thermal_rampup.h5", "w") as F:
 
 # %%
 q_crit = [1e-5, 0.002, 0.005, 0.01]
-with h5py.File(data_path, "loadcases", "ms9p_thermal_rampup.h5", "r") as F:
+
+with h5py.File(thermal_rampup_file, "r") as F:
     q = np.array(F["q"])
     T = np.array(F["T"])
     eps = np.array(F["eps"])
@@ -696,16 +708,15 @@ ax.set_xlabel(r"temperature $T$ [K]")
 ax.set_ylabel(r"hardening variable $\overline{q}$ [%]")
 
 # %%
-
-
 sig_fe_list = []
 sig0_fe_list = []
 sig1_fe_list = []
 
 # with h5py.File("ms9p_uniaxial_stress_data_loading0-5.h5", "r") as F:
-with h5py.File(
-    data_path, "loadcases", "ms9p_uniaxial_stress_data_mod_loading0.h5", "r"
-) as F:
+file_name = os.path.join(
+    data_path, "loadcases", "ms9p_uniaxial_stress_data_mod_loading0.h5"
+)
+with h5py.File(file_name, "r") as F:
     for iload in range(1):
         G = F[f"loading{iload:1d}"]
         for theta in theta_list:
@@ -765,17 +776,17 @@ for k in [0, 1, 2, 3, 4]:
 
 # %% [markdown]
 # ## Twoscale simulation
-
-
-# %% Analysis of the two-scale simulation
-"""##############################################################################
+#
 # Analysis of the two-scale simulation
 # - determine an element in the notch
 # - extract the strain, temperature, stress, qbar, xi, sig_cu, sig_wsc history
 # - pass the strain, temperature history to FANS as BC
 # - Compare the results
-##############################################################################"""
-with h5py.File("vtk_notch/NTFA293K_fine_temp_293-800.h5", "r") as F:
+
+
+# %% Analysis of the two-scale simulation
+ntfa_fine_file = os.path.join(data_path, "results", "NTFA293K_fine_temp_293-800.h5")
+with h5py.File(ntfa_fine_file, "r") as F:
     # step 1: find the element with the crucial pieces of information
     # read mesh
     vx = np.array(F["/mesh/X"]).reshape((-1, 3))
@@ -797,9 +808,11 @@ with h5py.File("vtk_notch/NTFA293K_fine_temp_293-800.h5", "r") as F:
     )
 
 
-# %% Read the history for the integration point of interest
+# %% [markdown]
 # vicinity of the noth (at the center of the specimen)
-with h5py.File("vtk_notch/NTFA293K_fine_temp_293-800.h5", "r") as F:
+
+# %% Read the history for the integration point of interest
+with h5py.File(ntfa_fine_file, "r") as F:
     N_modes = 24
     n_inc = 32
     theta = np.zeros(n_inc + 1)
@@ -827,8 +840,8 @@ with h5py.File("vtk_notch/NTFA293K_fine_temp_293-800.h5", "r") as F:
         zeta[j, 6] = 1
         zeta[j, 7:] = xi[j, :]
         # reconstruct the phase-wise stresses
-        sig_cu[j, :] = A_cu.Interpolate(theta[j]) @ zeta[j, :]
-        sig_wsc[j, :] = A_wsc.Interpolate(theta[j]) @ zeta[j, :]
+        sig_cu[j, :] = A_cu.interpolate(theta[j]) @ zeta[j, :]
+        sig_wsc[j, :] = A_wsc.interpolate(theta[j]) @ zeta[j, :]
 
 # %% some plots
 # compute some stress information
@@ -1017,7 +1030,8 @@ dpi = 400
 force = []
 temp = []
 for s in ("coarse", "medium", "fine"):
-    with h5py.File(f"vtk_notch/NTFA293K_{s}_temp_293-800.h5", mode="r") as F:
+    ntfa_file = os.path.join(data_path, "results", f"NTFA293K_{s}_temp_293-800.h5")
+    with h5py.File(ntfa_file, mode="r") as F:
         force.append(np.array(F["force32"]) / 1e6)
         temp.append(np.array(F["temperature32"]))
 

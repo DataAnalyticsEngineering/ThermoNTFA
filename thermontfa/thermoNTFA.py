@@ -150,7 +150,7 @@ class ThermoMechNTFA:
         self.C = self.C_bar.interpolate(self.theta_i)
         self.A = self.A_bar.interpolate(self.theta_i)
         self.D = self.D_xi.interpolate(self.theta_i)
-        self.s_th = self.tau_th.interpolate(self.theta_i)
+        self.s_th = self.tau_theta.interpolate(self.theta_i)
         self.t_xi = self.tau_xi.interpolate(self.theta_i)
         self.n_modes = self.D_xi.data.shape[-1]
 
@@ -165,7 +165,7 @@ class ThermoMechNTFA:
             self.C = self.C_bar.interpolate(self.theta_i)
             self.A = self.A_bar.interpolate(self.theta_i)
             self.D = self.D_xi.interpolate(self.theta_i)
-            self.s_th = self.tau_th.interpolate(self.theta_i)
+            self.s_th = self.tau_theta.interpolate(self.theta_i)
             self.t_xi = self.tau_xi.interpolate(self.theta_i)
 
     def stress(
