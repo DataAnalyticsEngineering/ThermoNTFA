@@ -1,0 +1,548 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Thermo-mechanical NTFA - Generate input files &mdash; ThermoNTFA 1.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=19f00094" />
+      <link rel="stylesheet" type="text/css" href="../_static/sg_gallery.css?v=61a4c737" />
+      <link rel="stylesheet" type="text/css" href="../_static/nbsphinx-code-cells.css" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../_static/documentation_options.js?v=f2a433a1"></script>
+        <script src="../_static/doctools.js?v=9a2dae69"></script>
+        <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+        <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+        <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="copyright" title="Copyright" href="../copyright.html" />
+    <link rel="next" title="Thermo-mechanical NTFA - Generate plots" href="generate_plots.html" />
+    <link rel="prev" title="Thermo-mechanical NTFA - plots for the CMAME paper" href="paper_plots.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            ThermoNTFA
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../workflow.html">Workflow</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api.html">ThermoNTFA Documentation</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../examples.html">Examples</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="material_parameters.html">Material parameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="truncate_ntfa_modes.html">Truncate NTFA modes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="paper_plots.html">Thermo-mechanical NTFA - plots for the CMAME paper</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Thermo-mechanical NTFA - Generate input files</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#Imports">Imports</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#Load-H5-file-with-validation-simulations">Load H5 file with validation simulations</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#Generate-input-files-(*.inp)-for-FE-simulation-on-macroscale">Generate input files (*.inp) for FE simulation on macroscale</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#Post-process-results-of-FE-simulation-on-macroscale">Post-process results of FE simulation on macroscale</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#Compute-error-of-stresses">Compute error of stresses</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#Plot-stresses-(NTFA-vs.-reference)">Plot stresses (NTFA vs. reference)</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#Incremenent-i_T-=-9;-all-loading-directions-1-\leq-n-\leq-6">Incremenent <span class="math notranslate nohighlight">\(i_T = 9\)</span>; all loading directions <span class="math notranslate nohighlight">\(1 \leq n \leq 6\)</span></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#Loading-direction-n-=-5;-all-increments-0-\leq-i_T-\leq-9">Loading direction <span class="math notranslate nohighlight">\(n = 5\)</span>; all increments <span class="math notranslate nohighlight">\(0 \leq i_T \leq 9\)</span></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#Save-all-results-to-H5-file">Save all results to H5 file</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="generate_plots.html">Thermo-mechanical NTFA - Generate plots</a></li>
+<li class="toctree-l2"><a class="reference internal" href="NTFA_thermo_paper.html">Thermo-mechanical NTFA: Examples from paper</a></li>
+<li class="toctree-l2"><a class="reference internal" href="thermoNTFA_example.html">Example usage of the thermo-mechanical NTFA</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../MarkdownLinks/license.html">License</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../MarkdownLinks/citation.html">Citation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../MarkdownLinks/changelog.html">Changelog</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">ThermoNTFA</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../examples.html">Examples</a></li>
+      <li class="breadcrumb-item active">Thermo-mechanical NTFA - Generate input files</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/examples/generate_inputs.ipynb.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="Thermo-mechanical-NTFA---Generate-input-files">
+<h1>Thermo-mechanical NTFA - Generate input files<a class="headerlink" href="#Thermo-mechanical-NTFA---Generate-input-files" title="Link to this heading"></a></h1>
+<p>Felix Fritzen <a class="reference external" href="mailto:fritzen&#37;&#52;&#48;simtech&#46;uni-stuttgart&#46;de">fritzen<span>&#64;</span>simtech<span>&#46;</span>uni-stuttgart<span>&#46;</span>de</a>, Julius Herb <a class="reference external" href="mailto:julius&#46;herb&#37;&#52;&#48;mib&#46;uni-stuttgart&#46;de">julius<span>&#46;</span>herb<span>&#64;</span>mib<span>&#46;</span>uni-stuttgart<span>&#46;</span>de</a>, Shadi Sharba <a class="reference external" href="mailto:shadi&#46;sharba&#37;&#52;&#48;isc&#46;fraunhofer&#46;de">shadi<span>&#46;</span>sharba<span>&#64;</span>isc<span>&#46;</span>fraunhofer<span>&#46;</span>de</a></p>
+<p>University of Stuttgart, Institute of Applied Mechanics, Chair for Data Analytics in Engineering</p>
+<blockquote>
+<div><p><strong>Funding acknowledgment</strong> The IGF-Project no.: 21.079 N / DVS-No.: 06.3341 of the “Forschungsvereinigung Schweißen und verwandte Verfahren e.V.” of the German Welding Society (DVS), Aachener Str. 172, 40223 Düsseldorf, Germany, was funded by the Federal Ministry for Economic Affairs and Climate Action (BMWK) via the German Federation of Industrial Research Associations (AiF) in accordance with the policy to support the Industrial Collective Research (IGF) on the orders of the German
+Bundestag.</p>
+<p>Felix Fritzen is funded by the German Research Foundation (DFG) – 390740016 (EXC-2075); 406068690 (FR2702/8-1); 517847245 (FR2702/10-1).</p>
+</div></blockquote>
+<section id="Imports">
+<h2>Imports<a class="headerlink" href="#Imports" title="Link to this heading"></a></h2>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">from</span> <span class="nn">itertools</span> <span class="kn">import</span> <span class="n">count</span>
+
+<span class="kn">import</span> <span class="nn">h5py</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<span class="n">data_path</span> <span class="o">=</span> <span class="s2">&quot;../data&quot;</span>
+</pre></div>
+</div>
+</div>
+</section>
+<section id="Load-H5-file-with-validation-simulations">
+<h2>Load H5 file with validation simulations<a class="headerlink" href="#Load-H5-file-with-validation-simulations" title="Link to this heading"></a></h2>
+<p>While the NTFA is trained based on snapshots at 10 temperature points, this data set contains snapshots at 100 temperature points.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">file_name</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
+    <span class="n">data_path</span><span class="p">,</span> <span class="s2">&quot;validation&quot;</span><span class="p">,</span> <span class="s2">&quot;simple_3d_rve_B1-B6_16x16x16_100samples_fix.h5&quot;</span>
+<span class="p">)</span>
+<span class="n">group_name</span> <span class="o">=</span> <span class="s2">&quot;/ms_9p/dset0_sim&quot;</span>
+<span class="n">suffix</span> <span class="o">=</span> <span class="s2">&quot;_fix16_N24_100s&quot;</span>
+<span class="n">prefix</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">data_path</span><span class="p">,</span> <span class="s2">&quot;loadcases&quot;</span><span class="p">)</span>
+<span class="n">N_modes</span> <span class="o">=</span> <span class="mi">24</span>
+
+<span class="c1"># open the file an get the keys --&gt; extract temperatures!</span>
+<span class="n">F</span> <span class="o">=</span> <span class="n">h5py</span><span class="o">.</span><span class="n">File</span><span class="p">(</span><span class="n">file_name</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">)</span>
+<span class="n">keylist</span> <span class="o">=</span> <span class="n">F</span><span class="p">[</span><span class="n">group_name</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
+
+<span class="n">temp_list</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="n">temp_str_list</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">keylist</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">k</span><span class="p">[:</span><span class="mi">13</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;hom_response_&quot;</span><span class="p">:</span>
+        <span class="n">temp_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">k</span><span class="p">[</span><span class="mi">13</span><span class="p">:</span><span class="mi">20</span><span class="p">]))</span>
+        <span class="n">temp_str_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">k</span><span class="p">[</span><span class="mi">13</span><span class="p">:</span><span class="mi">20</span><span class="p">])</span>
+
+<span class="c1"># get loadings:</span>
+<span class="n">loadcases</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">F</span><span class="p">[</span><span class="n">group_name</span> <span class="o">+</span> <span class="s2">&quot;/loadcases_&quot;</span> <span class="o">+</span> <span class="n">temp_str_list</span><span class="p">[</span><span class="mi">0</span><span class="p">]])[</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:]</span><span class="o">.</span><span class="n">T</span>
+<span class="c1"># find proportional loadings, figure direction and amplitude:</span>
+<span class="n">fans_S</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="n">fans_S0</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="n">fans_S1</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">t_str</span> <span class="ow">in</span> <span class="n">temp_str_list</span><span class="p">:</span>
+    <span class="n">fans_S</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+        <span class="n">np</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">F</span><span class="p">[</span><span class="n">group_name</span> <span class="o">+</span> <span class="s2">&quot;/hom_response_&quot;</span> <span class="o">+</span> <span class="n">t_str</span><span class="p">]),</span> <span class="n">axes</span><span class="o">=</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+    <span class="p">)</span>
+    <span class="n">fans_S0</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+        <span class="n">np</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span>
+            <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">F</span><span class="p">[</span><span class="n">group_name</span> <span class="o">+</span> <span class="s2">&quot;/hom_response0_&quot;</span> <span class="o">+</span> <span class="n">t_str</span><span class="p">]),</span> <span class="n">axes</span><span class="o">=</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="p">)</span>
+    <span class="p">)</span>
+    <span class="n">fans_S1</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+        <span class="n">np</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span>
+            <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">F</span><span class="p">[</span><span class="n">group_name</span> <span class="o">+</span> <span class="s2">&quot;/hom_response1_&quot;</span> <span class="o">+</span> <span class="n">t_str</span><span class="p">]),</span> <span class="n">axes</span><span class="o">=</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="p">)</span>
+    <span class="p">)</span>
+<span class="n">F</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</section>
+<section id="Generate-input-files-(*.inp)-for-FE-simulation-on-macroscale">
+<h2>Generate input files (<a href="#id1"><span class="problematic" id="id2">*</span></a>.inp) for FE simulation on macroscale<a class="headerlink" href="#Generate-input-files-(*.inp)-for-FE-simulation-on-macroscale" title="Link to this heading"></a></h2>
+<p>The thermo-mechanical NTFA is used as effective material model in the FE simulation on macroscale.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ntfa_S</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="n">ntfa_S0</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="n">ntfa_S1</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="n">modefn</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">data_path</span><span class="p">,</span> <span class="s2">&quot;ntfa&quot;</span><span class="p">,</span> <span class="s2">&quot;ms9p_fix_ntfa16_B1-6_10s_N24.h5&quot;</span><span class="p">)</span>
+<span class="n">orig_stdout</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">stdout</span>
+<span class="n">amplitudes</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">loadcases</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+<span class="k">for</span> <span class="n">n</span><span class="p">,</span> <span class="n">d</span><span class="p">,</span> <span class="n">amp</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">count</span><span class="p">(),</span> <span class="n">loadcases</span><span class="p">,</span> <span class="n">amplitudes</span><span class="p">):</span>
+    <span class="k">for</span> <span class="n">T</span><span class="p">,</span> <span class="n">T_str</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">temp_list</span><span class="p">,</span> <span class="n">temp_str_list</span><span class="p">):</span>
+        <span class="n">f</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">prefix</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;loadcase</span><span class="si">{</span><span class="n">n</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="si">}</span><span class="s2">_T</span><span class="si">{</span><span class="n">T_str</span><span class="si">}{</span><span class="n">suffix</span><span class="si">}</span><span class="s2">.inp&quot;</span><span class="p">),</span> <span class="s2">&quot;w&quot;</span><span class="p">)</span>
+        <span class="n">sys</span><span class="o">.</span><span class="n">stdout</span> <span class="o">=</span> <span class="n">f</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;output=&quot;loadcase</span><span class="si">{</span><span class="n">n</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="si">}</span><span class="s1">_T</span><span class="si">{</span><span class="n">T_str</span><span class="si">}{</span><span class="n">suffix</span><span class="si">}</span><span class="s1">.h5&quot;;&#39;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;modes=&quot;</span><span class="si">{</span><span class="n">modefn</span><span class="si">}</span><span class="s1">&quot;;&#39;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;epsilon=[</span><span class="si">{</span><span class="n">d</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s2">, </span><span class="si">{</span><span class="n">d</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="si">}</span><span class="s2">, </span><span class="si">{</span><span class="n">d</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="si">}</span><span class="s2">, </span><span class="si">{</span><span class="n">d</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span><span class="si">}</span><span class="s2">, </span><span class="si">{</span><span class="n">d</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span><span class="si">}</span><span class="s2">, </span><span class="si">{</span><span class="n">d</span><span class="p">[</span><span class="mi">5</span><span class="p">]</span><span class="si">}</span><span class="s2">];&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;amplitude=</span><span class="si">{</span><span class="n">amp</span><span class="si">}</span><span class="s2">;&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;totaltime=1;&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;deltat=0.1;&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;tstart=</span><span class="si">{</span><span class="n">T</span><span class="si">}</span><span class="s2">;&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;tend=</span><span class="si">{</span><span class="n">T</span><span class="si">}</span><span class="s2">;&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;hardeningmodulus=500000.0;&quot;</span><span class="p">)</span>
+        <span class="c1"># print(&quot;hardeningmodulus=20000000.0;&quot;)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;elastic=false;&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;relaxthermo=false;&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;linhardening=true;&quot;</span><span class="p">)</span>
+        <span class="n">f</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+        <span class="n">sys</span><span class="o">.</span><span class="n">stdout</span> <span class="o">=</span> <span class="n">orig_stdout</span>
+</pre></div>
+</div>
+</div>
+</section>
+<section id="Post-process-results-of-FE-simulation-on-macroscale">
+<h2>Post-process results of FE simulation on macroscale<a class="headerlink" href="#Post-process-results-of-FE-simulation-on-macroscale" title="Link to this heading"></a></h2>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ntfa_eps</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span>
+    <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">temp_list</span><span class="p">),</span> <span class="n">fans_S</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">fans_S</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">fans_S</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
+<span class="p">)</span>
+<span class="n">ntfa_S</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span>
+    <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">temp_list</span><span class="p">),</span> <span class="n">fans_S</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">fans_S</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">fans_S</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
+<span class="p">)</span>
+<span class="n">ntfa_S0</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span>
+    <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">temp_list</span><span class="p">),</span> <span class="n">fans_S</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">fans_S</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">fans_S</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
+<span class="p">)</span>
+<span class="n">ntfa_S1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span>
+    <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">temp_list</span><span class="p">),</span> <span class="n">fans_S</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">fans_S</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">fans_S</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
+<span class="p">)</span>
+<span class="n">ntfa_q</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="nb">len</span><span class="p">(</span><span class="n">temp_list</span><span class="p">),</span> <span class="n">fans_S</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">fans_S</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]))</span>
+<span class="n">ntfa_xi</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="nb">len</span><span class="p">(</span><span class="n">temp_list</span><span class="p">),</span> <span class="n">fans_S</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">fans_S</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">N_modes</span><span class="p">))</span>
+<span class="n">ct</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">ntfa_S1</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">i_T</span><span class="p">,</span> <span class="p">(</span><span class="n">T</span><span class="p">,</span> <span class="n">T_str</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">temp_list</span><span class="p">,</span> <span class="n">temp_str_list</span><span class="p">)):</span>
+    <span class="k">for</span> <span class="n">n</span><span class="p">,</span> <span class="n">d</span><span class="p">,</span> <span class="n">amp</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">count</span><span class="p">(),</span> <span class="n">loadcases</span><span class="p">,</span> <span class="n">amplitudes</span><span class="p">):</span>
+        <span class="n">ntfa_fname</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">prefix</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;loadcase</span><span class="si">{</span><span class="n">n</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="si">}</span><span class="s2">_T</span><span class="si">{</span><span class="n">T_str</span><span class="si">}{</span><span class="n">suffix</span><span class="si">}</span><span class="s2">.h5&quot;</span><span class="p">)</span>
+        <span class="c1"># print(ntfa_fname)</span>
+        <span class="n">F_ntfa</span> <span class="o">=</span> <span class="n">h5py</span><span class="o">.</span><span class="n">File</span><span class="p">(</span><span class="n">ntfa_fname</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">)</span>
+        <span class="c1"># get references values:</span>
+
+        <span class="n">ntfa_eps</span><span class="p">[</span><span class="n">i_T</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">F_ntfa</span><span class="p">[</span><span class="s2">&quot;/eps&quot;</span><span class="p">])</span>
+        <span class="n">ntfa_S</span><span class="p">[</span><span class="n">i_T</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">F_ntfa</span><span class="p">[</span><span class="s2">&quot;/sig&quot;</span><span class="p">])</span>
+        <span class="n">ntfa_S0</span><span class="p">[</span><span class="n">i_T</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">F_ntfa</span><span class="p">[</span><span class="s2">&quot;/sig0&quot;</span><span class="p">])</span>
+        <span class="n">ntfa_S1</span><span class="p">[</span><span class="n">i_T</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">F_ntfa</span><span class="p">[</span><span class="s2">&quot;/sig1&quot;</span><span class="p">])</span>
+        <span class="n">ntfa_q</span><span class="p">[</span><span class="n">i_T</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">F_ntfa</span><span class="p">[</span><span class="s2">&quot;/sdv&quot;</span><span class="p">][:,</span> <span class="mi">0</span><span class="p">])</span>
+        <span class="n">ntfa_xi</span><span class="p">[</span><span class="n">i_T</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">F_ntfa</span><span class="p">[</span><span class="s2">&quot;/sdv&quot;</span><span class="p">][:,</span> <span class="mi">1</span> <span class="p">:</span> <span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="n">N_modes</span><span class="p">)])</span>
+
+        <span class="n">F_ntfa</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">ntfa_S1</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">5</span><span class="p">])</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">ntfa_S1</span><span class="p">[</span><span class="mi">9</span><span class="p">][</span><span class="mi">5</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+(100, 6, 11, 6)
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+<span class="ansi-red-fg">---------------------------------------------------------------------------</span>
+<span class="ansi-red-fg">FileNotFoundError</span>                         Traceback (most recent call last)
+Cell <span class="ansi-green-fg">In[4], line 21</span>
+<span class="ansi-green-intense-fg ansi-bold">     19</span> ntfa_fname <span style="color: rgb(98,98,98)">=</span> os<span style="color: rgb(98,98,98)">.</span>path<span style="color: rgb(98,98,98)">.</span>join(prefix, <span style="color: rgb(175,0,0)">f</span><span style="color: rgb(175,0,0)">&#34;</span><span style="color: rgb(175,0,0)">loadcase</span><span class="ansi-bold" style="color: rgb(175,95,135)">{</span>n<span style="color: rgb(188,188,188)"> </span><span style="color: rgb(98,98,98)">+</span><span style="color: rgb(188,188,188)"> </span><span style="color: rgb(98,98,98)">1</span><span class="ansi-bold" style="color: rgb(175,95,135)">}</span><span style="color: rgb(175,0,0)">_T</span><span class="ansi-bold" style="color: rgb(175,95,135)">{</span>T_str<span class="ansi-bold" style="color: rgb(175,95,135)">}</span><span class="ansi-bold" style="color: rgb(175,95,135)">{</span>suffix<span class="ansi-bold" style="color: rgb(175,95,135)">}</span><span style="color: rgb(175,0,0)">.h5</span><span style="color: rgb(175,0,0)">&#34;</span>)
+<span class="ansi-green-intense-fg ansi-bold">     20</span> <span style="color: rgb(95,135,135)"># print(ntfa_fname)</span>
+<span class="ansi-green-fg">---&gt; 21</span> F_ntfa <span style="color: rgb(98,98,98)">=</span> <span class="ansi-yellow-bg">h5py</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">.</span><span class="ansi-yellow-bg">File</span><span class="ansi-yellow-bg">(</span><span class="ansi-yellow-bg">ntfa_fname</span><span class="ansi-yellow-bg">,</span><span class="ansi-yellow-bg"> </span><span class="ansi-yellow-bg" style="color: rgb(175,0,0)">&#34;</span><span class="ansi-yellow-bg" style="color: rgb(175,0,0)">r</span><span class="ansi-yellow-bg" style="color: rgb(175,0,0)">&#34;</span><span class="ansi-yellow-bg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">     22</span> <span style="color: rgb(95,135,135)"># get references values:</span>
+<span class="ansi-green-intense-fg ansi-bold">     24</span> ntfa_eps[i_T, n, :, :] <span style="color: rgb(98,98,98)">=</span> np<span style="color: rgb(98,98,98)">.</span>array(F_ntfa[<span style="color: rgb(175,0,0)">&#34;</span><span style="color: rgb(175,0,0)">/eps</span><span style="color: rgb(175,0,0)">&#34;</span>])
+
+File <span class="ansi-green-fg">~/Documents/ThermoNTFA/venv/lib/python3.11/site-packages/h5py/_hl/files.py:562</span>, in <span class="ansi-cyan-fg">File.__init__</span><span class="ansi-blue-fg">(self, name, mode, driver, libver, userblock_size, swmr, rdcc_nslots, rdcc_nbytes, rdcc_w0, track_order, fs_strategy, fs_persist, fs_threshold, fs_page_size, page_buf_size, min_meta_keep, min_raw_keep, locking, alignment_threshold, alignment_interval, meta_block_size, **kwds)</span>
+<span class="ansi-green-intense-fg ansi-bold">    553</span>     fapl <span style="color: rgb(98,98,98)">=</span> make_fapl(driver, libver, rdcc_nslots, rdcc_nbytes, rdcc_w0,
+<span class="ansi-green-intense-fg ansi-bold">    554</span>                      locking, page_buf_size, min_meta_keep, min_raw_keep,
+<span class="ansi-green-intense-fg ansi-bold">    555</span>                      alignment_threshold<span style="color: rgb(98,98,98)">=</span>alignment_threshold,
+<span class="ansi-green-intense-fg ansi-bold">    556</span>                      alignment_interval<span style="color: rgb(98,98,98)">=</span>alignment_interval,
+<span class="ansi-green-intense-fg ansi-bold">    557</span>                      meta_block_size<span style="color: rgb(98,98,98)">=</span>meta_block_size,
+<span class="ansi-green-intense-fg ansi-bold">    558</span>                      <span style="color: rgb(98,98,98)">*</span><span style="color: rgb(98,98,98)">*</span>kwds)
+<span class="ansi-green-intense-fg ansi-bold">    559</span>     fcpl <span style="color: rgb(98,98,98)">=</span> make_fcpl(track_order<span style="color: rgb(98,98,98)">=</span>track_order, fs_strategy<span style="color: rgb(98,98,98)">=</span>fs_strategy,
+<span class="ansi-green-intense-fg ansi-bold">    560</span>                      fs_persist<span style="color: rgb(98,98,98)">=</span>fs_persist, fs_threshold<span style="color: rgb(98,98,98)">=</span>fs_threshold,
+<span class="ansi-green-intense-fg ansi-bold">    561</span>                      fs_page_size<span style="color: rgb(98,98,98)">=</span>fs_page_size)
+<span class="ansi-green-fg">--&gt; 562</span>     fid <span style="color: rgb(98,98,98)">=</span> <span class="ansi-yellow-bg">make_fid</span><span class="ansi-yellow-bg">(</span><span class="ansi-yellow-bg">name</span><span class="ansi-yellow-bg">,</span><span class="ansi-yellow-bg"> </span><span class="ansi-yellow-bg">mode</span><span class="ansi-yellow-bg">,</span><span class="ansi-yellow-bg"> </span><span class="ansi-yellow-bg">userblock_size</span><span class="ansi-yellow-bg">,</span><span class="ansi-yellow-bg"> </span><span class="ansi-yellow-bg">fapl</span><span class="ansi-yellow-bg">,</span><span class="ansi-yellow-bg"> </span><span class="ansi-yellow-bg">fcpl</span><span class="ansi-yellow-bg">,</span><span class="ansi-yellow-bg"> </span><span class="ansi-yellow-bg">swmr</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">=</span><span class="ansi-yellow-bg">swmr</span><span class="ansi-yellow-bg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">    564</span> <span class="ansi-bold" style="color: rgb(0,135,0)">if</span> <span style="color: rgb(0,135,0)">isinstance</span>(libver, <span style="color: rgb(0,135,0)">tuple</span>):
+<span class="ansi-green-intense-fg ansi-bold">    565</span>     <span style="color: rgb(0,135,0)">self</span><span style="color: rgb(98,98,98)">.</span>_libver <span style="color: rgb(98,98,98)">=</span> libver
+
+File <span class="ansi-green-fg">~/Documents/ThermoNTFA/venv/lib/python3.11/site-packages/h5py/_hl/files.py:235</span>, in <span class="ansi-cyan-fg">make_fid</span><span class="ansi-blue-fg">(name, mode, userblock_size, fapl, fcpl, swmr)</span>
+<span class="ansi-green-intense-fg ansi-bold">    233</span>     <span class="ansi-bold" style="color: rgb(0,135,0)">if</span> swmr <span class="ansi-bold" style="color: rgb(175,0,255)">and</span> swmr_support:
+<span class="ansi-green-intense-fg ansi-bold">    234</span>         flags <span style="color: rgb(98,98,98)">|</span><span style="color: rgb(98,98,98)">=</span> h5f<span style="color: rgb(98,98,98)">.</span>ACC_SWMR_READ
+<span class="ansi-green-fg">--&gt; 235</span>     fid <span style="color: rgb(98,98,98)">=</span> <span class="ansi-yellow-bg">h5f</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">.</span><span class="ansi-yellow-bg">open</span><span class="ansi-yellow-bg">(</span><span class="ansi-yellow-bg">name</span><span class="ansi-yellow-bg">,</span><span class="ansi-yellow-bg"> </span><span class="ansi-yellow-bg">flags</span><span class="ansi-yellow-bg">,</span><span class="ansi-yellow-bg"> </span><span class="ansi-yellow-bg">fapl</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">=</span><span class="ansi-yellow-bg">fapl</span><span class="ansi-yellow-bg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">    236</span> <span class="ansi-bold" style="color: rgb(0,135,0)">elif</span> mode <span style="color: rgb(98,98,98)">==</span> <span style="color: rgb(175,0,0)">&#39;</span><span style="color: rgb(175,0,0)">r+</span><span style="color: rgb(175,0,0)">&#39;</span>:
+<span class="ansi-green-intense-fg ansi-bold">    237</span>     fid <span style="color: rgb(98,98,98)">=</span> h5f<span style="color: rgb(98,98,98)">.</span>open(name, h5f<span style="color: rgb(98,98,98)">.</span>ACC_RDWR, fapl<span style="color: rgb(98,98,98)">=</span>fapl)
+
+File <span class="ansi-green-fg">h5py/_objects.pyx:54</span>, in <span class="ansi-cyan-fg">h5py._objects.with_phil.wrapper</span><span class="ansi-blue-fg">()</span>
+
+File <span class="ansi-green-fg">h5py/_objects.pyx:55</span>, in <span class="ansi-cyan-fg">h5py._objects.with_phil.wrapper</span><span class="ansi-blue-fg">()</span>
+
+File <span class="ansi-green-fg">h5py/h5f.pyx:102</span>, in <span class="ansi-cyan-fg">h5py.h5f.open</span><span class="ansi-blue-fg">()</span>
+
+<span class="ansi-red-fg">FileNotFoundError</span>: [Errno 2] Unable to synchronously open file (unable to open file: name = &#39;../data/loadcases/loadcase1_T0300.00_fix16_N24_100s.h5&#39;, errno = 2, error message = &#39;No such file or directory&#39;, flags = 0, o_flags = 0)
+</pre></div></div>
+</div>
+</section>
+<section id="Compute-error-of-stresses">
+<h2>Compute error of stresses<a class="headerlink" href="#Compute-error-of-stresses" title="Link to this heading"></a></h2>
+<p>Overall stress: <span class="math notranslate nohighlight">\(S\)</span>, Stress in phase 0: <span class="math notranslate nohighlight">\(S_0\)</span>, Stress in phase 1: <span class="math notranslate nohighlight">\(S_1\)</span></p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">err</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">fans_S</span> <span class="o">-</span> <span class="n">ntfa_S</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">))</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">fans_S</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">))</span>
+<span class="n">err0</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">fans_S0</span> <span class="o">-</span> <span class="n">ntfa_S0</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">))</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span>
+    <span class="n">fans_S</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+<span class="p">)</span>
+<span class="n">err1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">fans_S1</span> <span class="o">-</span> <span class="n">ntfa_S1</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">))</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span>
+    <span class="n">fans_S</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</section>
+<section id="Plot-stresses-(NTFA-vs.-reference)">
+<h2>Plot stresses (NTFA vs. reference)<a class="headerlink" href="#Plot-stresses-(NTFA-vs.-reference)" title="Link to this heading"></a></h2>
+<section id="Incremenent-i_T-=-9;-all-loading-directions-1-\leq-n-\leq-6">
+<h3>Incremenent <span class="math notranslate nohighlight">\(i_T = 9\)</span>; all loading directions <span class="math notranslate nohighlight">\(1 \leq n \leq 6\)</span><a class="headerlink" href="#Incremenent-i_T-=-9;-all-loading-directions-1-\leq-n-\leq-6" title="Link to this heading"></a></h3>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">i_T</span> <span class="o">=</span> <span class="mi">9</span>
+<span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">6</span><span class="p">):</span>
+    <span class="n">fig</span><span class="p">,</span> <span class="n">ax1</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">8</span><span class="p">))</span>
+    <span class="c1"># fig, ax2 = plt.subplots(1,1,figsize=(10,8))</span>
+    <span class="c1"># fig, ax3 = plt.subplots(1,1,figsize=(10,8))</span>
+    <span class="c1"># for i, dp in zip( (0,),  (&#39;--&#39;,) ):</span>
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">dp</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">((</span><span class="s2">&quot;-&quot;</span><span class="p">,</span> <span class="s2">&quot;--&quot;</span><span class="p">,</span> <span class="s2">&quot;-.&quot;</span><span class="p">,</span> <span class="s2">&quot;-..&quot;</span><span class="p">,</span> <span class="s2">&quot;-&quot;</span><span class="p">,</span> <span class="s2">&quot;-.&quot;</span><span class="p">)):</span>
+        <span class="n">ax1</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">fans_S</span><span class="p">[</span><span class="n">i_T</span><span class="p">][</span><span class="n">n</span><span class="p">][:,</span> <span class="n">i</span><span class="p">],</span> <span class="n">dp</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;black&quot;</span><span class="p">)</span>
+        <span class="c1"># ax1.plot( (fans_S[i_T][n][:,i]-ntfa_S[i_T][n][:,i])/1e3, dp, color=&#39;black&#39; )</span>
+        <span class="c1"># print(fans_S[i_T][n][:,i]-ntfa_S[i_T][n][:,i])</span>
+        <span class="n">ax1</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ntfa_S</span><span class="p">[</span><span class="n">i_T</span><span class="p">][</span><span class="n">n</span><span class="p">][:,</span> <span class="n">i</span><span class="p">],</span> <span class="n">dp</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;blue&quot;</span><span class="p">)</span>
+        <span class="c1"># ax2.plot( fans_S0[i_T][n][:,i], dp, color=&#39;black&#39; )</span>
+        <span class="c1"># ax2.plot( ntfa_S0[i_T][n][:,i], dp, color=&#39;blue&#39; )</span>
+        <span class="c1"># ax1.plot( fans_S1[i_T][n][:,i], dp, color=&#39;black&#39; )</span>
+        <span class="c1"># ax1.plot( ntfa_S1[i_T][n][:,i], dp, color=&#39;blue&#39; )</span>
+</pre></div>
+</div>
+</div>
+</section>
+<section id="Loading-direction-n-=-5;-all-increments-0-\leq-i_T-\leq-9">
+<h3>Loading direction <span class="math notranslate nohighlight">\(n = 5\)</span>; all increments <span class="math notranslate nohighlight">\(0 \leq i_T \leq 9\)</span><a class="headerlink" href="#Loading-direction-n-=-5;-all-increments-0-\leq-i_T-\leq-9" title="Link to this heading"></a></h3>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">n</span> <span class="o">=</span> <span class="mi">5</span>
+<span class="k">for</span> <span class="n">i_T</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">10</span><span class="p">):</span>
+    <span class="n">fig</span><span class="p">,</span> <span class="n">ax1</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">8</span><span class="p">))</span>
+    <span class="c1"># fig, ax2 = plt.subplots(1,1,figsize=(10,8))</span>
+    <span class="c1"># fig, ax3 = plt.subplots(1,1,figsize=(10,8))</span>
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">dp</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">((</span><span class="mi">3</span><span class="p">,),</span> <span class="p">(</span><span class="s2">&quot;-&quot;</span><span class="p">,)):</span>
+        <span class="c1"># for i, dp in enumerate((&quot;-&quot;, &quot;--&quot;, &quot;-.&quot;, &quot;-..&quot;, &quot;-&quot;,&quot;-.&quot;)):</span>
+        <span class="n">ax1</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">fans_S</span><span class="p">[</span><span class="n">i_T</span><span class="p">][</span><span class="n">n</span><span class="p">][:,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">dp</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;black&quot;</span><span class="p">)</span>
+        <span class="c1"># ax1.plot( (fans_S[i_T][n][:,i]-ntfa_S[i_T][n][:,i])/1e3, dp, color=&#39;black&#39; )</span>
+        <span class="c1"># print(fans_S[i_T][n][:,i]-ntfa_S[i_T][n][:,i])</span>
+        <span class="n">ax1</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ntfa_S</span><span class="p">[</span><span class="n">i_T</span><span class="p">][</span><span class="n">n</span><span class="p">][:,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">dp</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;blue&quot;</span><span class="p">)</span>
+        <span class="c1"># ax1.plot( ntfa_q[i_T][n][:], &#39;-&#39;, color=&#39;red&#39;, lw=2)</span>
+        <span class="c1"># ax2.plot( fans_S0[i_T][n][:,i], dp, color=&#39;black&#39; )</span>
+        <span class="c1"># ax2.plot( ntfa_S0[i_T][n][:,i], dp, color=&#39;blue&#39; )</span>
+        <span class="c1"># ax1.plot( fans_S1[i_T][n][:,i], dp, color=&#39;black&#39; )</span>
+        <span class="c1"># ax1.plot( ntfa_S1[i_T][n][:,i], dp, color=&#39;blue&#39; )</span>
+<span class="c1"># ## Plot relative error (NTFA vs. reference)</span>
+<span class="c1">#</span>
+<span class="c1"># ### Overall stress</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span><span class="p">,</span> <span class="n">axx</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">15</span><span class="p">,</span> <span class="mi">7</span><span class="p">))</span>
+<span class="n">ct</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="k">for</span> <span class="n">i_T</span><span class="p">,</span> <span class="n">T</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">((</span><span class="mi">0</span><span class="p">,</span> <span class="mi">9</span><span class="p">),</span> <span class="p">(</span><span class="mf">300.0</span><span class="p">,</span> <span class="mf">1300.0</span><span class="p">)):</span>
+    <span class="n">ax</span> <span class="o">=</span> <span class="n">axx</span><span class="p">[</span><span class="n">ct</span><span class="p">]</span>
+    <span class="n">ct</span> <span class="o">+=</span> <span class="mi">1</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;Relativer Fehler, $\bar{\sigma}$, T=</span><span class="si">%.1f</span><span class="s2"> K&quot;</span> <span class="o">%</span> <span class="n">T</span><span class="p">)</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">11</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">&quot;relative Belastung [-]&quot;</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;relativer Fehler in $\bar{\sigma}$ [%]&quot;</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">6</span><span class="p">):</span>
+        <span class="n">myerr</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">fans_S</span><span class="p">[</span><span class="n">i_T</span><span class="p">][</span><span class="n">n</span><span class="p">][:,</span> <span class="p">:]</span> <span class="o">-</span> <span class="n">ntfa_S</span><span class="p">[</span><span class="n">i_T</span><span class="p">][</span><span class="n">n</span><span class="p">][:,</span> <span class="p">:],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+            <span class="o">*</span> <span class="mf">100.0</span>
+            <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">fans_S</span><span class="p">[</span><span class="n">i_T</span><span class="p">][</span><span class="n">n</span><span class="p">][:,</span> <span class="p">:],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+        <span class="p">)</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">myerr</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;Last </span><span class="si">{</span><span class="n">n</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="c1"># print(np.max(myerr))</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">grid</span><span class="p">()</span>
+    <span class="c1"># fig.savefig( f&#39;rel_error_ms9p_T{T:.0f}.pdf&#39;, format=&#39;pdf&#39;, pad_inches=0.0)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s2">&quot;rel_err_sig_10s.pdf&quot;</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="s2">&quot;pdf&quot;</span><span class="p">)</span>
+<span class="c1"># ### Stress in phase 1 (WSC)</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span><span class="p">,</span> <span class="n">axx</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">15</span><span class="p">,</span> <span class="mi">7</span><span class="p">))</span>
+<span class="n">ct</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="k">for</span> <span class="n">i_T</span><span class="p">,</span> <span class="n">T</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">((</span><span class="mi">0</span><span class="p">,</span> <span class="mi">9</span><span class="p">),</span> <span class="p">(</span><span class="mf">300.0</span><span class="p">,</span> <span class="mf">1300.0</span><span class="p">)):</span>
+    <span class="n">ax</span> <span class="o">=</span> <span class="n">axx</span><span class="p">[</span><span class="n">ct</span><span class="p">]</span>
+    <span class="n">ct</span> <span class="o">+=</span> <span class="mi">1</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;Relativer Fehler, $\bar{\sigma}_{\rm WSC}$, T=</span><span class="si">%.1f</span><span class="s2"> K&quot;</span> <span class="o">%</span> <span class="n">T</span><span class="p">)</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">11</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">&quot;relative Belastung [-]&quot;</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;relativer Fehler in $\bar{\sigma}_{\sf WSC}$ [%]&quot;</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">6</span><span class="p">):</span>
+        <span class="n">myerr</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">fans_S1</span><span class="p">[</span><span class="n">i_T</span><span class="p">][</span><span class="n">n</span><span class="p">][:,</span> <span class="p">:]</span> <span class="o">-</span> <span class="n">ntfa_S1</span><span class="p">[</span><span class="n">i_T</span><span class="p">][</span><span class="n">n</span><span class="p">][:,</span> <span class="p">:],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+            <span class="o">*</span> <span class="mf">100.0</span>
+            <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">fans_S1</span><span class="p">[</span><span class="n">i_T</span><span class="p">][</span><span class="n">n</span><span class="p">][:,</span> <span class="p">:],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+        <span class="p">)</span>
+        <span class="c1"># myerr[0] = 0.</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">myerr</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;Last </span><span class="si">{</span><span class="n">n</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">grid</span><span class="p">()</span>
+    <span class="c1"># fig.savefig( f&#39;rel_error_ms9p_T{T:.0f}.pdf&#39;, format=&#39;pdf&#39;, pad_inches=0.0)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s2">&quot;rel_err_sig_wsc_10s.pdf&quot;</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="s2">&quot;pdf&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</section>
+</section>
+<section id="Save-all-results-to-H5-file">
+<h2>Save all results to H5 file<a class="headerlink" href="#Save-all-results-to-H5-file" title="Link to this heading"></a></h2>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">F</span> <span class="o">=</span> <span class="n">h5py</span><span class="o">.</span><span class="n">File</span><span class="p">(</span>
+    <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">data_path</span><span class="p">,</span> <span class="s2">&quot;results&quot;</span><span class="p">,</span> <span class="s2">&quot;all_results_ms9p_16x16x16_100s_N24.h5&quot;</span><span class="p">),</span> <span class="s2">&quot;w&quot;</span>
+<span class="p">)</span>
+
+<span class="n">F</span><span class="o">.</span><span class="n">create_dataset</span><span class="p">(</span><span class="s2">&quot;/eps&quot;</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">ntfa_eps</span><span class="p">)</span>
+<span class="n">F</span><span class="o">.</span><span class="n">create_group</span><span class="p">(</span><span class="s2">&quot;/ntfa&quot;</span><span class="p">)</span>
+<span class="n">F</span><span class="o">.</span><span class="n">create_group</span><span class="p">(</span><span class="s2">&quot;/fans&quot;</span><span class="p">)</span>
+<span class="n">F</span><span class="o">.</span><span class="n">create_dataset</span><span class="p">(</span><span class="s2">&quot;/temperature&quot;</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">temp_list</span><span class="p">))</span>
+<span class="n">F</span><span class="o">.</span><span class="n">create_dataset</span><span class="p">(</span><span class="s2">&quot;/fans/sig&quot;</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">fans_S</span><span class="p">)</span>
+<span class="n">F</span><span class="o">.</span><span class="n">create_dataset</span><span class="p">(</span><span class="s2">&quot;/fans/sig0&quot;</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">fans_S0</span><span class="p">)</span>
+<span class="n">F</span><span class="o">.</span><span class="n">create_dataset</span><span class="p">(</span><span class="s2">&quot;/fans/sig1&quot;</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">fans_S1</span><span class="p">)</span>
+<span class="n">F</span><span class="o">.</span><span class="n">create_dataset</span><span class="p">(</span><span class="s2">&quot;/ntfa/sig&quot;</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">ntfa_S</span><span class="p">)</span>
+<span class="n">F</span><span class="o">.</span><span class="n">create_dataset</span><span class="p">(</span><span class="s2">&quot;/ntfa/sig0&quot;</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">ntfa_S0</span><span class="p">)</span>
+<span class="n">F</span><span class="o">.</span><span class="n">create_dataset</span><span class="p">(</span><span class="s2">&quot;/ntfa/sig1&quot;</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">ntfa_S1</span><span class="p">)</span>
+<span class="n">F</span><span class="o">.</span><span class="n">create_dataset</span><span class="p">(</span><span class="s2">&quot;/ntfa/q&quot;</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">ntfa_q</span><span class="p">)</span>
+<span class="n">F</span><span class="o">.</span><span class="n">create_dataset</span><span class="p">(</span><span class="s2">&quot;/ntfa/xi&quot;</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">ntfa_xi</span><span class="p">)</span>
+
+<span class="n">F</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># fans_E = np.array(F[&quot;ms_9p/dset0_sim/loadcases_0300.00&quot;])[:,20:30]</span>
+<span class="c1"># fans_S = np.array(F[&quot;ms_9p/dset0_sim/hom_response_0300.00&quot;])[:,20:30]</span>
+<span class="c1"># fans_S0 = np.array(F[&quot;ms_9p/dset0_sim/hom_response0_0300.00&quot;])[:,20:30]</span>
+<span class="c1"># fans_S1 = np.array(F[&quot;ms_9p/dset0_sim/hom_response1_0300.00&quot;])[:,20:30]</span>
+<span class="c1"># F.close()</span>
+<span class="c1"># fname = &quot;/home/fritzen/calc/dvs/NTFAthermo_paper/ntfa_hull_res.h5&quot;</span>
+<span class="c1"># F = h5py.File(fname, &quot;r&quot;)</span>
+<span class="c1"># ntfa_E = np.array(F[&quot;eps&quot;])</span>
+<span class="c1"># ntfa_S = np.array(F[&quot;sig&quot;])</span>
+<span class="c1"># ntfa_S0 = np.array(F[&quot;sig0&quot;])</span>
+<span class="c1"># ntfa_S1 = np.array(F[&quot;sig1&quot;])</span>
+<span class="c1"># F.close()</span>
+
+<span class="c1"># #%%</span>
+<span class="c1"># fig, ax = plt.subplots(1,3,figsize=(20,6))</span>
+<span class="c1"># icomp = 3</span>
+<span class="c1"># ax[0].plot(fans_E[icomp,:], fans_S[icomp,:], &#39;x-&#39;, color=&#39;black&#39;)</span>
+<span class="c1"># ax[0].plot(ntfa_E[icomp,:], ntfa_S[icomp,:], &#39;o-&#39;, color=&#39;blue&#39;)</span>
+<span class="c1"># ax[1].plot(fans_E[icomp,:], fans_S0[icomp,:],&#39;x-&#39;,  color=&#39;black&#39;)</span>
+<span class="c1"># ax[1].plot(ntfa_E[icomp,:], ntfa_S0[icomp,:], &#39;o-&#39;, color=&#39;blue&#39;)</span>
+<span class="c1"># ax[2].plot(fans_E[icomp,:], fans_S1[icomp,:], &#39;x-&#39;, color=&#39;black&#39;)</span>
+<span class="c1"># ax[2].plot(ntfa_E[icomp,:], ntfa_S1[icomp,:], &#39;o-&#39;, color=&#39;blue&#39;)</span>
+
+<span class="c1"># fig, ax = plt.subplots(1,1)</span>
+<span class="c1"># ax.plot(fans_E[icomp,:3], fans_S[icomp,:3],&#39;x-&#39;,  color=&#39;black&#39;)</span>
+<span class="c1"># ax.plot(ntfa_E[icomp,:20], ntfa_S[icomp,:20], &#39;o-&#39;, color=&#39;blue&#39;)</span>
+</pre></div>
+</div>
+</div>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="paper_plots.html" class="btn btn-neutral float-left" title="Thermo-mechanical NTFA - plots for the CMAME paper" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="generate_plots.html" class="btn btn-neutral float-right" title="Thermo-mechanical NTFA - Generate plots" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; <a href="../copyright.html">Copyright</a> 2024, Felix Fritzen, Julius Herb, Shadi Sharba.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

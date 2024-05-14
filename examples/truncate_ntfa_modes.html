@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Truncate NTFA modes &mdash; ThermoNTFA 1.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=19f00094" />
+      <link rel="stylesheet" type="text/css" href="../_static/sg_gallery.css?v=61a4c737" />
+      <link rel="stylesheet" type="text/css" href="../_static/nbsphinx-code-cells.css" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../_static/documentation_options.js?v=f2a433a1"></script>
+        <script src="../_static/doctools.js?v=9a2dae69"></script>
+        <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+        <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+        <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="copyright" title="Copyright" href="../copyright.html" />
+    <link rel="next" title="Thermo-mechanical NTFA - plots for the CMAME paper" href="paper_plots.html" />
+    <link rel="prev" title="Material parameters" href="material_parameters.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            ThermoNTFA
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../workflow.html">Workflow</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api.html">ThermoNTFA Documentation</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../examples.html">Examples</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="material_parameters.html">Material parameters</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Truncate NTFA modes</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#Imports">Imports</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="paper_plots.html">Thermo-mechanical NTFA - plots for the CMAME paper</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generate_inputs.html">Thermo-mechanical NTFA - Generate input files</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generate_plots.html">Thermo-mechanical NTFA - Generate plots</a></li>
+<li class="toctree-l2"><a class="reference internal" href="NTFA_thermo_paper.html">Thermo-mechanical NTFA: Examples from paper</a></li>
+<li class="toctree-l2"><a class="reference internal" href="thermoNTFA_example.html">Example usage of the thermo-mechanical NTFA</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../MarkdownLinks/license.html">License</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../MarkdownLinks/citation.html">Citation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../MarkdownLinks/changelog.html">Changelog</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">ThermoNTFA</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../examples.html">Examples</a></li>
+      <li class="breadcrumb-item active">Truncate NTFA modes</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/examples/truncate_ntfa_modes.ipynb.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="Truncate-NTFA-modes">
+<h1>Truncate NTFA modes<a class="headerlink" href="#Truncate-NTFA-modes" title="Link to this heading"></a></h1>
+<p>Felix Fritzen <a class="reference external" href="mailto:fritzen&#37;&#52;&#48;simtech&#46;uni-stuttgart&#46;de">fritzen<span>&#64;</span>simtech<span>&#46;</span>uni-stuttgart<span>&#46;</span>de</a>, Julius Herb <a class="reference external" href="mailto:julius&#46;herb&#37;&#52;&#48;mib&#46;uni-stuttgart&#46;de">julius<span>&#46;</span>herb<span>&#64;</span>mib<span>&#46;</span>uni-stuttgart<span>&#46;</span>de</a>, Shadi Sharba <a class="reference external" href="mailto:shadi&#46;sharba&#37;&#52;&#48;isc&#46;fraunhofer&#46;de">shadi<span>&#46;</span>sharba<span>&#64;</span>isc<span>&#46;</span>fraunhofer<span>&#46;</span>de</a></p>
+<p>University of Stuttgart, Institute of Applied Mechanics, Chair for Data Analytics in Engineering</p>
+<blockquote>
+<div><p><strong>Funding acknowledgment</strong> The IGF-Project no.: 21.079 N / DVS-No.: 06.3341 of the “Forschungsvereinigung Schweißen und verwandte Verfahren e.V.” of the German Welding Society (DVS), Aachener Str. 172, 40223 Düsseldorf, Germany, was funded by the Federal Ministry for Economic Affairs and Climate Action (BMWK) via the German Federation of Industrial Research Associations (AiF) in accordance with the policy to support the Industrial Collective Research (IGF) on the orders of the German
+Bundestag.</p>
+<p>Felix Fritzen is funded by the German Research Foundation (DFG) – 390740016 (EXC-2075); 406068690 (FR2702/8-1); 517847245 (FR2702/10-1).</p>
+</div></blockquote>
+<section id="Imports">
+<h2>Imports<a class="headerlink" href="#Imports" title="Link to this heading"></a></h2>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">h5py</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">os</span>
+
+<span class="kn">from</span> <span class="nn">material_parameters</span> <span class="kn">import</span> <span class="o">*</span>
+
+<span class="n">data_path</span> <span class="o">=</span> <span class="s2">&quot;../data&quot;</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fname</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
+    <span class="n">data_path</span><span class="p">,</span> <span class="s2">&quot;validation&quot;</span><span class="p">,</span> <span class="s2">&quot;simple_3d_rve_B1-B6_16x16x16_10samples_fix.h5&quot;</span>
+<span class="p">)</span>
+<span class="n">basename</span> <span class="o">=</span> <span class="s2">&quot;/ms_9p/dset0_ntfa/&quot;</span>
+
+<span class="n">F</span> <span class="o">=</span> <span class="n">h5py</span><span class="o">.</span><span class="n">File</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">)</span>
+<span class="n">A_bar</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">F</span><span class="p">[</span><span class="n">basename</span> <span class="o">+</span> <span class="s2">&quot;A_bar&quot;</span><span class="p">])</span>
+<span class="n">A0</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">F</span><span class="p">[</span><span class="n">basename</span> <span class="o">+</span> <span class="s2">&quot;A0&quot;</span><span class="p">])</span>
+<span class="n">A1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">F</span><span class="p">[</span><span class="n">basename</span> <span class="o">+</span> <span class="s2">&quot;A1&quot;</span><span class="p">])</span>
+<span class="n">C0</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">F</span><span class="p">[</span><span class="n">basename</span> <span class="o">+</span> <span class="s2">&quot;C0&quot;</span><span class="p">])</span>
+<span class="n">C1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">F</span><span class="p">[</span><span class="n">basename</span> <span class="o">+</span> <span class="s2">&quot;C1&quot;</span><span class="p">])</span>
+<span class="n">C_bar</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">F</span><span class="p">[</span><span class="n">basename</span> <span class="o">+</span> <span class="s2">&quot;C_bar&quot;</span><span class="p">])</span>
+<span class="n">D_theta</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">F</span><span class="p">[</span><span class="n">basename</span> <span class="o">+</span> <span class="s2">&quot;D_theta&quot;</span><span class="p">])</span>
+<span class="n">D_xi</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">F</span><span class="p">[</span><span class="n">basename</span> <span class="o">+</span> <span class="s2">&quot;D_xi&quot;</span><span class="p">])</span>
+<span class="n">tau_theta</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">F</span><span class="p">[</span><span class="n">basename</span> <span class="o">+</span> <span class="s2">&quot;tau_theta&quot;</span><span class="p">])</span>
+<span class="n">tau_xi</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">F</span><span class="p">[</span><span class="n">basename</span> <span class="o">+</span> <span class="s2">&quot;tau_xi&quot;</span><span class="p">])</span>
+<span class="n">temperatures</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">F</span><span class="p">[</span><span class="n">basename</span> <span class="o">+</span> <span class="s2">&quot;temperatures&quot;</span><span class="p">])</span>
+<span class="n">vol_frac</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">F</span><span class="p">[</span><span class="s2">&quot;ms_9p/dset0_ntfa&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">attrs</span><span class="p">[</span><span class="s2">&quot;combo_volume_fraction&quot;</span><span class="p">])</span>
+<span class="c1"># vol_frac = np.zeros(2)</span>
+<span class="c1"># vol_frac[1] = np.mean(F[&quot;ms_1p/dset0_sim/mat_id&quot;])</span>
+<span class="c1"># vol_frac[0] = 1. - vol_frac[1]</span>
+<span class="c1"># print(vol_frac)</span>
+<span class="n">mu</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">F</span><span class="p">[</span><span class="s2">&quot;/ms_9p/dset0_sim/plastic_modes&quot;</span><span class="p">])</span>
+<span class="n">mu_eff</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">mu</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="c1"># print(mu_eff/vol_frac[0])</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">mu</span><span class="p">[:,</span> <span class="p">:</span><span class="mi">12</span><span class="p">,</span> <span class="p">:],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">))</span>
+<span class="n">F</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+[[-4.81957192e-03 -1.87528725e-03  6.69485918e-03 -2.51804015e-01
+  -2.52646652e-01 -2.52964984e-01]
+ [ 1.45886310e-03 -6.41553815e-04 -8.17309288e-04 -1.99404954e-01
+  -1.58046155e-01  3.56296561e-01]
+ [-8.78852426e-05  1.26334860e-03 -1.17546336e-03 -2.99336425e-01
+   3.22711105e-01 -2.43784261e-02]
+ [-2.80818244e-01 -9.75181120e-02  3.78336356e-01  4.02089368e-03
+   6.01847530e-03  6.82159257e-03]
+ [ 2.75147501e-01 -3.81194901e-01  1.06047400e-01 -2.82880727e-04
+   1.71243014e-03 -1.01420933e-03]
+ [-4.12447345e-02 -1.57588433e-02  5.70035778e-02 -1.04866728e-02
+  -1.03093058e-02 -1.02459260e-02]
+ [-7.86225341e-04 -1.96939329e-03  2.75561863e-03  1.27961341e-01
+  -8.91150551e-02 -3.90480145e-02]
+ [-2.50104340e-03  1.99375768e-03  5.07285721e-04  2.86961002e-02
+   9.63577684e-02 -1.25873730e-01]
+ [-8.39072811e-03 -3.99626799e-03  1.23869961e-02  1.00012553e-01
+   1.00066432e-01  9.95045543e-02]
+ [-4.14913018e-03 -1.52616497e-01  1.56765628e-01 -3.64521611e-03
+  -6.63791917e-03 -5.17289708e-03]
+ [-1.91486891e-01  1.01497428e-01  8.99894627e-02 -1.87006015e-03
+  -1.68134243e-03 -8.04254774e-03]
+ [-1.21860436e-04 -1.82412608e-03  1.94598651e-03 -1.20850520e-01
+   1.16432336e-01  4.61590318e-03]]
+</pre></div></div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">Ntemp</span> <span class="o">=</span> <span class="n">temperatures</span><span class="o">.</span><span class="n">size</span>
+<span class="n">Nmax</span> <span class="o">=</span> <span class="mi">24</span>
+<span class="c1"># truncate and change order of the data</span>
+<span class="c1"># print(A_bar.shape)</span>
+<span class="c1"># phase average stress localization</span>
+<span class="n">A0</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="n">A0</span><span class="p">[:,</span> <span class="p">:</span> <span class="n">Nmax</span> <span class="o">+</span> <span class="mi">7</span><span class="p">,</span> <span class="p">:],</span> <span class="n">axes</span><span class="o">=</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span>
+<span class="n">A1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="n">A1</span><span class="p">[:,</span> <span class="p">:</span> <span class="n">Nmax</span> <span class="o">+</span> <span class="mi">7</span><span class="p">,</span> <span class="p">:],</span> <span class="n">axes</span><span class="o">=</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">sig_ph</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">2</span><span class="p">,)</span> <span class="o">+</span> <span class="n">A0</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+<span class="n">sig_ph</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">A0</span>
+<span class="n">sig_ph</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">A1</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># phase stiffness tensors at the different temperatures</span>
+<span class="n">C0</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="n">C0</span><span class="p">,</span> <span class="n">axes</span><span class="o">=</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span>
+<span class="n">C1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="n">C1</span><span class="p">,</span> <span class="n">axes</span><span class="o">=</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">C_ph</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">2</span><span class="p">,)</span> <span class="o">+</span> <span class="n">C0</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+<span class="n">C_ph</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">C0</span>
+<span class="n">C_ph</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">C1</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">eps_th_ph</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">2</span><span class="p">,</span> <span class="n">Ntemp</span><span class="p">,</span> <span class="mi">6</span><span class="p">))</span>
+<span class="n">eps_th_ph</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">eps_th_cu</span><span class="p">(</span><span class="n">temperatures</span><span class="p">)[:,</span> <span class="kc">None</span><span class="p">]</span> <span class="o">*</span> <span class="n">I2</span><span class="p">[</span><span class="kc">None</span><span class="p">,</span> <span class="p">:]</span>
+<span class="n">eps_th_ph</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">eps_th_wsc</span><span class="p">(</span><span class="n">temperatures</span><span class="p">)[:,</span> <span class="kc">None</span><span class="p">]</span> <span class="o">*</span> <span class="n">I2</span><span class="p">[</span><span class="kc">None</span><span class="p">,</span> <span class="p">:]</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">A_bar</span> <span class="o">=</span> <span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="n">A_bar</span><span class="p">[:,</span> <span class="p">:</span><span class="n">Nmax</span><span class="p">,</span> <span class="p">:],</span> <span class="n">axes</span><span class="o">=</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">])</span>
+<span class="c1"># print(A_bar.shape)</span>
+<span class="n">D_xi</span> <span class="o">=</span> <span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="n">D_xi</span><span class="p">[:</span><span class="n">Nmax</span><span class="p">,</span> <span class="p">:</span><span class="n">Nmax</span><span class="p">,</span> <span class="p">:],</span> <span class="n">axes</span><span class="o">=</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span>
+<span class="c1"># print(np.linalg.eigvals(D_xi[0,:3,:3]))</span>
+<span class="n">tau_xi</span> <span class="o">=</span> <span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="n">tau_xi</span><span class="p">[:</span><span class="n">Nmax</span><span class="p">,</span> <span class="p">:],</span> <span class="n">axes</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">])</span>
+<span class="n">tau_theta</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="n">tau_theta</span><span class="p">)</span>
+<span class="n">C_bar</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="n">C_bar</span><span class="p">,</span> <span class="n">axes</span><span class="o">=</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span>
+<span class="n">A</span> <span class="o">=</span> <span class="n">A_bar</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<span class="n">XX</span> <span class="o">=</span> <span class="n">A</span><span class="o">.</span><span class="n">T</span> <span class="o">@</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">pinv</span><span class="p">(</span><span class="n">A</span> <span class="o">@</span> <span class="n">A</span><span class="o">.</span><span class="n">T</span><span class="p">)</span> <span class="o">@</span> <span class="n">A</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">XX</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+[[ 1.00000000e+00 -1.83013327e-16 -2.70616862e-16  0.00000000e+00
+   2.91433544e-16 -3.07046055e-16]
+ [-3.93782229e-16  1.00000000e+00 -2.64545330e-16 -1.47451495e-16
+   1.64798730e-16 -8.41340886e-17]
+ [ 1.43982049e-16  4.88758339e-16  1.00000000e+00 -3.41740525e-16
+   6.34041430e-16 -2.46330734e-16]
+ [ 2.76037873e-16  5.25079112e-16  1.72821826e-16  1.00000000e+00
+  -2.83193607e-16  2.42427606e-16]
+ [-2.25514052e-16 -5.44215280e-16 -2.50017021e-16 -1.92987987e-17
+   1.00000000e+00 -1.72604986e-16]
+ [-4.94396191e-17  1.68051337e-17  1.25984292e-16  2.04697370e-16
+   2.87096735e-16  1.00000000e+00]]
+</pre></div></div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># print(( vol_frac[1]*A1[0,:,:7]+vol_frac[0]*A0[0,:,:7]) )</span>
+<span class="n">x</span> <span class="o">=</span> <span class="n">C_bar</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:]</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span>
+<span class="n">x0</span> <span class="o">=</span> <span class="n">A0</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:</span><span class="mi">6</span><span class="p">]</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span>
+<span class="n">x1</span> <span class="o">=</span> <span class="n">A1</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:</span><span class="mi">6</span><span class="p">]</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">alpha</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">x</span> <span class="o">-</span> <span class="n">x1</span><span class="p">,</span> <span class="n">x0</span> <span class="o">-</span> <span class="n">x1</span><span class="p">)</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">x0</span> <span class="o">-</span> <span class="n">x1</span><span class="p">,</span> <span class="n">x0</span> <span class="o">-</span> <span class="n">x1</span><span class="p">)</span>
+<span class="c1"># print(alpha, vol_frac)</span>
+<span class="n">alpha</span> <span class="o">=</span> <span class="mi">37</span> <span class="o">/</span> <span class="mi">64</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;c_Bar:&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">C_bar</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:])</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+c_Bar:
+[[2.83544622e+08 1.30812412e+08 1.30812412e+08 1.24569387e+05
+  1.24569387e+05 7.44890553e+04]
+ [1.30812412e+08 2.83544622e+08 1.30812412e+08 1.24569387e+05
+  7.44890553e+04 1.24569387e+05]
+ [1.30812412e+08 1.30812412e+08 2.83544622e+08 7.44890553e+04
+  1.24569387e+05 1.24569387e+05]
+ [1.24569387e+05 1.24569387e+05 7.44890553e+04 1.55475051e+08
+  1.67818031e+05 1.67818031e+05]
+ [1.24569387e+05 7.44890553e+04 1.24569387e+05 1.67818031e+05
+  1.55475051e+08 1.67818031e+05]
+ [7.44890553e+04 1.24569387e+05 1.24569387e+05 1.67818031e+05
+  1.67818031e+05 1.55475051e+08]]
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">xx</span> <span class="o">=</span> <span class="n">alpha</span> <span class="o">*</span> <span class="n">x0</span> <span class="o">+</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">alpha</span><span class="p">)</span> <span class="o">*</span> <span class="n">x1</span>
+<span class="c1"># print(xx.reshape((6,6))-C_bar[0,:,:])</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;error:&quot;</span><span class="p">,</span> <span class="n">xx</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">x</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+error: [4.44244702e-01 2.03578631e-01 2.03578631e-01 2.26026406e-04
+ 2.26026406e-04 1.38090640e-04 2.03578631e-01 4.44244702e-01
+ 2.03578631e-01 2.26026406e-04 1.38090640e-04 2.26026406e-04
+ 2.03578631e-01 2.03578631e-01 4.44244702e-01 1.38090640e-04
+ 2.26026406e-04 2.26026406e-04 2.18730561e-04 2.18730561e-04
+ 1.30794698e-04 2.45482202e-01 2.94670288e-04 2.94670288e-04
+ 2.18730561e-04 1.30794698e-04 2.18730561e-04 2.94670288e-04
+ 2.45482202e-01 2.94670288e-04 1.30794698e-04 2.18730561e-04
+ 2.18730561e-04 2.94670288e-04 2.94670288e-04 2.45482202e-01]
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># print((C_bar[0,:,:]), tau_theta[0,:])</span>
+<span class="n">fname</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;data_new/ms9p_fix_ntfa16_B1-6_10s_N</span><span class="si">{</span><span class="n">Nmax</span><span class="si">}</span><span class="s2">.h5&quot;</span>
+<span class="n">F</span> <span class="o">=</span> <span class="n">h5py</span><span class="o">.</span><span class="n">File</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">)</span>
+<span class="n">F</span><span class="o">.</span><span class="n">create_dataset</span><span class="p">(</span><span class="s2">&quot;SIG_phases&quot;</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">sig_ph</span><span class="p">)</span>
+<span class="n">F</span><span class="o">.</span><span class="n">create_dataset</span><span class="p">(</span><span class="s2">&quot;C_phases&quot;</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">C_ph</span><span class="p">)</span>
+<span class="n">F</span><span class="o">.</span><span class="n">create_dataset</span><span class="p">(</span><span class="s2">&quot;eps_th_phases&quot;</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">eps_th_ph</span><span class="p">)</span>
+<span class="n">F</span><span class="o">.</span><span class="n">create_dataset</span><span class="p">(</span><span class="s2">&quot;A_bar&quot;</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">A_bar</span><span class="p">)</span>
+<span class="n">F</span><span class="o">.</span><span class="n">create_dataset</span><span class="p">(</span><span class="s2">&quot;v_frac&quot;</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">vol_frac</span><span class="p">)</span>
+<span class="n">F</span><span class="o">.</span><span class="n">create_dataset</span><span class="p">(</span><span class="s2">&quot;C_bar&quot;</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">C_bar</span><span class="p">)</span>
+<span class="n">F</span><span class="o">.</span><span class="n">create_dataset</span><span class="p">(</span><span class="s2">&quot;D_xi&quot;</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">D_xi</span><span class="p">)</span>
+<span class="n">F</span><span class="o">.</span><span class="n">create_dataset</span><span class="p">(</span><span class="s2">&quot;D_theta&quot;</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">D_theta</span><span class="p">)</span>
+<span class="n">F</span><span class="o">.</span><span class="n">create_dataset</span><span class="p">(</span><span class="s2">&quot;tau_xi&quot;</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">tau_xi</span><span class="p">)</span>
+<span class="n">F</span><span class="o">.</span><span class="n">create_dataset</span><span class="p">(</span><span class="s2">&quot;tau_theta&quot;</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">tau_theta</span><span class="p">)</span>
+<span class="n">F</span><span class="o">.</span><span class="n">create_dataset</span><span class="p">(</span><span class="s2">&quot;temperatures&quot;</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">temperatures</span><span class="p">)</span>
+<span class="n">F</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+<span class="n">eps_th_500</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">solve</span><span class="p">(</span><span class="n">C_bar</span><span class="p">[</span><span class="mi">20</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:],</span> <span class="n">tau_theta</span><span class="p">[</span><span class="mi">20</span><span class="p">,</span> <span class="p">:])</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">eps_th_500</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">tau_theta</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+<span class="ansi-red-fg">---------------------------------------------------------------------------</span>
+<span class="ansi-red-fg">FileNotFoundError</span>                         Traceback (most recent call last)
+Cell <span class="ansi-green-fg">In[12], line 3</span>
+<span class="ansi-green-intense-fg ansi-bold">      1</span> <span style="color: rgb(95,135,135)"># print((C_bar[0,:,:]), tau_theta[0,:])</span>
+<span class="ansi-green-intense-fg ansi-bold">      2</span> fname <span style="color: rgb(98,98,98)">=</span> <span style="color: rgb(175,0,0)">f</span><span style="color: rgb(175,0,0)">&#34;</span><span style="color: rgb(175,0,0)">data_new/ms9p_fix_ntfa16_B1-6_10s_N</span><span class="ansi-bold" style="color: rgb(175,95,135)">{</span>Nmax<span class="ansi-bold" style="color: rgb(175,95,135)">}</span><span style="color: rgb(175,0,0)">.h5</span><span style="color: rgb(175,0,0)">&#34;</span>
+<span class="ansi-green-fg">----&gt; 3</span> F <span style="color: rgb(98,98,98)">=</span> <span class="ansi-yellow-bg">h5py</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">.</span><span class="ansi-yellow-bg">File</span><span class="ansi-yellow-bg">(</span><span class="ansi-yellow-bg">fname</span><span class="ansi-yellow-bg">,</span><span class="ansi-yellow-bg"> </span><span class="ansi-yellow-bg" style="color: rgb(175,0,0)">&#34;</span><span class="ansi-yellow-bg" style="color: rgb(175,0,0)">w</span><span class="ansi-yellow-bg" style="color: rgb(175,0,0)">&#34;</span><span class="ansi-yellow-bg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">      4</span> F<span style="color: rgb(98,98,98)">.</span>create_dataset(<span style="color: rgb(175,0,0)">&#34;</span><span style="color: rgb(175,0,0)">SIG_phases</span><span style="color: rgb(175,0,0)">&#34;</span>, data<span style="color: rgb(98,98,98)">=</span>sig_ph)
+<span class="ansi-green-intense-fg ansi-bold">      5</span> F<span style="color: rgb(98,98,98)">.</span>create_dataset(<span style="color: rgb(175,0,0)">&#34;</span><span style="color: rgb(175,0,0)">C_phases</span><span style="color: rgb(175,0,0)">&#34;</span>, data<span style="color: rgb(98,98,98)">=</span>C_ph)
+
+File <span class="ansi-green-fg">~/Documents/ThermoNTFA/venv/lib/python3.11/site-packages/h5py/_hl/files.py:562</span>, in <span class="ansi-cyan-fg">File.__init__</span><span class="ansi-blue-fg">(self, name, mode, driver, libver, userblock_size, swmr, rdcc_nslots, rdcc_nbytes, rdcc_w0, track_order, fs_strategy, fs_persist, fs_threshold, fs_page_size, page_buf_size, min_meta_keep, min_raw_keep, locking, alignment_threshold, alignment_interval, meta_block_size, **kwds)</span>
+<span class="ansi-green-intense-fg ansi-bold">    553</span>     fapl <span style="color: rgb(98,98,98)">=</span> make_fapl(driver, libver, rdcc_nslots, rdcc_nbytes, rdcc_w0,
+<span class="ansi-green-intense-fg ansi-bold">    554</span>                      locking, page_buf_size, min_meta_keep, min_raw_keep,
+<span class="ansi-green-intense-fg ansi-bold">    555</span>                      alignment_threshold<span style="color: rgb(98,98,98)">=</span>alignment_threshold,
+<span class="ansi-green-intense-fg ansi-bold">    556</span>                      alignment_interval<span style="color: rgb(98,98,98)">=</span>alignment_interval,
+<span class="ansi-green-intense-fg ansi-bold">    557</span>                      meta_block_size<span style="color: rgb(98,98,98)">=</span>meta_block_size,
+<span class="ansi-green-intense-fg ansi-bold">    558</span>                      <span style="color: rgb(98,98,98)">*</span><span style="color: rgb(98,98,98)">*</span>kwds)
+<span class="ansi-green-intense-fg ansi-bold">    559</span>     fcpl <span style="color: rgb(98,98,98)">=</span> make_fcpl(track_order<span style="color: rgb(98,98,98)">=</span>track_order, fs_strategy<span style="color: rgb(98,98,98)">=</span>fs_strategy,
+<span class="ansi-green-intense-fg ansi-bold">    560</span>                      fs_persist<span style="color: rgb(98,98,98)">=</span>fs_persist, fs_threshold<span style="color: rgb(98,98,98)">=</span>fs_threshold,
+<span class="ansi-green-intense-fg ansi-bold">    561</span>                      fs_page_size<span style="color: rgb(98,98,98)">=</span>fs_page_size)
+<span class="ansi-green-fg">--&gt; 562</span>     fid <span style="color: rgb(98,98,98)">=</span> <span class="ansi-yellow-bg">make_fid</span><span class="ansi-yellow-bg">(</span><span class="ansi-yellow-bg">name</span><span class="ansi-yellow-bg">,</span><span class="ansi-yellow-bg"> </span><span class="ansi-yellow-bg">mode</span><span class="ansi-yellow-bg">,</span><span class="ansi-yellow-bg"> </span><span class="ansi-yellow-bg">userblock_size</span><span class="ansi-yellow-bg">,</span><span class="ansi-yellow-bg"> </span><span class="ansi-yellow-bg">fapl</span><span class="ansi-yellow-bg">,</span><span class="ansi-yellow-bg"> </span><span class="ansi-yellow-bg">fcpl</span><span class="ansi-yellow-bg">,</span><span class="ansi-yellow-bg"> </span><span class="ansi-yellow-bg">swmr</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">=</span><span class="ansi-yellow-bg">swmr</span><span class="ansi-yellow-bg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">    564</span> <span class="ansi-bold" style="color: rgb(0,135,0)">if</span> <span style="color: rgb(0,135,0)">isinstance</span>(libver, <span style="color: rgb(0,135,0)">tuple</span>):
+<span class="ansi-green-intense-fg ansi-bold">    565</span>     <span style="color: rgb(0,135,0)">self</span><span style="color: rgb(98,98,98)">.</span>_libver <span style="color: rgb(98,98,98)">=</span> libver
+
+File <span class="ansi-green-fg">~/Documents/ThermoNTFA/venv/lib/python3.11/site-packages/h5py/_hl/files.py:241</span>, in <span class="ansi-cyan-fg">make_fid</span><span class="ansi-blue-fg">(name, mode, userblock_size, fapl, fcpl, swmr)</span>
+<span class="ansi-green-intense-fg ansi-bold">    239</span>     fid <span style="color: rgb(98,98,98)">=</span> h5f<span style="color: rgb(98,98,98)">.</span>create(name, h5f<span style="color: rgb(98,98,98)">.</span>ACC_EXCL, fapl<span style="color: rgb(98,98,98)">=</span>fapl, fcpl<span style="color: rgb(98,98,98)">=</span>fcpl)
+<span class="ansi-green-intense-fg ansi-bold">    240</span> <span class="ansi-bold" style="color: rgb(0,135,0)">elif</span> mode <span style="color: rgb(98,98,98)">==</span> <span style="color: rgb(175,0,0)">&#39;</span><span style="color: rgb(175,0,0)">w</span><span style="color: rgb(175,0,0)">&#39;</span>:
+<span class="ansi-green-fg">--&gt; 241</span>     fid <span style="color: rgb(98,98,98)">=</span> <span class="ansi-yellow-bg">h5f</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">.</span><span class="ansi-yellow-bg">create</span><span class="ansi-yellow-bg">(</span><span class="ansi-yellow-bg">name</span><span class="ansi-yellow-bg">,</span><span class="ansi-yellow-bg"> </span><span class="ansi-yellow-bg">h5f</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">.</span><span class="ansi-yellow-bg">ACC_TRUNC</span><span class="ansi-yellow-bg">,</span><span class="ansi-yellow-bg"> </span><span class="ansi-yellow-bg">fapl</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">=</span><span class="ansi-yellow-bg">fapl</span><span class="ansi-yellow-bg">,</span><span class="ansi-yellow-bg"> </span><span class="ansi-yellow-bg">fcpl</span><span class="ansi-yellow-bg" style="color: rgb(98,98,98)">=</span><span class="ansi-yellow-bg">fcpl</span><span class="ansi-yellow-bg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">    242</span> <span class="ansi-bold" style="color: rgb(0,135,0)">elif</span> mode <span style="color: rgb(98,98,98)">==</span> <span style="color: rgb(175,0,0)">&#39;</span><span style="color: rgb(175,0,0)">a</span><span style="color: rgb(175,0,0)">&#39;</span>:
+<span class="ansi-green-intense-fg ansi-bold">    243</span>     <span style="color: rgb(95,135,135)"># Open in append mode (read/write).</span>
+<span class="ansi-green-intense-fg ansi-bold">    244</span>     <span style="color: rgb(95,135,135)"># If that fails, create a new file only if it won&#39;t clobber an</span>
+<span class="ansi-green-intense-fg ansi-bold">    245</span>     <span style="color: rgb(95,135,135)"># existing one (ACC_EXCL)</span>
+<span class="ansi-green-intense-fg ansi-bold">    246</span>     <span class="ansi-bold" style="color: rgb(0,135,0)">try</span>:
+
+File <span class="ansi-green-fg">h5py/_objects.pyx:54</span>, in <span class="ansi-cyan-fg">h5py._objects.with_phil.wrapper</span><span class="ansi-blue-fg">()</span>
+
+File <span class="ansi-green-fg">h5py/_objects.pyx:55</span>, in <span class="ansi-cyan-fg">h5py._objects.with_phil.wrapper</span><span class="ansi-blue-fg">()</span>
+
+File <span class="ansi-green-fg">h5py/h5f.pyx:122</span>, in <span class="ansi-cyan-fg">h5py.h5f.create</span><span class="ansi-blue-fg">()</span>
+
+<span class="ansi-red-fg">FileNotFoundError</span>: [Errno 2] Unable to synchronously create file (unable to open file: name = &#39;data_new/ms9p_fix_ntfa16_B1-6_10s_N24.h5&#39;, errno = 2, error message = &#39;No such file or directory&#39;, flags = 13, o_flags = 242)
+</pre></div></div>
+</div>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="material_parameters.html" class="btn btn-neutral float-left" title="Material parameters" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="paper_plots.html" class="btn btn-neutral float-right" title="Thermo-mechanical NTFA - plots for the CMAME paper" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; <a href="../copyright.html">Copyright</a> 2024, Felix Fritzen, Julius Herb, Shadi Sharba.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -1,0 +1,385 @@
+{
+ "cells": [
+  {
+   "cell_type": "markdown",
+   "id": "0335e8dc-a944-485e-a5fc-3101f1ba28e0",
+   "metadata": {},
+   "source": [
+    "# Truncate NTFA modes\n",
+    "\n",
+    "Felix Fritzen <fritzen@simtech.uni-stuttgart.de>,\n",
+    "Julius Herb <julius.herb@mib.uni-stuttgart.de>,\n",
+    "Shadi Sharba <shadi.sharba@isc.fraunhofer.de>\n",
+    "\n",
+    "University of Stuttgart, Institute of Applied Mechanics, Chair for Data Analytics in Engineering\n",
+    "\n",
+    "> **Funding acknowledgment**\n",
+    "> The IGF-Project no.: 21.079 N / DVS-No.: 06.3341 of the\n",
+    "> “Forschungsvereinigung Schweißen und verwandte Verfahren e.V.” of the\n",
+    "> German Welding Society (DVS), Aachener Str. 172, 40223 Düsseldorf, Germany,\n",
+    "> was funded by the Federal Ministry for Economic Affairs and Climate Action (BMWK)\n",
+    "> via the German Federation of Industrial Research Associations (AiF) in accordance\n",
+    "> with the policy to support the Industrial Collective Research (IGF)\n",
+    "> on the orders of the German Bundestag.\n",
+    ">\n",
+    "> Felix Fritzen is funded by the German Research Foundation (DFG) --\n",
+    "> 390740016 (EXC-2075); 406068690 (FR2702/8-1); 517847245 (FR2702/10-1).\n",
+    "\n",
+    "## Imports"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 1,
+   "id": "348fc17b",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "import h5py\n",
+    "import numpy as np\n",
+    "import os\n",
+    "\n",
+    "from material_parameters import *\n",
+    "\n",
+    "data_path = \"../data\""
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 2,
+   "id": "87bc2e47",
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "[[-4.81957192e-03 -1.87528725e-03  6.69485918e-03 -2.51804015e-01\n",
+      "  -2.52646652e-01 -2.52964984e-01]\n",
+      " [ 1.45886310e-03 -6.41553815e-04 -8.17309288e-04 -1.99404954e-01\n",
+      "  -1.58046155e-01  3.56296561e-01]\n",
+      " [-8.78852426e-05  1.26334860e-03 -1.17546336e-03 -2.99336425e-01\n",
+      "   3.22711105e-01 -2.43784261e-02]\n",
+      " [-2.80818244e-01 -9.75181120e-02  3.78336356e-01  4.02089368e-03\n",
+      "   6.01847530e-03  6.82159257e-03]\n",
+      " [ 2.75147501e-01 -3.81194901e-01  1.06047400e-01 -2.82880727e-04\n",
+      "   1.71243014e-03 -1.01420933e-03]\n",
+      " [-4.12447345e-02 -1.57588433e-02  5.70035778e-02 -1.04866728e-02\n",
+      "  -1.03093058e-02 -1.02459260e-02]\n",
+      " [-7.86225341e-04 -1.96939329e-03  2.75561863e-03  1.27961341e-01\n",
+      "  -8.91150551e-02 -3.90480145e-02]\n",
+      " [-2.50104340e-03  1.99375768e-03  5.07285721e-04  2.86961002e-02\n",
+      "   9.63577684e-02 -1.25873730e-01]\n",
+      " [-8.39072811e-03 -3.99626799e-03  1.23869961e-02  1.00012553e-01\n",
+      "   1.00066432e-01  9.95045543e-02]\n",
+      " [-4.14913018e-03 -1.52616497e-01  1.56765628e-01 -3.64521611e-03\n",
+      "  -6.63791917e-03 -5.17289708e-03]\n",
+      " [-1.91486891e-01  1.01497428e-01  8.99894627e-02 -1.87006015e-03\n",
+      "  -1.68134243e-03 -8.04254774e-03]\n",
+      " [-1.21860436e-04 -1.82412608e-03  1.94598651e-03 -1.20850520e-01\n",
+      "   1.16432336e-01  4.61590318e-03]]\n"
+     ]
+    }
+   ],
+   "source": [
+    "fname = os.path.join(\n",
+    "    data_path, \"validation\", \"simple_3d_rve_B1-B6_16x16x16_10samples_fix.h5\"\n",
+    ")\n",
+    "basename = \"/ms_9p/dset0_ntfa/\"\n",
+    "\n",
+    "F = h5py.File(fname, \"r\")\n",
+    "A_bar = np.array(F[basename + \"A_bar\"])\n",
+    "A0 = np.array(F[basename + \"A0\"])\n",
+    "A1 = np.array(F[basename + \"A1\"])\n",
+    "C0 = np.array(F[basename + \"C0\"])\n",
+    "C1 = np.array(F[basename + \"C1\"])\n",
+    "C_bar = np.array(F[basename + \"C_bar\"])\n",
+    "D_theta = np.array(F[basename + \"D_theta\"])\n",
+    "D_xi = np.array(F[basename + \"D_xi\"])\n",
+    "tau_theta = np.array(F[basename + \"tau_theta\"])\n",
+    "tau_xi = np.array(F[basename + \"tau_xi\"])\n",
+    "temperatures = np.array(F[basename + \"temperatures\"])\n",
+    "vol_frac = np.array(F[\"ms_9p/dset0_ntfa\"].attrs[\"combo_volume_fraction\"])\n",
+    "# vol_frac = np.zeros(2)\n",
+    "# vol_frac[1] = np.mean(F[\"ms_1p/dset0_sim/mat_id\"])\n",
+    "# vol_frac[0] = 1. - vol_frac[1]\n",
+    "# print(vol_frac)\n",
+    "mu = np.array(F[\"/ms_9p/dset0_sim/plastic_modes\"])\n",
+    "mu_eff = np.linalg.norm(mu, axis=2).sum(axis=0)\n",
+    "# print(mu_eff/vol_frac[0])\n",
+    "print(np.mean(mu[:, :12, :], axis=0))\n",
+    "F.close()"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 3,
+   "id": "7c69d76f",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "Ntemp = temperatures.size\n",
+    "Nmax = 24\n",
+    "# truncate and change order of the data\n",
+    "# print(A_bar.shape)\n",
+    "# phase average stress localization\n",
+    "A0 = np.transpose(A0[:, : Nmax + 7, :], axes=[2, 0, 1])\n",
+    "A1 = np.transpose(A1[:, : Nmax + 7, :], axes=[2, 0, 1])"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 4,
+   "id": "a93d7940",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "sig_ph = np.zeros((2,) + A0.shape)\n",
+    "sig_ph[0] = A0\n",
+    "sig_ph[1] = A1"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 5,
+   "id": "206ea7c1",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "# phase stiffness tensors at the different temperatures\n",
+    "C0 = np.transpose(C0, axes=[2, 0, 1])\n",
+    "C1 = np.transpose(C1, axes=[2, 0, 1])"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 6,
+   "id": "2dff94aa",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "C_ph = np.zeros((2,) + C0.shape)\n",
+    "C_ph[0] = C0\n",
+    "C_ph[1] = C1"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 7,
+   "id": "94d44632",
+   "metadata": {
+    "lines_to_next_cell": 2
+   },
+   "outputs": [],
+   "source": [
+    "eps_th_ph = np.zeros((2, Ntemp, 6))\n",
+    "eps_th_ph[0, :, :] = eps_th_cu(temperatures)[:, None] * I2[None, :]\n",
+    "eps_th_ph[1, :, :] = eps_th_wsc(temperatures)[:, None] * I2[None, :]"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 8,
+   "id": "42c0eba6",
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "[[ 1.00000000e+00 -1.83013327e-16 -2.70616862e-16  0.00000000e+00\n",
+      "   2.91433544e-16 -3.07046055e-16]\n",
+      " [-3.93782229e-16  1.00000000e+00 -2.64545330e-16 -1.47451495e-16\n",
+      "   1.64798730e-16 -8.41340886e-17]\n",
+      " [ 1.43982049e-16  4.88758339e-16  1.00000000e+00 -3.41740525e-16\n",
+      "   6.34041430e-16 -2.46330734e-16]\n",
+      " [ 2.76037873e-16  5.25079112e-16  1.72821826e-16  1.00000000e+00\n",
+      "  -2.83193607e-16  2.42427606e-16]\n",
+      " [-2.25514052e-16 -5.44215280e-16 -2.50017021e-16 -1.92987987e-17\n",
+      "   1.00000000e+00 -1.72604986e-16]\n",
+      " [-4.94396191e-17  1.68051337e-17  1.25984292e-16  2.04697370e-16\n",
+      "   2.87096735e-16  1.00000000e+00]]\n"
+     ]
+    }
+   ],
+   "source": [
+    "A_bar = -np.transpose(A_bar[:, :Nmax, :], axes=[2, 1, 0])\n",
+    "# print(A_bar.shape)\n",
+    "D_xi = -np.transpose(D_xi[:Nmax, :Nmax, :], axes=[2, 0, 1])\n",
+    "# print(np.linalg.eigvals(D_xi[0,:3,:3]))\n",
+    "tau_xi = -np.transpose(tau_xi[:Nmax, :], axes=[1, 0])\n",
+    "tau_theta = np.transpose(tau_theta)\n",
+    "C_bar = np.transpose(C_bar, axes=[2, 0, 1])\n",
+    "A = A_bar[0]\n",
+    "XX = A.T @ np.linalg.pinv(A @ A.T) @ A\n",
+    "print(XX)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "1644aa44",
+   "metadata": {},
+   "source": []
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 9,
+   "id": "2e79ca5d",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "# print(( vol_frac[1]*A1[0,:,:7]+vol_frac[0]*A0[0,:,:7]) )\n",
+    "x = C_bar[0, :, :].flatten()\n",
+    "x0 = A0[0, :, :6].flatten()\n",
+    "x1 = A1[0, :, :6].flatten()"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 10,
+   "id": "b3289fe4",
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "c_Bar:\n",
+      "[[2.83544622e+08 1.30812412e+08 1.30812412e+08 1.24569387e+05\n",
+      "  1.24569387e+05 7.44890553e+04]\n",
+      " [1.30812412e+08 2.83544622e+08 1.30812412e+08 1.24569387e+05\n",
+      "  7.44890553e+04 1.24569387e+05]\n",
+      " [1.30812412e+08 1.30812412e+08 2.83544622e+08 7.44890553e+04\n",
+      "  1.24569387e+05 1.24569387e+05]\n",
+      " [1.24569387e+05 1.24569387e+05 7.44890553e+04 1.55475051e+08\n",
+      "  1.67818031e+05 1.67818031e+05]\n",
+      " [1.24569387e+05 7.44890553e+04 1.24569387e+05 1.67818031e+05\n",
+      "  1.55475051e+08 1.67818031e+05]\n",
+      " [7.44890553e+04 1.24569387e+05 1.24569387e+05 1.67818031e+05\n",
+      "  1.67818031e+05 1.55475051e+08]]\n"
+     ]
+    }
+   ],
+   "source": [
+    "alpha = np.dot(x - x1, x0 - x1) / np.dot(x0 - x1, x0 - x1)\n",
+    "# print(alpha, vol_frac)\n",
+    "alpha = 37 / 64\n",
+    "print(\"c_Bar:\")\n",
+    "print(C_bar[0, :, :])"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "8840c9e8",
+   "metadata": {},
+   "source": []
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 11,
+   "id": "f3e23dcf",
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "error: [4.44244702e-01 2.03578631e-01 2.03578631e-01 2.26026406e-04\n",
+      " 2.26026406e-04 1.38090640e-04 2.03578631e-01 4.44244702e-01\n",
+      " 2.03578631e-01 2.26026406e-04 1.38090640e-04 2.26026406e-04\n",
+      " 2.03578631e-01 2.03578631e-01 4.44244702e-01 1.38090640e-04\n",
+      " 2.26026406e-04 2.26026406e-04 2.18730561e-04 2.18730561e-04\n",
+      " 1.30794698e-04 2.45482202e-01 2.94670288e-04 2.94670288e-04\n",
+      " 2.18730561e-04 1.30794698e-04 2.18730561e-04 2.94670288e-04\n",
+      " 2.45482202e-01 2.94670288e-04 1.30794698e-04 2.18730561e-04\n",
+      " 2.18730561e-04 2.94670288e-04 2.94670288e-04 2.45482202e-01]\n"
+     ]
+    }
+   ],
+   "source": [
+    "xx = alpha * x0 + (1 - alpha) * x1\n",
+    "# print(xx.reshape((6,6))-C_bar[0,:,:])\n",
+    "print(\"error:\", xx / np.linalg.norm(x))"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "89aa604a",
+   "metadata": {},
+   "source": []
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 12,
+   "id": "260bb68a",
+   "metadata": {},
+   "outputs": [
+    {
+     "ename": "FileNotFoundError",
+     "evalue": "[Errno 2] Unable to synchronously create file (unable to open file: name = 'data_new/ms9p_fix_ntfa16_B1-6_10s_N24.h5', errno = 2, error message = 'No such file or directory', flags = 13, o_flags = 242)",
+     "output_type": "error",
+     "traceback": [
+      "\u001b[0;31m---------------------------------------------------------------------------\u001b[0m",
+      "\u001b[0;31mFileNotFoundError\u001b[0m                         Traceback (most recent call last)",
+      "Cell \u001b[0;32mIn[12], line 3\u001b[0m\n\u001b[1;32m      1\u001b[0m \u001b[38;5;66;03m# print((C_bar[0,:,:]), tau_theta[0,:])\u001b[39;00m\n\u001b[1;32m      2\u001b[0m fname \u001b[38;5;241m=\u001b[39m \u001b[38;5;124mf\u001b[39m\u001b[38;5;124m\"\u001b[39m\u001b[38;5;124mdata_new/ms9p_fix_ntfa16_B1-6_10s_N\u001b[39m\u001b[38;5;132;01m{\u001b[39;00mNmax\u001b[38;5;132;01m}\u001b[39;00m\u001b[38;5;124m.h5\u001b[39m\u001b[38;5;124m\"\u001b[39m\n\u001b[0;32m----> 3\u001b[0m F \u001b[38;5;241m=\u001b[39m \u001b[43mh5py\u001b[49m\u001b[38;5;241;43m.\u001b[39;49m\u001b[43mFile\u001b[49m\u001b[43m(\u001b[49m\u001b[43mfname\u001b[49m\u001b[43m,\u001b[49m\u001b[43m \u001b[49m\u001b[38;5;124;43m\"\u001b[39;49m\u001b[38;5;124;43mw\u001b[39;49m\u001b[38;5;124;43m\"\u001b[39;49m\u001b[43m)\u001b[49m\n\u001b[1;32m      4\u001b[0m F\u001b[38;5;241m.\u001b[39mcreate_dataset(\u001b[38;5;124m\"\u001b[39m\u001b[38;5;124mSIG_phases\u001b[39m\u001b[38;5;124m\"\u001b[39m, data\u001b[38;5;241m=\u001b[39msig_ph)\n\u001b[1;32m      5\u001b[0m F\u001b[38;5;241m.\u001b[39mcreate_dataset(\u001b[38;5;124m\"\u001b[39m\u001b[38;5;124mC_phases\u001b[39m\u001b[38;5;124m\"\u001b[39m, data\u001b[38;5;241m=\u001b[39mC_ph)\n",
+      "File \u001b[0;32m~/Documents/ThermoNTFA/venv/lib/python3.11/site-packages/h5py/_hl/files.py:562\u001b[0m, in \u001b[0;36mFile.__init__\u001b[0;34m(self, name, mode, driver, libver, userblock_size, swmr, rdcc_nslots, rdcc_nbytes, rdcc_w0, track_order, fs_strategy, fs_persist, fs_threshold, fs_page_size, page_buf_size, min_meta_keep, min_raw_keep, locking, alignment_threshold, alignment_interval, meta_block_size, **kwds)\u001b[0m\n\u001b[1;32m    553\u001b[0m     fapl \u001b[38;5;241m=\u001b[39m make_fapl(driver, libver, rdcc_nslots, rdcc_nbytes, rdcc_w0,\n\u001b[1;32m    554\u001b[0m                      locking, page_buf_size, min_meta_keep, min_raw_keep,\n\u001b[1;32m    555\u001b[0m                      alignment_threshold\u001b[38;5;241m=\u001b[39malignment_threshold,\n\u001b[1;32m    556\u001b[0m                      alignment_interval\u001b[38;5;241m=\u001b[39malignment_interval,\n\u001b[1;32m    557\u001b[0m                      meta_block_size\u001b[38;5;241m=\u001b[39mmeta_block_size,\n\u001b[1;32m    558\u001b[0m                      \u001b[38;5;241m*\u001b[39m\u001b[38;5;241m*\u001b[39mkwds)\n\u001b[1;32m    559\u001b[0m     fcpl \u001b[38;5;241m=\u001b[39m make_fcpl(track_order\u001b[38;5;241m=\u001b[39mtrack_order, fs_strategy\u001b[38;5;241m=\u001b[39mfs_strategy,\n\u001b[1;32m    560\u001b[0m                      fs_persist\u001b[38;5;241m=\u001b[39mfs_persist, fs_threshold\u001b[38;5;241m=\u001b[39mfs_threshold,\n\u001b[1;32m    561\u001b[0m                      fs_page_size\u001b[38;5;241m=\u001b[39mfs_page_size)\n\u001b[0;32m--> 562\u001b[0m     fid \u001b[38;5;241m=\u001b[39m \u001b[43mmake_fid\u001b[49m\u001b[43m(\u001b[49m\u001b[43mname\u001b[49m\u001b[43m,\u001b[49m\u001b[43m \u001b[49m\u001b[43mmode\u001b[49m\u001b[43m,\u001b[49m\u001b[43m \u001b[49m\u001b[43muserblock_size\u001b[49m\u001b[43m,\u001b[49m\u001b[43m \u001b[49m\u001b[43mfapl\u001b[49m\u001b[43m,\u001b[49m\u001b[43m \u001b[49m\u001b[43mfcpl\u001b[49m\u001b[43m,\u001b[49m\u001b[43m \u001b[49m\u001b[43mswmr\u001b[49m\u001b[38;5;241;43m=\u001b[39;49m\u001b[43mswmr\u001b[49m\u001b[43m)\u001b[49m\n\u001b[1;32m    564\u001b[0m \u001b[38;5;28;01mif\u001b[39;00m \u001b[38;5;28misinstance\u001b[39m(libver, \u001b[38;5;28mtuple\u001b[39m):\n\u001b[1;32m    565\u001b[0m     \u001b[38;5;28mself\u001b[39m\u001b[38;5;241m.\u001b[39m_libver \u001b[38;5;241m=\u001b[39m libver\n",
+      "File \u001b[0;32m~/Documents/ThermoNTFA/venv/lib/python3.11/site-packages/h5py/_hl/files.py:241\u001b[0m, in \u001b[0;36mmake_fid\u001b[0;34m(name, mode, userblock_size, fapl, fcpl, swmr)\u001b[0m\n\u001b[1;32m    239\u001b[0m     fid \u001b[38;5;241m=\u001b[39m h5f\u001b[38;5;241m.\u001b[39mcreate(name, h5f\u001b[38;5;241m.\u001b[39mACC_EXCL, fapl\u001b[38;5;241m=\u001b[39mfapl, fcpl\u001b[38;5;241m=\u001b[39mfcpl)\n\u001b[1;32m    240\u001b[0m \u001b[38;5;28;01melif\u001b[39;00m mode \u001b[38;5;241m==\u001b[39m \u001b[38;5;124m'\u001b[39m\u001b[38;5;124mw\u001b[39m\u001b[38;5;124m'\u001b[39m:\n\u001b[0;32m--> 241\u001b[0m     fid \u001b[38;5;241m=\u001b[39m \u001b[43mh5f\u001b[49m\u001b[38;5;241;43m.\u001b[39;49m\u001b[43mcreate\u001b[49m\u001b[43m(\u001b[49m\u001b[43mname\u001b[49m\u001b[43m,\u001b[49m\u001b[43m \u001b[49m\u001b[43mh5f\u001b[49m\u001b[38;5;241;43m.\u001b[39;49m\u001b[43mACC_TRUNC\u001b[49m\u001b[43m,\u001b[49m\u001b[43m \u001b[49m\u001b[43mfapl\u001b[49m\u001b[38;5;241;43m=\u001b[39;49m\u001b[43mfapl\u001b[49m\u001b[43m,\u001b[49m\u001b[43m \u001b[49m\u001b[43mfcpl\u001b[49m\u001b[38;5;241;43m=\u001b[39;49m\u001b[43mfcpl\u001b[49m\u001b[43m)\u001b[49m\n\u001b[1;32m    242\u001b[0m \u001b[38;5;28;01melif\u001b[39;00m mode \u001b[38;5;241m==\u001b[39m \u001b[38;5;124m'\u001b[39m\u001b[38;5;124ma\u001b[39m\u001b[38;5;124m'\u001b[39m:\n\u001b[1;32m    243\u001b[0m     \u001b[38;5;66;03m# Open in append mode (read/write).\u001b[39;00m\n\u001b[1;32m    244\u001b[0m     \u001b[38;5;66;03m# If that fails, create a new file only if it won't clobber an\u001b[39;00m\n\u001b[1;32m    245\u001b[0m     \u001b[38;5;66;03m# existing one (ACC_EXCL)\u001b[39;00m\n\u001b[1;32m    246\u001b[0m     \u001b[38;5;28;01mtry\u001b[39;00m:\n",
+      "File \u001b[0;32mh5py/_objects.pyx:54\u001b[0m, in \u001b[0;36mh5py._objects.with_phil.wrapper\u001b[0;34m()\u001b[0m\n",
+      "File \u001b[0;32mh5py/_objects.pyx:55\u001b[0m, in \u001b[0;36mh5py._objects.with_phil.wrapper\u001b[0;34m()\u001b[0m\n",
+      "File \u001b[0;32mh5py/h5f.pyx:122\u001b[0m, in \u001b[0;36mh5py.h5f.create\u001b[0;34m()\u001b[0m\n",
+      "\u001b[0;31mFileNotFoundError\u001b[0m: [Errno 2] Unable to synchronously create file (unable to open file: name = 'data_new/ms9p_fix_ntfa16_B1-6_10s_N24.h5', errno = 2, error message = 'No such file or directory', flags = 13, o_flags = 242)"
+     ]
+    }
+   ],
+   "source": [
+    "# print((C_bar[0,:,:]), tau_theta[0,:])\n",
+    "fname = f\"data_new/ms9p_fix_ntfa16_B1-6_10s_N{Nmax}.h5\"\n",
+    "F = h5py.File(fname, \"w\")\n",
+    "F.create_dataset(\"SIG_phases\", data=sig_ph)\n",
+    "F.create_dataset(\"C_phases\", data=C_ph)\n",
+    "F.create_dataset(\"eps_th_phases\", data=eps_th_ph)\n",
+    "F.create_dataset(\"A_bar\", data=A_bar)\n",
+    "F.create_dataset(\"v_frac\", data=vol_frac)\n",
+    "F.create_dataset(\"C_bar\", data=C_bar)\n",
+    "F.create_dataset(\"D_xi\", data=D_xi)\n",
+    "F.create_dataset(\"D_theta\", data=D_theta)\n",
+    "F.create_dataset(\"tau_xi\", data=tau_xi)\n",
+    "F.create_dataset(\"tau_theta\", data=tau_theta)\n",
+    "F.create_dataset(\"temperatures\", data=temperatures)\n",
+    "F.close()\n",
+    "eps_th_500 = np.linalg.solve(C_bar[20, :, :], tau_theta[20, :])\n",
+    "print(eps_th_500)\n",
+    "print(tau_theta)"
+   ]
+  }
+ ],
+ "metadata": {
+  "jupytext": {
+   "cell_metadata_filter": "-all",
+   "encoding": "# -*- coding: utf-8 -*-",
+   "executable": "/usr/bin/env python3",
+   "formats": "ipynb,py:percent",
+   "main_language": "python",
+   "notebook_metadata_filter": "-all"
+  },
+  "kernelspec": {
+   "display_name": "Python 3 (ipykernel)",
+   "language": "python",
+   "name": "python3"
+  },
+  "language_info": {
+   "codemirror_mode": {
+    "name": "ipython",
+    "version": 3
+   },
+   "file_extension": ".py",
+   "mimetype": "text/x-python",
+   "name": "python",
+   "nbconvert_exporter": "python",
+   "pygments_lexer": "ipython3",
+   "version": "3.11.6"
+  }
+ },
+ "nbformat": 4,
+ "nbformat_minor": 5
+}

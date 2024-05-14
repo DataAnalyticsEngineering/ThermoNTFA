@@ -13,7 +13,7 @@
     for Economic Affairs and Climate Action (BMWK) via the German Federation of Industrial Research Associations (AiF)
     in accordance with the policy to support the Industrial Collective Research (IGF) on the orders of the German Bundestag.
 
-    .. image:: ../data/bmwk.png
+    .. image:: ./images/bmwk.png
        :width: 30%
 
     Felix Fritzen is funded by the German Research Foundation (DFG) --
