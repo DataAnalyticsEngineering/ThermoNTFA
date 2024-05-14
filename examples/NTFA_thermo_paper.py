@@ -30,6 +30,8 @@ import h5py
 import matplotlib.pyplot as plt
 import numpy as np
 
+data_path = "../data"
+
 # %% [markdown]
 # ## Twoscale loading plot:
 
@@ -38,7 +40,7 @@ dpi = 400
 force = []
 temp = []
 for s in ("fine",):  # 'coarse', 'medium',
-    file_name = os.path.join("data", f"NTFA293K_{s}_temp_293-800.h5")
+    file_name = os.path.join(data_path, "results", f"NTFA293K_{s}_temp_293-800.h5")
     with h5py.File(file_name, mode="r") as F:
         force.append(np.array(F["force28"]) / 1e6)
         temp.append(np.array(F["temperature28"]))
@@ -76,7 +78,7 @@ for f, T in zip((force), (temp)):
         ax2.legend(loc=(0.65, 0.7))
     nhalf = int((t.size + 1) / 2)
     labels = True
-fig.savefig(os.path.join("results", "twoscale_loading.pdf"))
+fig.savefig(os.path.join(data_path, "figures", "twoscale_loading.pdf"))
 plt.show()
 
 # %% [markdown]
@@ -94,14 +96,14 @@ ax.text(1.1, 0.1, "force unloading", color="red", bbox=dict(facecolor="white"))
 ax.set_xlabel("time [s]")
 ax.set_ylabel(r"rel. stretch $u/u_\mathrm{max}$ and force $F/F_\mathrm{max}$ [-]")
 ax.grid(zorder=3)
-fig.savefig(os.path.join("results", "twoscale_loading.pdf"))
+fig.savefig(os.path.join(data_path, "figures", "twoscale_loading.pdf"))
 plt.show()
 
 # %% [markdown]
 # ## Plot:
 
 # %%
-file_name = os.path.join("data", "test_coarse.h5")
+file_name = os.path.join(data_path, "results", "test_coarse.h5")
 with h5py.File(file_name, mode="r") as F:
     u = np.array(F["displacement1/X"])
     uy = u[1::2]
@@ -114,14 +116,14 @@ with h5py.File(file_name, mode="r") as F:
 
 fig, ax = plt.subplots(1, 1, dpi=dpi)
 ax.plot(f)
-fig.savefig(os.path.join("results", "force.pdf"))
+fig.savefig(os.path.join(data_path, "figures", "force.pdf"))
 plt.show()
 
 # %% [markdown]
 # ## Plot:
 
 # %%
-file_name = os.path.join("data", "test_coarse.h5")
+file_name = os.path.join(data_path, "results", "test_coarse.h5")
 with h5py.File(file_name, mode="r") as F:
     d = []
     for i in range(16):

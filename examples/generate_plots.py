@@ -37,6 +37,8 @@ from thermontfa import TabularInterpolation
 
 matplotlib.rc("font", size=14)
 
+data_path = "../data"
+
 
 def Vec2Tensor(vec):
     """Convert a 6-vector (in Mandel notation) into a sym. 3x3 Matrix"""
@@ -58,7 +60,7 @@ def Vec2Tensor(vec):
 
 # %% read the NTFA data into tabular interpolatoin objects
 mode_file_name = os.path.join(
-    "data", "", "simple_3d_rve_B1-B6_16x16x16_10samples_fix.h5"
+    data_path, "validation", "simple_3d_rve_B1-B6_16x16x16_10samples_fix.h5"
 )
 A_bar = TabularInterpolation.from_h5(
     mode_file_name,
@@ -111,7 +113,7 @@ for A in [A_bar, A_cu, A_wsc]:
 # ### Determine an element in the notch:
 
 # %% Analysis of the two-scale simulation
-F = h5py.File(os.path.join("data", "NTFA293K_fine_temp_293-800.h5"), "r")
+F = h5py.File(os.path.join(data_path, "results", "NTFA293K_fine_temp_293-800.h5"), "r")
 
 # step 1: find the element with the crucial pieces of information
 # read mesh
@@ -281,7 +283,9 @@ ax[1].set_ylabel(
 )
 ax2.set_ylabel(r"$\overline{Q}$ [-]")
 plt.tight_layout()
-plt.savefig(os.path.join("results", "notchtest_fine_sigyy_ntfa.pdf"), format="pdf")
+plt.savefig(
+    os.path.join(data_path, "figures", "notchtest_fine_sigyy_ntfa.pdf"), format="pdf"
+)
 plt.show()
 
 # %%
@@ -352,14 +356,16 @@ ax[1].grid()
 ax[1].set_xlabel(r"$t$ [s]")
 ax[1].set_ylabel(r"Vergleichsspannung und Fließspannung [MPa]")
 plt.tight_layout()
-plt.savefig(os.path.join("results", "notchtest_fine_sigeq_ntfa.pdf"), format="pdf")
+plt.savefig(
+    os.path.join(data_path, "figures", "notchtest_fine_sigeq_ntfa.pdf"), format="pdf"
+)
 plt.show()
 
 # %% [markdown]
 # ### Pass the strain, temperature history to FANS as BC
 
 # %%
-F = h5py.File(os.path.join("data", "daten_kerbgrund.h5"), "w")
+F = h5py.File(os.path.join(data_path, "daten_kerbgrund.h5"), "w")
 F.create_dataset("/sig", data=sig)
 F.create_dataset("/sig_cu", data=sig_cu)
 F.create_dataset("/sig_wsc", data=sig_wsc)
@@ -385,7 +391,7 @@ print(theta)
 # #### Load data from hdf5 files:
 
 # %%
-file_name = os.path.join("data", "daten_kerbgrund_32s_fans.h5")
+file_name = os.path.join(data_path, "daten_kerbgrund_32s_fans.h5")
 with h5py.File(file_name, "r") as F:
     eps = np.array(F["/eps"])
     theta = np.array(F["/theta"])
@@ -413,8 +419,9 @@ plt.show()
 # ### Load H5 file with all results:
 
 # %% Analysis of the training directions of the temperature range
-# file_name = os.path.join("data", "all_results_ms9p_16x16x16_10s_N24.h5")
-file_name = os.path.join("data", f"all_results_ms9p_16x16x16_100s_N{N_modes}.h5")
+file_name = os.path.join(
+    data_path, "results", f"all_results_ms9p_16x16x16_100s_N{N_modes}.h5"
+)
 with h5py.File(file_name, "r") as F:
     eps = np.array(F["/eps"])
     theta = np.array(F["/temperature"])
@@ -454,7 +461,7 @@ for i_T, T in zip((0, 9), (300.0, 1300.0)):
     ax.legend()
     ax.grid()
     # fig.savefig( f'rel_error_ms9p_T{T:.0f}.pdf', format='pdf', pad_inches=0.0)
-plt.savefig(os.path.join("results", "rel_err_sig_10s.pdf"), format="pdf")
+plt.savefig(os.path.join(data_path, "figures", "rel_err_sig_10s.pdf"), format="pdf")
 plt.show()
 # %%
 fig, axx = plt.subplots(1, 2, figsize=(15, 7))
@@ -479,7 +486,7 @@ for i_T, T in zip((0, 9), (300.0, 1300.0)):
     ax.legend()
     ax.grid()
     # fig.savefig( f'rel_error_ms9p_T{T:.0f}.pdf', format='pdf', pad_inches=0.0)
-plt.savefig(os.path.join("results", "rel_err_sig_wsc_10s.pdf"), format="pdf")
+plt.savefig(os.path.join(data_path, "figures", "rel_err_sig_wsc_10s.pdf"), format="pdf")
 plt.show()
 
 # %% plot for loadcase 2 the relevant curves
@@ -574,7 +581,10 @@ ax.set_zlabel(r"rel. Fehler in $\overline{\sigma}_{\sf WSC}$ [%]")
 
 fig.tight_layout()
 
-plt.savefig(os.path.join("results", "surface_plots_err_sig_sig_wsc.pdf"), format="pdf")
+plt.savefig(
+    os.path.join(data_path, "figures", "surface_plots_err_sig_sig_wsc.pdf"),
+    format="pdf",
+)
 plt.show()
 
 # ax[0].plot(theta, err, '-', color='black', label=r"$e_{\overline{\sigma}}$ [%]")
@@ -588,7 +598,7 @@ plt.show()
 
 # %%
 with h5py.File(
-    os.path.join("data", "daten_kerbgrund_JH_fixed.h5"), "r"
+    os.path.join(data_path, "daten_kerbgrund_JH_fixed.h5"), "r"
 ) as F:  # daten_kerbgrund_NTFA_FE.h5
     eps = np.array(F["/eps"])
     ntfa_S = np.array(F["/sig"]) / 1e3
@@ -667,5 +677,7 @@ ax.grid()
 ax.set_xlabel("Lastschritt-Nr. [-]")
 ax.set_ylabel(r"rel. Fehler in $\overline{\sigma}, \overline{\sigma}_{\sf WSC}$ [%]")
 fig.tight_layout()
-plt.savefig(os.path.join("results", "kerbgrund_err_sig_sig_wsc.pdf"), format="pdf")
+plt.savefig(
+    os.path.join(data_path, "figures", "kerbgrund_err_sig_sig_wsc.pdf"), format="pdf"
+)
 plt.show()

@@ -61,28 +61,28 @@ class ThermoMechNTFA:
         verbose: bool = False,
     ) -> None:
         """
-        Initialize the thermo-mechanical NTFA from an HDF5 file (*.h5)
+        Initialize the thermo-mechanical NTFA from an HDF5 file (:code:`*.h5`)
 
-        Seek the data in HDF5 file named `file_name` within the group `group_name`.
+        Seek the data in HDF5 file named :code:`file_name` within the group :code:`group_name`.
         The following data sets containing tabular data for the NTFA are expected in the group:
-        - `temperatures`: list of temperature points of the tabular data, shape: `(N_temp,)`
-        - `A_bar`: shape: `(N_temp, N_modes, 6)`
-        - `C_bar`: shape: `(N_temp, 6, 6)`
-        - `D_xi`: shape: `(N_temp, N_modes, N_modes)`
-        - `tau_theta`: shape: `(N_temp, 6)`
-        - `tau_xi`: shape: `(N_temp, N_modes)`
+        - `temperatures`: list of temperature points of the tabular data, shape: :code:`(N_temp,)`
+        - :code:`A_bar`: shape: :code:`(N_temp, N_modes, 6)`
+        - :code:`C_bar`: shape: :code:`(N_temp, 6, 6)`
+        - :code:`D_xi`: shape: :code:`(N_temp, N_modes, N_modes)`
+        - :code:`tau_theta`: shape: :code:`(N_temp, 6)`
+        - :code:`tau_xi`: shape: :code:`(N_temp, N_modes)`
 
         In addition, the group in the HDF5 file must contain the following data sets:
-        - `v_frac`: volume fraction of the different phases
-        - `SIG_phases`: stress data different phases
+        - :code:`v_frac`: volume fraction of the different phases
+        - :code:`SIG_phases`: stress data different phases
 
         :param file_name: path to the HDF5 file
         :type file_name: str
         :param group_name: group in the HDF5 file that contains the NTFA tabular data
         :type group_name: str
-        :param sig_y: function/callable that returns the yield stress `sig_y(theta, q_n, derivative)`
-            given the temperature `theta` and the current isotropic hardening variable `q_n`.
-            If `derivative = True`, the derivative should also be returned.
+        :param sig_y: function/callable that returns the yield stress :code:`sig_y(theta, q_n, derivative)`
+            given the temperature :code:`theta` and the current isotropic hardening variable :code:`q_n`.
+            If :code:`derivative = True`, the derivative should also be returned.
         :type sig_y: Callable[[float, float, bool], float]
         :param N_max: maximum number of NTFA modes that should be used. If None, all available modes are used.
         :type N_max: int
@@ -156,7 +156,7 @@ class ThermoMechNTFA:
 
     def interpolate(self, theta: float) -> None:
         """
-        Interpolate NTFA matrices to current temperature `theta` if the given tolerance is exceeded
+        Interpolate NTFA matrices to current temperature :code:`theta` if the given tolerance is exceeded
 
         :param theta: Temperature
         """
@@ -176,8 +176,8 @@ class ThermoMechNTFA:
         i_phase: Optional[int] = None,
     ):
         """
-        Compute the stress given strain `eps`, plastic mode activations `xi`.
-        If `i_phase` is given, the stress is computed only for the phase with index `i_phase`.
+        Compute the stress given strain :code:`eps`, plastic mode activations :code:`xi`.
+        If :code:`i_phase` is given, the stress is computed only for the phase with index :code:`i_phase`.
 
         :param eps: Strain
         :type eps: np.ndarray
@@ -185,7 +185,7 @@ class ThermoMechNTFA:
         :type eps: float
         :param xi: Plastic mode activations
         :type eps: np.ndarray
-        :param i_phase: Phase index for the stress computation. If None, overall stress is computed.
+        :param i_phase: Phase index for the stress computation. If :code:`None`, overall stress is computed.
         :type eps: int, optional
         :return: Computed stress
         """
@@ -209,13 +209,14 @@ class ThermoMechNTFA:
         """
         Run the UMAT using partial eps-BC, e.g., uniaxial tension test.
 
-        :param eps_idx: Indices of eps that are prescribed. If `None`, then all components of `sig_bc` are prescribed.
+        :param eps_idx: Indices of eps that are prescribed.
+            If :code:`None`, then all components of :code:`sig_bc` are prescribed.
         :type eps_idx: nd-array, dtype=int
         :param eps_n: Strain at the beginning of the increment.
         :type eps_n: nd-array, dtype=float, shape=[6]
         :param deps: Strain increment. Only deps[eps_idx] is used.
         :type deps: nd-array, dtype=float, shape=[6]
-        :param sig_bc: Stress at the end of the increment. Only non `eps_idx` components are used.
+        :param sig_bc: Stress at the end of the increment. Only non :code:`eps_idx` components are used.
         :type sig_bc: nd-array, dtype=float, shape=[6]
         :param theta: Temperature at the end of the time increment.
         :type theta: float
@@ -301,9 +302,9 @@ class ThermoMechNTFA:
         xi_n: np.ndarray,
     ) -> Tuple[np.ndarray, float, np.ndarray, np.ndarray]:
         """
-        Solve for stress `S`, hardening variable `q`, reduced coefficients `xi`, and stiffness `C` given the
-        strain `eps`, strain increment `deps`, temperature `theta`, hardening variable `q_n`,
-        and reduced coefficients `xi_n`.
+        Solve for stress :code:`S`, hardening variable :code:`q`, reduced coefficients :code:`xi`,
+        and stiffness :code:`C` given the strain :code:`eps`, strain increment :code:`deps`,
+        temperature :code:`theta`, hardening variable :code:`q_n`, and reduced coefficients :code:`xi_n`.
 
         :param eps: Strain
         :type eps: np.ndarray

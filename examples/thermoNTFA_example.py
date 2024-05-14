@@ -31,12 +31,15 @@ from matplotlib import pyplot as plt
 from material_parameters import my_sig_y
 from thermontfa import ThermoMechNTFA
 
+data_path = "../"
+
 # %% [markdown]
 # ## Instantiate ThermoMechNTFA material routine:
 
 # %%
+file_name = os.path.join(data_path, "results", "ms9p_fix_ntfa16_B1-6_10s_N24.h5")
 ntfa_material = ThermoMechNTFA(
-    file_name="ms9p_fix_ntfa16_B1-6_10s_N24.h5",
+    file_name=file_name,
     group_name="/",
     sig_y=my_sig_y,
     N_max=24,

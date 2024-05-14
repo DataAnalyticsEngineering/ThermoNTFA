@@ -105,12 +105,12 @@ class TabularInterpolation:
 
         :param file_name: path of the HDF5 file
         :type file_name: str
-        :param dset_param: path to the desired dataset in the HDF5 file
-        :type dset_param: str
+        :param dset_temps: path to the desired dataset in the HDF5 file
+        :type dset_temps: str
         :param dset_data:
         :type dset_param: str
         :param const_extrapolate: "linear" or "constant"
-        :type extrapolate: bool
+        :type const_extrapolate: bool
         :param transpose_dims: axis order for transposition
         :type transpose_dims: Tuple[int, ...], optional
         :return: new instance  of the `TabularInterpolation` class
@@ -140,7 +140,7 @@ class TabularInterpolation:
                 return self.data[0, ...]
             else:
                 # linear extrapolation
-                alpha = (self.temp_min - temp) / (self.temp[1] - self.temp[0])
+                alpha = (self.temp_min - temp) / (self.temps[1] - self.temps[0])
                 return self.data[0, ...] - alpha * (
                     self.data[1, ...] - self.data[0, ...]
                 )
@@ -150,14 +150,14 @@ class TabularInterpolation:
                 return self.data[-1, ...]
             else:
                 # linear extrapolation
-                alpha = (temp - self.temp_max) / (self.temp[-1] - self.temp[-2])
+                alpha = (temp - self.temp_max) / (self.temps[-1] - self.temps[-2])
                 return self.data[-1, ...] + alpha * (
                     self.data[-1, ...] - self.data[-2, ...]
                 )
 
-        idx = np.searchsorted(self.temp > temp, 1) - 1
-        t1 = self.t[idx]
-        t2 = self.t[idx + 1]
+        idx = np.searchsorted(self.temps > temp, 1) - 1
+        t1 = self.temps[idx]
+        t2 = self.temps[idx + 1]
         alpha = (temp - t1) / (t2 - t1)
         interp_data = self.data[idx, ...] + alpha * (
             self.data[idx + 1, ...] - self.data[idx, ...]
