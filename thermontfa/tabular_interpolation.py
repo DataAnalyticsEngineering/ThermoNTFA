@@ -30,8 +30,8 @@ class TabularInterpolation:
     Tabular interpolation for the thermo-mechanical NTFA
 
     Performs a linear interpolation of the NTFA system matrices for a given temperature
-    given tabular data for sufficiently many temperature points.
-    It can be initialized for given data or based on a HDF5 file.
+    given tabular data at sufficiently many temperature points.
+    It can be initialized with given tabular data or based on a HDF5 file (:code:`*.h5`).
     """
 
     temp_min: float = 0.0
@@ -48,12 +48,12 @@ class TabularInterpolation:
         const_extrapolate: bool = False,
     ) -> None:
         """
-        Initialize the tabular interpolator for given `data` at prescribed temperatures `temps`.
+        Initialize the tabular interpolator for given :code:`data` at prescribed temperatures :code:`temps`.
 
         :param temps: temperature points on which tabular data is available.
-            The shape of the `numpy` array is expected to be `(N_t,)`.
+            The shape of the :code:`numpy` array is expected to be :code:`(N_t,)`.
         :type temps: np.ndarray
-        :param data: tabular data, e.g., a batch of NTFA system matrices with shape `(N_t, ...)`.
+        :param data: tabular data, e.g., a batch of NTFA system matrices with shape :code:`(N_t, ...)`.
         :type data: np.ndarray
         :param const_extrapolate: If true, a constant extrapolation instead of a linear extrapolation is performed.
             The default value is false.
@@ -92,16 +92,16 @@ class TabularInterpolation:
         const_extrapolate: bool = False,
     ) -> Self:
         """
-        Initialize the tabular interpolator based on tabular data stored in a HDF5 file (*.h5).
+        Initialize the tabular interpolator based on tabular data stored in a HDF5 file (:code:`*.h5`).
 
-        This is a factory method and returns a new instance of the `TabularInterpolation` class.
-        It is expected that the HDF5 file contains a data set with path `dset_temps` that contains
+        This is a factory method and returns a new instance of the :code:`TabularInterpolation` class.
+        It is expected that the HDF5 file contains a data set with path :code:`dset_temps` that contains
         a list of the temperature points on which tabular data is available. The shape of this
-        dataset is expected to be `(N_t,)`.
-        Additionaly, the HDF5 file must contain a data set with path `dset_data` that contains the
-        tabular data, e.g., a batch of NTFA system matrices with shape `(N_t, ...)`.
+        dataset is expected to be :code:`(N_t,)`.
+        Additionaly, the HDF5 file must contain a data set with path :code:`dset_data` that contains the
+        tabular data, e.g., a batch of NTFA system matrices with shape :code:`(N_t, ...)`.
         The order of axes/dimensions of the data set with path `dset_data` can be changed by transposing
-        to the axis order given in `transpose_dims`.
+        to the axis order given in :code:`transpose_dims`.
 
         :param file_name: path of the HDF5 file
         :type file_name: str
@@ -113,7 +113,7 @@ class TabularInterpolation:
         :type const_extrapolate: bool
         :param transpose_dims: axis order for transposition
         :type transpose_dims: Tuple[int, ...], optional
-        :return: new instance  of the `TabularInterpolation` class
+        :return: new instance of the :code:`TabularInterpolation` class
         :rtype: TabularInterpolation
         """
         with h5py.File(file_name, "r") as file:
@@ -128,7 +128,7 @@ class TabularInterpolation:
 
     def interpolate(self, temp: float) -> np.ndarray:
         """
-        Perform a linear interpolation based on the available tabular data at a given temperature `temp`
+        Perform a linear interpolation based on the available tabular data at a given temperature :code:`temp`
 
         :param temp: temperature point for interpolation
         :type temp: float

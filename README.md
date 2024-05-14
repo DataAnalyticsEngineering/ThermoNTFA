@@ -6,7 +6,7 @@
 [![black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](./LICENSE.md)
 [![Python](https://img.shields.io/badge/python-3.11-purple.svg)](https://www.python.org/)
-![PyPI](https://img.shields.io/pypi/v/thermontfa)
+[![PyPI](https://img.shields.io/pypi/v/thermontfa)](https://test.pypi.org/project/thermontfa/)
 
 
 This repository contains a material routine written in *Python* for the thermo-elasto-plastic Nonuniform Transformation Field Analysis (**ThermoNTFA**) published in ...
@@ -15,9 +15,9 @@ TODO: abstract
 
 ## Documentation
 
-TODO: deployment of documentation on Github
+TODO: deployment of documentation via DAE Github organization
 
-The documentation of this software, including examples on how to use **ThermoNTFA**, can be found under [Documentation](https://DataAnalyticsEngineering.github.io/ThermoNTFA/).
+The documentation of this software, including examples on how to use **ThermoNTFA**, can be found under [Documentation](https://juliusgh.github.io/ThermoNTFA).<!--(https://DataAnalyticsEngineering.github.io/ThermoNTFA/).-->
 
 ## Features
 
