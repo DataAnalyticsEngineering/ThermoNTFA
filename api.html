@@ -125,18 +125,18 @@ NTFA contains following classes:</p>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>Tabular interpolation for the thermo-mechanical NTFA</p>
 <p>Performs a linear interpolation of the NTFA system matrices for a given temperature
-given tabular data for sufficiently many temperature points.
-It can be initialized for given data or based on a HDF5 file.</p>
+given tabular data at sufficiently many temperature points.
+It can be initialized with given tabular data or based on a HDF5 file (<code class="code docutils literal notranslate"><span class="pre">*.h5</span></code>).</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="thermontfa.TabularInterpolation.__init__">
 <span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">temps</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">const_extrapolate</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#thermontfa.TabularInterpolation.__init__" title="Link to this definition"></a></dt>
-<dd><p>Initialize the tabular interpolator for given <cite>data</cite> at prescribed temperatures <cite>temps</cite>.</p>
+<dd><p>Initialize the tabular interpolator for given <code class="code docutils literal notranslate"><span class="pre">data</span></code> at prescribed temperatures <code class="code docutils literal notranslate"><span class="pre">temps</span></code>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>temps</strong> (<em>np.ndarray</em>) – temperature points on which tabular data is available.
-The shape of the <cite>numpy</cite> array is expected to be <cite>(N_t,)</cite>.</p></li>
-<li><p><strong>data</strong> (<em>np.ndarray</em>) – tabular data, e.g., a batch of NTFA system matrices with shape <cite>(N_t, …)</cite>.</p></li>
+The shape of the <code class="code docutils literal notranslate"><span class="pre">numpy</span></code> array is expected to be <code class="code docutils literal notranslate"><span class="pre">(N_t,)</span></code>.</p></li>
+<li><p><strong>data</strong> (<em>np.ndarray</em>) – tabular data, e.g., a batch of NTFA system matrices with shape <code class="code docutils literal notranslate"><span class="pre">(N_t,</span> <span class="pre">...)</span></code>.</p></li>
 <li><p><strong>const_extrapolate</strong> – If true, a constant extrapolation instead of a linear extrapolation is performed.
 The default value is false.</p></li>
 </ul>
@@ -177,15 +177,15 @@ The default value is false.</p></li>
 <dl class="py method">
 <dt class="sig sig-object py" id="thermontfa.TabularInterpolation.from_h5">
 <em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">from_h5</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dset_temps</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dset_data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">transpose_dims</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="p"><span class="pre">...</span></span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">const_extrapolate</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Self</span></span></span><a class="headerlink" href="#thermontfa.TabularInterpolation.from_h5" title="Link to this definition"></a></dt>
-<dd><p>Initialize the tabular interpolator based on tabular data stored in a HDF5 file (<a href="#id1"><span class="problematic" id="id2">*</span></a>.h5).</p>
-<p>This is a factory method and returns a new instance of the <cite>TabularInterpolation</cite> class.
-It is expected that the HDF5 file contains a data set with path <cite>dset_temps</cite> that contains
+<dd><p>Initialize the tabular interpolator based on tabular data stored in a HDF5 file (<code class="code docutils literal notranslate"><span class="pre">*.h5</span></code>).</p>
+<p>This is a factory method and returns a new instance of the <code class="code docutils literal notranslate"><span class="pre">TabularInterpolation</span></code> class.
+It is expected that the HDF5 file contains a data set with path <code class="code docutils literal notranslate"><span class="pre">dset_temps</span></code> that contains
 a list of the temperature points on which tabular data is available. The shape of this
-dataset is expected to be <cite>(N_t,)</cite>.
-Additionaly, the HDF5 file must contain a data set with path <cite>dset_data</cite> that contains the
-tabular data, e.g., a batch of NTFA system matrices with shape <cite>(N_t, …)</cite>.
+dataset is expected to be <code class="code docutils literal notranslate"><span class="pre">(N_t,)</span></code>.
+Additionaly, the HDF5 file must contain a data set with path <code class="code docutils literal notranslate"><span class="pre">dset_data</span></code> that contains the
+tabular data, e.g., a batch of NTFA system matrices with shape <code class="code docutils literal notranslate"><span class="pre">(N_t,</span> <span class="pre">...)</span></code>.
 The order of axes/dimensions of the data set with path <cite>dset_data</cite> can be changed by transposing
-to the axis order given in <cite>transpose_dims</cite>.</p>
+to the axis order given in <code class="code docutils literal notranslate"><span class="pre">transpose_dims</span></code>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
@@ -197,7 +197,7 @@ to the axis order given in <cite>transpose_dims</cite>.</p>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>new instance  of the <cite>TabularInterpolation</cite> class</p>
+<dd class="field-even"><p>new instance of the <code class="code docutils literal notranslate"><span class="pre">TabularInterpolation</span></code> class</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p><a class="reference internal" href="#thermontfa.TabularInterpolation" title="thermontfa.TabularInterpolation">TabularInterpolation</a></p>
@@ -208,7 +208,7 @@ to the axis order given in <cite>transpose_dims</cite>.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="thermontfa.TabularInterpolation.interpolate">
 <span class="sig-name descname"><span class="pre">interpolate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">temp</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">ndarray</span></span></span><a class="headerlink" href="#thermontfa.TabularInterpolation.interpolate" title="Link to this definition"></a></dt>
-<dd><p>Perform a linear interpolation based on the available tabular data at a given temperature <cite>temp</cite></p>
+<dd><p>Perform a linear interpolation based on the available tabular data at a given temperature <code class="code docutils literal notranslate"><span class="pre">temp</span></code></p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>temp</strong> (<em>float</em>) – temperature point for interpolation</p>
