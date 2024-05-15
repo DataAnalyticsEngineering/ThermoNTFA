@@ -29,7 +29,7 @@ If you want to install optional dependencies for development:
 ```bash
 git clone https://github.com/DataAnalyticsEngineering/ThermoNTFA.git
 cd ThermoNTFA
-pip install -e .[dev]
+pip install -e ".[dev]"
 ```
 
 ### Requirements
