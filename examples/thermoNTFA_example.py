@@ -31,13 +31,13 @@ from matplotlib import pyplot as plt
 from material_parameters import my_sig_y
 from thermontfa import ThermoMechNTFA
 
-data_path = "../"
+data_path = "../data"
 
 # %% [markdown]
 # ## Instantiate ThermoMechNTFA material routine:
 
 # %%
-file_name = os.path.join(data_path, "results", "ms9p_fix_ntfa16_B1-6_10s_N24.h5")
+file_name = os.path.join(data_path, "ntfa", "ms9p_fix_ntfa16_B1-6_10s_N24.h5")
 ntfa_material = ThermoMechNTFA(
     file_name=file_name,
     group_name="/",
@@ -112,7 +112,7 @@ sig0_list = []
 sig1_list = []
 q_list = []
 xi_list = []
-with h5py.File(os.path.join("data", "ms9p_uniaxial_stress_data_mod.h5"), "w") as F:
+with h5py.File(os.path.join(data_path, "ms9p_uniaxial_stress_data_mod.h5"), "w") as F:
     for iload in range(6):
         G = F.create_group(f"loading{iload:1d}")
         # part 1: theta ramp up in 5 steps
@@ -218,7 +218,7 @@ sig1_list = []
 q_list = []
 xi_list = []
 n_ramp = 10
-with h5py.File(os.path.join("data", "ms9p_uniaxial_stress_data_mod.h5"), "w") as F:
+with h5py.File(os.path.join(data_path, "ms9p_uniaxial_stress_data_mod.h5"), "w") as F:
     for iload in range(6):
         G = F.create_group(f"loading{iload:1d}")
         # part 1: theta ramp up in 5 steps
@@ -326,7 +326,7 @@ with h5py.File(os.path.join("data", "ms9p_uniaxial_stress_data_mod.h5"), "w") as
 # draw the results of theta
 
 n_ramp = 1300 - 293 + 1
-with h5py.File(os.path.join("data", "ms9p_thermal_rampup.h5"), "w") as F:
+with h5py.File(os.path.join(data_path, "ms9p_thermal_rampup.h5"), "w") as F:
     eps_idx = None
     sig_idx = np.arange(6)
     eps = np.zeros(6)
@@ -373,7 +373,7 @@ with h5py.File(os.path.join("data", "ms9p_thermal_rampup.h5"), "w") as F:
 
 # %%
 q_crit = [1e-5, 0.002, 0.005, 0.01]
-with h5py.File(os.path.join("data", "ms9p_thermal_rampup.h5"), "r") as F:
+with h5py.File(os.path.join(data_path, "ms9p_thermal_rampup.h5"), "r") as F:
     q = np.array(F["q"])
     T = np.array(F["T"])
     eps = np.array(F["eps"])
@@ -406,7 +406,7 @@ sig1_fe_list = []
 
 # with h5py.File("ms9p_uniaxial_stress_data_loading0-5.h5", "r") as F:
 with h5py.File(
-    os.path.join("data", "ms9p_uniaxial_stress_data_mod_loading0.h5"), "r"
+    os.path.join(data_path, "loadcases", "ms9p_uniaxial_stress_data_mod_loading0.h5"), "r"
 ) as F:
     for iload in range(1):
         G = F[f"loading{iload:1d}"]
@@ -455,7 +455,7 @@ for k in [0, 1, 2, 3, 4]:
     ax[0].text(0.55, 1, "plastic matrix", backgroundcolor="#004191", color="white")
     ax[1].text(0.55, 1, "elastic particles", backgroundcolor="#004191", color="white")
     fig.tight_layout()
-    plt.savefig(os.path.join("results", f"rel_error_uniaxial_T{temp:.0f}.jpg"))
+    plt.savefig(os.path.join(data_path, "results", f"rel_error_uniaxial_T{temp:.0f}.jpg"))
     # ax[0].plot(t[:], err_sig[:]*100)
     # ax[1].plot(t[:], err_sig0[:]*100)
     # ax[2].plot(t[:], err_sig1[:]*100)
@@ -464,3 +464,5 @@ for k in [0, 1, 2, 3, 4]:
     # print(f'rel. error in sig   {100*err_sig}%')
     # print(f'rel. error in sig0  {100*err_sig0}%')
     # print(f'rel. error in sig1  {100*err_sig1}%')
+
+# %%

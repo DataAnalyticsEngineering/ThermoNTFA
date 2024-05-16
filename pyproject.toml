@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "thermontfa"
-version = "0.0.3"
+version = "0.0.1"
 description = ""
 authors = [
     {name="Felix Fritzen", email="fritzen@simtech.uni-stuttgart.de"},
@@ -19,7 +19,7 @@ classifiers = [
 ]
 license = {text = "MIT License"}
 requires-python = ">=3.10"
-keywords = ["NTFA", "MOR", "mechanics", "composite materials", "temperature-dependence", "plasticity"]
+keywords = ["NTFA", "MOR", "mechanics", "composite materials", "temperature-dependence", "multi-scale", "plasticity"]
 dependencies = [
     'numpy~=1.26.4',
     'h5py~=3.11.0',
@@ -37,6 +37,10 @@ dev = [
     'nbsphinx~=0.9.4',
     'sphinx-gallery~=0.16.0',
     'sphinx-rtd-theme~=2.0.0'
+]
+etc = []
+all = [
+    "fnocg[dev,etc]"
 ]
 
 [tool.flake8]
