@@ -1,0 +1,5 @@
+*.h5
+*.odb
+*.res
+*.vtk
+!.gitignore
