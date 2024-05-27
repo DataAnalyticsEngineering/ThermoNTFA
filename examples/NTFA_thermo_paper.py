@@ -28,7 +28,12 @@ import os
 
 import h5py
 import matplotlib.pyplot as plt
+import matplotlib
 import numpy as np
+
+colors = ["#004191", "#00BEFF", "tab:orange", "tab:red", "tab:olive", "tab:green", "tab:brown", "tab:pink", "tab:gray", "tab:cyan", "tab:purple", "tab:blue"]
+markers = ['o', 'd', 's', '+', '^', 'x', 'p', '*', 'v', '1', 'P', '.']
+matplotlib.rcParams['axes.prop_cycle'] = matplotlib.cycler(color=colors)
 
 data_path = "../data"
 
@@ -49,7 +54,7 @@ fig, ax = plt.subplots(1, 1, dpi=dpi)
 labels = False
 for f, T in zip((force), (temp)):
     t = np.linspace(0, 2, f.size)
-    ax.plot(t, f, "-s", ms=4, label="tensile force", color="blue")
+    ax.plot(t, f, "-s", ms=4, label="tensile force", color=colors[0])
     if labels:
         ax.plot(1.0, f[np.where(t == 1.0)], "o", color="black", ms=6)
     else:
@@ -57,22 +62,22 @@ for f, T in zip((force), (temp)):
         nhalf = int((t.size + 1) / 2)
         # ax.plot(1.0, f[np.where(t==1.0)], 'o', color='black', ms=6, label='start unloading', zorder=4)
         ax.fill_between(
-            t[:nhalf], f[:nhalf], np.zeros(nhalf), color="blue", alpha=0.2, zorder=2
+            t[:nhalf], f[:nhalf], np.zeros(nhalf), color=colors[0], alpha=0.2, zorder=2
         )
         ax.fill_between(
             t[(nhalf - 1) :],
             f[(nhalf - 1) :],
             np.zeros(f.size - nhalf + 1),
-            color="red",
+            color=colors[1],
             alpha=0.2,
             zorder=2,
         )
-        ax2.plot(t, T, "-s", ms=4, color="red", zorder=4, label="temperature")
+        ax2.plot(t, T, "-s", ms=4, color=colors[1], zorder=4, label="temperature")
         ax.set_xlabel("time [s]")
         ax.set_ylabel("force [kN]")
         ax2.set_ylabel("temperature [K]")
-        ax.text(0.4, 2, "tensile loading", color="blue", bbox=dict(facecolor="white"))
-        ax.text(1.1, 2, "force unloading", color="red", bbox=dict(facecolor="white"))
+        ax.text(0.4, 2, "tensile loading", color=colors[0], bbox=dict(facecolor="white"))
+        ax.text(1.1, 2, "force unloading", color=colors[1], bbox=dict(facecolor="white"))
         ax.grid(zorder=1)
         ax.legend(loc=(0.65, 0.825))
         ax2.legend(loc=(0.65, 0.7))
@@ -87,12 +92,12 @@ plt.show()
 # %%
 fig, ax = plt.subplots(1, 1, dpi=dpi)
 ax.plot((1.0, 1.0), (-0.05, 1.05), "--", color="gray", lw=2, zorder=4)
-ax.fill_between((0.0, 1.0), (0.0, 1.0), (0.0, 0.0), color="blue", alpha=0.2, zorder=2)
-ax.fill_between((1.0, 2.0), (1.0, 0.0), (0.0, 0.0), color="red", alpha=0.2, zorder=2)
-ax.plot((0.0, 1.0), (0.0, 1.0), color="blue", lw=2, zorder=1)
-ax.plot((1.0, 2.0), (1.0, 0.0), "--", color="red", lw=2, zorder=1)
-ax.text(0.4, 0.1, "tensile loading", color="blue", bbox=dict(facecolor="white"))
-ax.text(1.1, 0.1, "force unloading", color="red", bbox=dict(facecolor="white"))
+ax.fill_between((0.0, 1.0), (0.0, 1.0), (0.0, 0.0), color=colors[0], alpha=0.2, zorder=2)
+ax.fill_between((1.0, 2.0), (1.0, 0.0), (0.0, 0.0), color=colors[1], alpha=0.2, zorder=2)
+ax.plot((0.0, 1.0), (0.0, 1.0), color=colors[0], lw=2, zorder=1)
+ax.plot((1.0, 2.0), (1.0, 0.0), "--", color=colors[1], lw=2, zorder=1)
+ax.text(0.4, 0.1, "tensile loading", color=colors[0], bbox=dict(facecolor="white"))
+ax.text(1.1, 0.1, "force unloading", color=colors[1], bbox=dict(facecolor="white"))
 ax.set_xlabel("time [s]")
 ax.set_ylabel(r"rel. stretch $u/u_\mathrm{max}$ and force $F/F_\mathrm{max}$ [-]")
 ax.grid(zorder=3)

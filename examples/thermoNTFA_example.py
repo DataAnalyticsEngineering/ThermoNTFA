@@ -26,10 +26,17 @@ import os
 
 import h5py
 import numpy as np
+import matplotlib
 from matplotlib import pyplot as plt
 
 from material_parameters import my_sig_y
 from thermontfa import ThermoMechNTFA
+
+plt.rcParams["figure.dpi"] = 400
+matplotlib.rc("font", size=14)
+colors = ["#004191", "#00BEFF", "tab:orange", "tab:red", "tab:olive", "tab:green", "tab:brown", "tab:pink", "tab:gray", "tab:cyan", "tab:purple", "tab:blue"]
+markers = ['o', 'd', 's', '+', '^', 'x', 'p', '*', 'v', '1', 'P', '.']
+matplotlib.rcParams['axes.prop_cycle'] = matplotlib.cycler(color=colors)
 
 data_path = "../data"
 
@@ -380,22 +387,23 @@ with h5py.File(os.path.join(data_path, "ms9p_thermal_rampup.h5"), "r") as F:
     sig0 = np.array(F["sig0"])
     sig1 = np.array(F["sig1"])
     fig, ax = plt.subplots(1, 1, figsize=(12, 7))
-    ax.plot(T, 100 * q, color="red", lw=2, label=r"NTFA $\overline{q}$")
+    ax.plot(T, 100 * q, color=colors[1], lw=2, label=r"NTFA $\overline{q}$")
     for qc in q_crit:
         ax.plot([T[0], T[-1]], [100 * qc, 100 * qc], color="black", lw=1)
         i = np.searchsorted(q, qc)
         ax.annotate(
-            text=rf"$q_c={qc * 100}\%, T={T[i]}K$",
+            text=f"$q_c={qc * 100}\%$\n$T={T[i]}\mathrm{{K}}$",
             xy=[T[i], 100 * q[i]],
-            xytext=[T[i] - 150, 100 * q[i] + 0.2],
-            color="blue",
-            arrowprops=dict(width=2),
+            xytext=[T[i] - 145, 100 * q[i] + 0.23],
+            color=colors[0],
+            arrowprops=dict(width=2, color=colors[0]),
         )
 
 ax.grid()
 ax.set_xlim(T[0], T[-1])
 ax.set_xlabel(r"temperature $T$ [K]")
 ax.set_ylabel(r"hardening variable $\overline{q}$ [%]")
+plt.show()
 
 # %%
 
@@ -406,7 +414,8 @@ sig1_fe_list = []
 
 # with h5py.File("ms9p_uniaxial_stress_data_loading0-5.h5", "r") as F:
 with h5py.File(
-    os.path.join(data_path, "loadcases", "ms9p_uniaxial_stress_data_mod_loading0.h5"), "r"
+    os.path.join(data_path, "loadcases", "ms9p_uniaxial_stress_data_mod_loading0.h5"),
+    "r",
 ) as F:
     for iload in range(1):
         G = F[f"loading{iload:1d}"]
@@ -455,7 +464,9 @@ for k in [0, 1, 2, 3, 4]:
     ax[0].text(0.55, 1, "plastic matrix", backgroundcolor="#004191", color="white")
     ax[1].text(0.55, 1, "elastic particles", backgroundcolor="#004191", color="white")
     fig.tight_layout()
-    plt.savefig(os.path.join(data_path, "results", f"rel_error_uniaxial_T{temp:.0f}.jpg"))
+    plt.savefig(
+        os.path.join(data_path, "results", f"rel_error_uniaxial_T{temp:.0f}.jpg")
+    )
     # ax[0].plot(t[:], err_sig[:]*100)
     # ax[1].plot(t[:], err_sig0[:]*100)
     # ax[2].plot(t[:], err_sig1[:]*100)
