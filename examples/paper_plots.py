@@ -50,9 +50,10 @@ from thermontfa import TabularInterpolation, ThermoMechNTFA
 
 
 plt.rcParams["figure.dpi"] = 400
-matplotlib.rc("font", size=14)
+#matplotlib.rc("font", size=8)
 colors = ["#004191", "#00BEFF", "tab:orange", "tab:red", "tab:olive", "tab:green", "tab:brown", "tab:pink", "tab:gray", "tab:cyan", "tab:purple", "tab:blue"]
 markers = ['o', 'd', 's', '+', '^', 'x', 'p', '*', 'v', '1', 'P', '.']
+plot_width = 2 * 4.68596
 matplotlib.rcParams['axes.prop_cycle'] = matplotlib.cycler(color=colors)
 
 data_path = "../data"
@@ -107,7 +108,7 @@ A_cu = TabularInterpolation.from_h5(
     "/ms_9p/dset0_ntfa/A0",
     transpose_dims=(2, 0, 1),
 )
-A_wsc = TabularInterpolation.from_h5(
+A_ftc = TabularInterpolation.from_h5(
     mode_fn,
     "/ms_9p/dset0_ntfa/temperatures",
     "/ms_9p/dset0_ntfa/A1",
@@ -119,7 +120,7 @@ C_cu = TabularInterpolation.from_h5(
     "/ms_9p/dset0_ntfa/C0",
     transpose_dims=(2, 0, 1),
 )
-C_wsc = TabularInterpolation.from_h5(
+C_ftc = TabularInterpolation.from_h5(
     mode_fn,
     "/ms_9p/dset0_ntfa/temperatures",
     "/ms_9p/dset0_ntfa/C1",
@@ -130,9 +131,9 @@ C_wsc = TabularInterpolation.from_h5(
 N_modes = 24
 A_bar.data = A_bar.data[:, :, :N_modes]
 A_cu.data = A_cu.data[:, :, : (7 + N_modes)]
-A_wsc.data = A_wsc.data[:, :, : (7 + N_modes)]
+A_ftc.data = A_ftc.data[:, :, : (7 + N_modes)]
 
-for A in [A_bar, A_cu, A_wsc]:
+for A in [A_bar, A_cu, A_ftc]:
     A.dim = A.data.shape
 
 # %% [markdown]
@@ -164,7 +165,7 @@ data_sig_fans = np.zeros((3, 3, 3, 11, 6))
 line_style = [
     {"linewidth": 2, "color": colors[0], "linestyle": "solid", "markersize": 6},
     {"linewidth": 2, "color": colors[1], "linestyle": "dashed", "markersize": 6},
-    {"linewidth": 2, "color": colors[2], "linestyle": "dotted", "markersize": 6}
+    {"linewidth": 2, "color": colors[3], "linestyle": "dotted", "markersize": 6}
 ]
 
 for i, N_modes in enumerate((12, 18, 24)):
@@ -177,10 +178,10 @@ for i, N_modes in enumerate((12, 18, 24)):
         theta = np.array(F["/temperature"])
         fans_sig = np.array(F["/fans/sig"])
         fans_sig_cu = np.array(F["/fans/sig0"])
-        fans_sig_wsc = np.array(F["/fans/sig1"])
+        fans_sig_ftc = np.array(F["/fans/sig1"])
         ntfa_sig = np.array(F["/ntfa/sig"])
         ntfa_sig_cu = np.array(F["/ntfa/sig0"])
-        ntfa_sig_wsc = np.array(F["/ntfa/sig1"])
+        ntfa_sig_ftc = np.array(F["/ntfa/sig1"])
         ntfa_q = np.array(F["/ntfa/q"])
         ntfa_xi = np.array(F["/ntfa/xi"])
 
@@ -214,7 +215,7 @@ for i, N_modes in enumerate((12, 18, 24)):
 # ### Relative error in sig_bar for 300K, 633.3K and 1300 K
 
 # %%
-fig, ax = plt.subplots(1, 3, figsize=(13, 5))
+fig, ax = plt.subplots(1, 3, figsize=(plot_width, 3.25))
 Temp = [theta[0], theta[33], theta[-1]]
 load = np.linspace(0, 1, 11)
 m = ["o", "d", "s"]
@@ -229,17 +230,10 @@ for i_mode in range(3):
             ds = data_sig_ntfa[i_temp, i_load, i_mode, :, :] @ P2 - s
             err = np.linalg.norm(ds, axis=1) / np.linalg.norm(s, axis=1) * 100.0
             if i_temp == 0:
-                ax[i_temp].plot(
-                    load[1:],
-                    err[1:],
-                    label=f"N={N_modes}, load={J_load[i_load]}",
-                    **line_style[i_mode],
-                    marker=m[i_load],
-                )
+                ax[i_temp].plot(load[1:], err[1:], label=f"N={N_modes}, load={J_load[i_load]}", 
+                                **line_style[i_mode], marker=m[i_load])
             else:
-                ax[i_temp].plot(
-                    load[1:], err[1:], **line_style[i_mode], marker=m[i_load]
-                )
+                ax[i_temp].plot(load[1:], err[1:], **line_style[i_mode], marker=m[i_load])
 for a in ax:
     # a.legend()
     a.grid()
@@ -273,10 +267,10 @@ with h5py.File(fname, "r") as F:
     theta = np.array(F["/temperature"])
     fans_sig = np.array(F["/fans/sig"])
     fans_sig_cu = np.array(F["/fans/sig0"])
-    fans_sig_wsc = np.array(F["/fans/sig1"])
+    fans_sig_ftc = np.array(F["/fans/sig1"])
     ntfa_sig = np.array(F["/ntfa/sig"])
     ntfa_sig_cu = np.array(F["/ntfa/sig0"])
-    ntfa_sig_wsc = np.array(F["/ntfa/sig1"])
+    ntfa_sig_ftc = np.array(F["/ntfa/sig1"])
     ntfa_q = np.array(F["/ntfa/q"])
     ntfa_xi = np.array(F["/ntfa/xi"])
 
@@ -284,8 +278,9 @@ with h5py.File(fname, "r") as F:
 # ### Relative error in sig_bar for 300 and 1300 K
 
 # %%
-fig, axx = plt.subplots(1, 2, figsize=(13, 5.5))
+fig, axx = plt.subplots(1, 2, figsize=(plot_width, 3.5))
 ct = 0
+first_plot = True
 for i_T, T in zip((0, 9), (300.0, 1300.0)):
     ax = axx[ct]
     ct += 1
@@ -296,16 +291,23 @@ for i_T, T in zip((0, 9), (300.0, 1300.0)):
     for iload in range(6):
         myerr = np.linalg.norm(fans_sig[i_T][iload][:, :] - ntfa_sig[i_T][iload][:, :], axis=1) \
             * 100.0 / np.linalg.norm(fans_sig[i_T][iload][:, :], axis=1)
-        ax.plot(x, myerr, lw=2, label=f"load {iload+1}", color=colors[iload], marker=markers[iload])
-    ax.legend()
+        if first_plot:
+            ax.plot(x, myerr, lw=2, label=f"load {iload+1}", color=colors[iload], marker=markers[iload])
+        else:
+            ax.plot(x, myerr, lw=2, color=colors[iload], marker=markers[iload])
+    #ax.legend()
     ax.grid()
+    first_plot = False
+
+fig.legend(ncol=6, loc="lower center", bbox_to_anchor=(0, -0.07, 1, 1))
 
 fig.tight_layout()
-fig.savefig(os.path.join(data_path, "figures", "rel_err_sig_10s.pdf"), format="pdf")
+fig.savefig(os.path.join(data_path, "figures", "rel_err_sig_10s.pdf"), format="pdf", bbox_inches="tight")
 
 # %%
-fig, axx = plt.subplots(1, 2, figsize=(13, 5.5))
+fig, axx = plt.subplots(1, 2, figsize=(plot_width, 3.5))
 ct = 0
+first_plot = True
 for i_T, T in zip((0, 9), (300.0, 1300.0)):
     ax = axx[ct]
     ct += 1
@@ -314,14 +316,19 @@ for i_T, T in zip((0, 9), (300.0, 1300.0)):
     ax.set_xlabel("rel. load [-]")
     ax.set_ylabel(r"rel. error in $\overline{\sigma}_{\sf FTC}$ [%]")
     for iload in range(6):
-        myerr =  np.linalg.norm(fans_sig_wsc[i_T][iload][:, :] - ntfa_sig_wsc[i_T][iload][:, :], axis=1) \
-            * 100.0 / np.linalg.norm(fans_sig_wsc[i_T][iload][:, :], axis=1)
-        ax.plot(x, myerr, lw=2, label=f"load {iload+1}", color=colors[iload], marker=markers[iload])
-    ax.legend()
+        myerr =  np.linalg.norm(fans_sig_ftc[i_T][iload][:, :] - ntfa_sig_ftc[i_T][iload][:, :], axis=1) \
+            * 100.0 / np.linalg.norm(fans_sig_ftc[i_T][iload][:, :], axis=1)
+        if first_plot:
+            ax.plot(x, myerr, lw=2, label=f"load {iload+1}", color=colors[iload], marker=markers[iload])
+        else:
+            ax.plot(x, myerr, lw=2, color=colors[iload], marker=markers[iload])
+    #ax.legend()
     ax.grid()
+    first_plot = False
 
+fig.legend(ncol=6, loc="lower center", bbox_to_anchor=(0, -0.07, 1, 1))
 fig.tight_layout()
-fig.savefig(os.path.join(data_path, "figures", "rel_err_sig_ftc_10s.pdf"), format="pdf")
+fig.savefig(os.path.join(data_path, "figures", "rel_err_sig_ftc_10s.pdf"), format="pdf", bbox_inches="tight")
 
 # %% [markdown]
 # ### Plot the for loadcase no. 2 relevant curves
@@ -337,13 +344,13 @@ iload = 2
 for i_T, T in enumerate(theta):
     Sref = fans_sig[i_T, iload]
     Sref0 = fans_sig_cu[i_T, iload]
-    Sref1 = fans_sig_wsc[i_T, iload]
+    Sref1 = fans_sig_ftc[i_T, iload]
     # recompute stress of NTFA:
     zeta[:, :6] = eps[i_T, iload]
     zeta[:, 6] = 1
     zeta[:, 7:] = ntfa_xi[i_T, iload]
     ntfa_S0 = zeta @ (A_cu.interpolate(T)).T
-    ntfa_S1 = zeta @ (A_wsc.interpolate(T)).T
+    ntfa_S1 = zeta @ (A_ftc.interpolate(T)).T
     dS = Sref - ntfa_sig[i_T, iload, :, :]
     dS0 = Sref0 - ntfa_S0
     dS1 = Sref1 - ntfa_S1
@@ -364,7 +371,7 @@ X = np.linspace(0, 1, fans_sig.shape[2])
 Y = theta
 XX, YY = np.meshgrid(X, Y)
 
-fig, ax = plt.subplots(1, 2, subplot_kw=dict(projection="3d"), figsize=(15, 7))
+fig, ax = plt.subplots(1, 2, subplot_kw=dict(projection="3d"), figsize=(plot_width, 4.5))
 ls = LightSource(220, 45)
 ZZ = err
 rgb = ls.shade(ZZ, cmap=cm.jet, vert_exag=0.1, blend_mode="soft")
@@ -376,6 +383,8 @@ ax[0].set_ylabel("temperature [K]")
 ax[0].set_zlabel(r"rel. error in $\overline{\sigma}$ [%]")
 fig.tight_layout()
 ax[0].set_title(r"load case 2, rel. errors in $\overline{\sigma}$")
+ax[0].zaxis.labelpad=0.1
+ax[0].set_box_aspect(aspect=None, zoom=0.83)
 
 ZZ = err1
 rgb = ls.shade(ZZ, cmap=cm.jet, vert_exag=0.1, blend_mode="soft")
@@ -386,10 +395,12 @@ ax[1].set_xlabel("rel. load [-]")
 ax[1].set_ylabel("temperature [K]")
 ax[1].set_zlabel(r"rel. error in $\overline{\sigma}_{\sf FTC}$ [%]")
 ax[1].set_title(r"load case 2, rel. errors in $\overline{\sigma}_{\sf FTC}$")
-
+ax[1].zaxis.labelpad=0.1
+ax[1].set_box_aspect(aspect=None, zoom=0.83)
+#plt.subplots_adjust(right=0.1)
 fig.tight_layout()
-fig.savefig(os.path.join(data_path, "figures", "surface_plots_err_sig_sig_ftc.pdf"),
-            format="pdf", bbox_inches="tight")
+plt.autoscale()
+fig.savefig(os.path.join(data_path, "figures", "surface_plots_err_sig_sig_ftc.pdf"), format="pdf")
 
 # %% [markdown]
 # ## Random loading
@@ -402,7 +413,7 @@ loadings_file_name = os.path.join(data_path, "loadcases", "random_loadings_vol1e
 with h5py.File(loadings_file_name, "r") as F:
     # load the random loadings from file and run NTFA; compare to full model
     eps_rand = np.array(F["/eps_random"][:3, :])
-    fig, ax = plt.subplots(2, 3, figsize=(15, 10))
+    fig, ax = plt.subplots(2, 3, figsize=(plot_width, 6.0))
     for i_load, E in enumerate(eps_rand):
         for i_temp, T in enumerate(("0355.6", "0688.9", "1022.2")):
             ntfa_e = np.zeros((11, 6))
@@ -644,7 +655,7 @@ with h5py.File(stress_file_name_new, "w") as F:
 # ### Load results from FE simulation on the microscale
 #
 # The in-house FE simulation software stores the simulation results
-# (homogenized overall stress `sig`, homogenized stress in cu phase `sig_cu`, homogenized stress in wsc phase `sig_wsc`, and homogenized hardening variable `qbar`)
+# (homogenized overall stress `sig`, homogenized stress in cu phase `sig_cu`, homogenized stress in ftc phase `sig_ftc`, and homogenized hardening variable `qbar`)
 # on the microscale in a new HDF5 (`.h5`) file.
 # These results serve as validation data for the two-scale simulation at the specific integration point of the macroscale simulation.
 
@@ -680,12 +691,12 @@ with h5py.File(os.path.join(data_path, "ms9p_uniaxial_stress_data_mod_fe.h5"), "
         sig0_fe_list.append(sig0_fe)
         sig1_fe_list.append(sig1_fe)
 
-        fig, ax = plt.subplots(1, 2, figsize=(13, 4.5))
+        fig, ax = plt.subplots(1, 2, figsize=(plot_width, 3.0))
         sig_ref = np.max(np.abs(sig_fe[:, iload]))
         sig_ref0 = np.max(np.abs(sig0_fe[:, iload]))
         sig_ref1 = np.max(np.abs(sig1_fe[:, iload]))
-        fig.suptitle(rf"$T={temp}$ - rel. error (matrix/inclusion)" +
-                     r"$\Vert\Delta\overline{\sigma}\Vert_{\sf F} / \overline{\sigma}_{\sf FE, max}$")
+        fig.suptitle(rf"$T={temp}$ K - rel. error,  " +
+                     r"$\mathcal{E}_\mathsf{{mat,xx}} = \vert \overline{\sigma}_\mathsf{mat,NTFA,xx} - \overline{\sigma}_\mathsf{mat,FE,xx} \vert \, / \, \overline{\sigma}_\mathsf{{mat,FE,xx}} \,, \; \mathsf{mat} \in \{\mathsf{Cu}, \mathsf{FTC} \}$")
         c1 = ntfa_material.v_frac[0]
         c2 = ntfa_material.v_frac[1]
         sig_list[k] = c1 * sig0_list[k] + c2 * sig1_list[k]
@@ -699,15 +710,9 @@ with h5py.File(os.path.join(data_path, "ms9p_uniaxial_stress_data_mod_fe.h5"), "
             A.grid()
             A.set_xlabel("rel. time [-]")
             if z == 0:
-                A.set_ylabel(
-                    r"$\vert \overline{\sigma}_\mathsf{Cu, NTFA, xx} - " +
-                    r"\overline{\sigma}_\mathsf{Cu, FE, xx} \Vert / \overline{\sigma}_\mathsf{{Cu, FE, xx}}$ [%]"
-                )
+                A.set_ylabel(r"$\mathcal{E}_\mathsf{{Cu,xx}}$ [%]")
             else:
-                A.set_ylabel(
-                    r"$\vert \overline{\sigma}_\mathsf{FTC, NTFA, xx} - " +
-                    r"\overline{\sigma}_\mathsf{FTC, FE, xx} \Vert / \overline{\sigma}_\mathsf{{FTC, FE, xx}}$ [%]"
-                )
+                A.set_ylabel(r"$\mathcal{E}_\mathsf{{FTC,xx}}$ [%]")
             A.set_ylim([0, 6])
         ax[0].text(0.65, 5.25, "plastic CU matrix", backgroundcolor=colors[0], color="white")
         ax[1].text(0.65, 5.25, "elastic FTC particles", backgroundcolor=colors[0], color="white")
@@ -722,7 +727,7 @@ print(sig_ref, sig_ref0, sig_ref1)
 print(err_sig0)
 
 # %% [markdown]
-# ### Figuring when palsticity kicks in using the mixed UMAT
+# ### Figuring when plasticity kicks in using the mixed UMAT
 #
 # 1. set the stress to 0
 # 2. ramp the temperature from 293K
@@ -825,7 +830,7 @@ with h5py.File(file_name, "r") as F:
 #
 # Analysis of the two-scale simulation
 # - determine an element in the notch
-# - extract the strain, temperature, stress, qbar, xi, sig_cu, sig_wsc history
+# - extract the strain, temperature, stress, qbar, xi, sig_cu, sig_ftc history
 # - pass the strain, temperature history to FANS as BC
 # - Compare the results
 
@@ -864,7 +869,7 @@ with h5py.File(os.path.join(data_path, "vtk-notch/NTFA293K_fine_temp_293-800.h5"
     eps = np.zeros((n_inc + 1, 6))
     sig = np.zeros((n_inc + 1, 6))
     sig_cu = np.zeros((n_inc + 1, 6))
-    sig_wsc = np.zeros((n_inc + 1, 6))
+    sig_ftc = np.zeros((n_inc + 1, 6))
     qbar = np.zeros(n_inc + 1)
     xi = np.zeros((n_inc + 1, N_modes))
     zeta = np.zeros((n_inc + 1, N_modes + 7))
@@ -886,7 +891,7 @@ with h5py.File(os.path.join(data_path, "vtk-notch/NTFA293K_fine_temp_293-800.h5"
         zeta[j, 7:] = xi[j, :]
         # reconstruct the phase-wise stresses
         sig_cu[j, :] = A_cu.interpolate(theta[j]) @ zeta[j, :]
-        sig_wsc[j, :] = A_wsc.interpolate(theta[j]) @ zeta[j, :]
+        sig_ftc[j, :] = A_ftc.interpolate(theta[j]) @ zeta[j, :]
 
 # %% [markdown]
 # ### Use temperature and strain as boundary conditions for FE simulation on the microscale
@@ -900,7 +905,7 @@ bc_file_name = os.path.join(data_path, "daten_kerbgrund_32s.h5")
 F = h5py.File(bc_file_name, "w")
 F.create_dataset("/sig", data=sig)  # only used for comparison later on
 F.create_dataset("/sig_cu", data=sig_cu)  # only used for comparison later on
-F.create_dataset("/sig_wsc", data=sig_wsc)  # only used for comparison later on
+F.create_dataset("/sig_ftc", data=sig_ftc)  # only used for comparison later on
 F.create_dataset("/eps", data=eps)
 F.create_dataset("/theta", data=theta)
 F.create_dataset("/time", data=t)
@@ -910,7 +915,7 @@ F.close()
 # ### Load results from FE simulation on the microscale
 #
 # The in-house FE simulation software stores the simulation results
-# (homogenized overall stress `sig`, homogenized stress in cu phase `sig_cu`, homogenized stress in wsc phase `sig_wsc`, and homogenized hardening variable `qbar`)
+# (homogenized overall stress `sig`, homogenized stress in cu phase `sig_cu`, homogenized stress in ftc phase `sig_ftc`, and homogenized hardening variable `qbar`)
 # on the microscale in a new HDF5 (`.h5`) file.
 # These results serve as validation data for the two-scale simulation at the specific integration point of the macroscale simulation.
 
@@ -921,7 +926,7 @@ with h5py.File(sim_bc_file_name, "r") as F:
     fe_theta = np.array(F["/theta"])
     fe_sig = np.array(F["/fe/sig"])
     fe_sig_cu = np.array(F["/fe/sig0"])
-    fe_sig_wsc = np.array(F["/fe/sig1"])
+    fe_sig_ftc = np.array(F["/fe/sig1"])
     fe_qbar = np.array(F["/fe/qbar"]).ravel()
 
 # %% [markdown]
@@ -930,42 +935,42 @@ with h5py.File(sim_bc_file_name, "r") as F:
 # %% some plots
 sig_h = sig[:, :3].sum(axis=1) / 3
 sig_h_cu = sig_cu[:, :3].sum(axis=1) / 3
-sig_h_wsc = sig_wsc[:, :3].sum(axis=1) / 3
+sig_h_ftc = sig_ftc[:, :3].sum(axis=1) / 3
 fe_sig_h = fe_sig[:, :3].sum(axis=1) / 3
 fe_sig_h_cu = fe_sig_cu[:, :3].sum(axis=1) / 3
-fe_sig_h_wsc = fe_sig_wsc[:, :3].sum(axis=1) / 3
+fe_sig_h_ftc = fe_sig_ftc[:, :3].sum(axis=1) / 3
 
 sig_eq = np.sqrt(1.5 * np.maximum(0.0, np.linalg.norm(sig, axis=1) ** 2 - 3 * sig_h * sig_h))
 sig_eq_cu = np.sqrt(1.5 * np.maximum(0.0, np.linalg.norm(sig_cu, axis=1) ** 2 - 3 * sig_h_cu * sig_h_cu))
-sig_eq_wsc = np.sqrt(1.5 * np.maximum(0.0, np.linalg.norm(sig_wsc, axis=1) ** 2 - 3 * sig_h_wsc * sig_h_wsc))
+sig_eq_ftc = np.sqrt(1.5 * np.maximum(0.0, np.linalg.norm(sig_ftc, axis=1) ** 2 - 3 * sig_h_ftc * sig_h_ftc))
 fe_sig_eq = np.sqrt(1.5 * np.maximum(0.0, np.linalg.norm(fe_sig, axis=1) ** 2 - 3 * sig_h * sig_h))
 fe_sig_eq_cu = np.sqrt(1.5 * np.maximum(0.0, np.linalg.norm(fe_sig_cu, axis=1) ** 2 - 3 * fe_sig_h_cu * sig_h_cu))
-fe_sig_eq_wsc = np.sqrt(1.5 * np.maximum(0.0, np.linalg.norm(fe_sig_wsc, axis=1) ** 2 - 3 * fe_sig_h_wsc * sig_h_wsc))
+fe_sig_eq_ftc = np.sqrt(1.5 * np.maximum(0.0, np.linalg.norm(fe_sig_ftc, axis=1) ** 2 - 3 * fe_sig_h_ftc * sig_h_ftc))
 
-sig_I_wsc = np.zeros(sig.shape[0])
-sig_II_wsc = np.zeros(sig.shape[0])
-sig_III_wsc = np.zeros(sig.shape[0])
+sig_I_ftc = np.zeros(sig.shape[0])
+sig_II_ftc = np.zeros(sig.shape[0])
+sig_III_ftc = np.zeros(sig.shape[0])
 sig_I_cu = np.zeros(sig.shape[0])
 sig_II_cu = np.zeros(sig.shape[0])
 sig_III_cu = np.zeros(sig.shape[0])
 for i in range(n_inc + 1):
     sig_III_cu[i], sig_II_cu[i], sig_I_cu[i] = np.linalg.eigvalsh(Vec2Tensor(sig_cu[i]))
-    sig_III_wsc[i], sig_II_wsc[i], sig_I_wsc[i] = np.linalg.eigvalsh(Vec2Tensor(sig_wsc[i]))
+    sig_III_ftc[i], sig_II_ftc[i], sig_I_ftc[i] = np.linalg.eigvalsh(Vec2Tensor(sig_ftc[i]))
 
-fe_sig_I_wsc = np.zeros(sig.shape[0])
-fe_sig_II_wsc = np.zeros(sig.shape[0])
-fe_sig_III_wsc = np.zeros(sig.shape[0])
+fe_sig_I_ftc = np.zeros(sig.shape[0])
+fe_sig_II_ftc = np.zeros(sig.shape[0])
+fe_sig_III_ftc = np.zeros(sig.shape[0])
 fe_sig_I_cu = np.zeros(sig.shape[0])
 fe_sig_II_cu = np.zeros(sig.shape[0])
 fe_sig_III_cu = np.zeros(sig.shape[0])
 for i in range(n_inc + 1):
     fe_sig_III_cu[i], fe_sig_II_cu[i], fe_sig_I_cu[i] = np.linalg.eigvalsh(Vec2Tensor(fe_sig_cu[i]))
-    fe_sig_III_wsc[i], fe_sig_II_wsc[i], fe_sig_I_wsc[i] = np.linalg.eigvalsh(Vec2Tensor(fe_sig_wsc[i]))
+    fe_sig_III_ftc[i], fe_sig_II_ftc[i], fe_sig_I_ftc[i] = np.linalg.eigvalsh(Vec2Tensor(fe_sig_ftc[i]))
 
 
 # %%
 t = np.linspace(0, 2, n_inc + 1)
-fig, ax = plt.subplots(1, 2, figsize=(15, 5))
+fig, ax = plt.subplots(1, 2, figsize=(plot_width, 3.5))
 ax[0].plot(fe_eps[:, 1], fe_sig[:, 1] / 1000,
            color=colors[0], marker=markers[0], label=r"$\overline{\sigma}_{\sf yy}^{\mathrm{FE}}$")
 ax[0].plot(eps[:, 1], sig[:, 1] / 1000, ":",
@@ -974,15 +979,15 @@ ax[0].plot(fe_eps[:, 1], fe_sig_cu[:, 1] / 1000, "-",
            color=colors[2], marker=markers[2], label=r"$\overline{\sigma}_{\sf Cu, yy}^{\mathrm{FE}}$")
 ax[0].plot(eps[:, 1], sig_cu[:, 1] / 1000, ":",
            color=colors[3], marker=markers[3], label=r"$\overline{\sigma}_{\sf Cu, yy}^{\mathrm{NTFA}}$")
-ax[0].plot(fe_eps[:, 1], fe_sig_wsc[:, 1] / 1000, "-",
+ax[0].plot(fe_eps[:, 1], fe_sig_ftc[:, 1] / 1000, "-",
            color=colors[4], marker=markers[4], label=r"$\overline{\sigma}_{\sf FTC, yy}^{\mathrm{FE}}$")
-ax[0].plot(eps[:, 1], sig_wsc[:, 1] / 1000, ":",
+ax[0].plot(eps[:, 1], sig_ftc[:, 1] / 1000, ":",
            color=colors[5], marker=markers[5], label=r"$\overline{\sigma}_{\sf FTC, yy}^{\mathrm{NTFA}}$")
 ax[0].set_title(
     r"$\overline{\sigma}_{\sf yy}$, $\overline{\sigma}_{\sf Cu, yy}$," +
     r"$\overline{\sigma}_{\sf FTC, yy}$ vs. $\overline{\varepsilon}_{\sf yy}$"
 )
-ax[0].legend()
+#ax[0].legend()
 ax[0].grid()
 ax[0].set_xlabel(r"$\overline{\varepsilon}_{\sf yy}$ [-]")
 ax[0].set_ylabel(
@@ -991,7 +996,7 @@ ax[0].set_ylabel(
 eyy_max = max(eps[:, 1])
 syy = sig[int(n_inc / 2), 1] / 1000
 syy_cu = sig_cu[int(n_inc / 2), 1] / 1000
-syy_ftc = sig_wsc[int(n_inc / 2), 1] / 1000
+syy_ftc = sig_ftc[int(n_inc / 2), 1] / 1000
 # arrowprops = dict(shrink=0.02, facecolor='black', shrinkB=1, width=2, headwidth=12, headlength=12)
 arrowprops = dict(arrowstyle="-|>", shrinkB=1, shrinkA=50)
 # ax[0].annotate("start\nunloading &\ncool down", xy=(eyy_max,syy), xytext=(0.02,925), arrowprops=arrowprops)
@@ -1006,20 +1011,20 @@ ax[1].text(1.05, -140, "unload & cool down")
 ax[1].annotate("", xy=(1.25, 0), xytext=(1, 0),
                arrowprops=dict(facecolor="black", shrink=0.0, width=2, headwidth=12, headlength=12))
 ax[1].plot(t, fe_sig[:, 1] / 1000, "-",
-           color=colors[0], marker=markers[0], label=r"$\overline{\sigma}_{\sf yy}^{\mathrm{FE}}$")
+           color=colors[0], marker=markers[0])#, label=r"$\overline{\sigma}_{\sf yy}^{\mathrm{FE}}$")
 ax[1].plot(t, sig[:, 1] / 1000, ":",
-           color=colors[1], marker=markers[1], label=r"$\overline{\sigma}_{\sf yy}^{\mathrm{NTFA}}$")
+           color=colors[1], marker=markers[1])#, label=r"$\overline{\sigma}_{\sf yy}^{\mathrm{NTFA}}$")
 ax[1].plot(t, fe_sig_cu[:, 1] / 1000, "-",
-           color=colors[2], marker=markers[2], label=r"$\overline{\sigma}_{\sf Cu,yy}^{\mathrm{FE}}$")
+           color=colors[2], marker=markers[2])#, label=r"$\overline{\sigma}_{\sf Cu,yy}^{\mathrm{FE}}$")
 ax[1].plot(t, sig_cu[:, 1] / 1000, ":",
-           color=colors[3], marker=markers[3], label=r"$\overline{\sigma}_{\sf Cu,yy}^{\mathrm{NTFA}}$")
-ax[1].plot(t, fe_sig_wsc[:, 1] / 1000, "-",
-           color=colors[4], marker=markers[4], label=r"$\overline{\sigma}_{\sf WSC,yy}^{\mathrm{FE}}$")
-ax[1].plot(t, sig_wsc[:, 1] / 1000, ":",
-           color=colors[5], marker=markers[5], label=r"$\overline{\sigma}_{\sf WSC,yy}^{\mathrm{NTFA}}$")
+           color=colors[3], marker=markers[3])#, label=r"$\overline{\sigma}_{\sf Cu,yy}^{\mathrm{NTFA}}$")
+ax[1].plot(t, fe_sig_ftc[:, 1] / 1000, "-",
+           color=colors[4], marker=markers[4])#, label=r"$\overline{\sigma}_{\sf FTC,yy}^{\mathrm{FE}}$")
+ax[1].plot(t, sig_ftc[:, 1] / 1000, ":",
+           color=colors[5], marker=markers[5])#, label=r"$\overline{\sigma}_{\sf FTC,yy}^{\mathrm{NTFA}}$")
 ax[1].set_title(
     r"$\overline{\sigma}_{\sf yy}$, $\overline{\sigma}_{\sf Cu, yy}$," +
-    r"$\overline{\sigma}_{\sf WSC, yy}$, $\overline{Q}$ vs. time $t$"
+    r"$\overline{\sigma}_{\sf FTC, yy}$, $\overline{Q}$ vs. time $t$"
 )
 ax2 = ax[1].twinx()
 ax[1].grid()
@@ -1029,46 +1034,46 @@ ax2.plot(t, qbar, ":",
          color=colors[7], marker="*", label=r"$\overline{Q}^{\mathrm{NTFA}}$",)
 ax[1].set_xlabel(r"$t$ [s]")
 ax[1].set_ylabel(
-    r"$\overline{\sigma}_{\sf yy}, \overline{\sigma}_{\sf Cu, yy}, \overline{\sigma}_{\sf WSC, yy}$  [MPa]"
+    r"$\overline{\sigma}_{\sf yy}, \overline{\sigma}_{\sf Cu, yy}, \overline{\sigma}_{\sf FTC, yy}$  [MPa]"
 )
 ax2.set_ylabel(r"$\overline{Q}$ [-]")
-ax[1].legend(loc="center right")
-ax2.legend()
+#ax[1].legend(loc="center right")
+fig.legend(ncol=8, loc="lower center", bbox_to_anchor=(0, -0.09, 1, 1))
 plt.tight_layout()
-plt.savefig(os.path.join(data_path, "figures", "notchtest_fine_sigyy_ntfa.pdf"), format="pdf")
+plt.savefig(os.path.join(data_path, "figures", "notchtest_fine_sigyy_ntfa.pdf"), format="pdf", bbox_inches="tight")
 
 # %%
-fig, ax = plt.subplots(1, 2, figsize=(15, 7))
-ax[0].plot(t, fe_sig_III_wsc / 1000, "-",
-           color=colors[0], marker=markers[0], label=r"$\overline{\sigma}_{\sf WSC, 3}^{\mathrm{FE}}$")
-ax[0].plot(t, sig_III_wsc / 1000, ":",
-           color=colors[1], marker=markers[1], label=r"$\overline{\sigma}_{\sf WSC, 3}^{\mathrm{NTFA}}$")
-ax[0].plot(t, fe_sig_II_wsc / 1000, "-",
-           color=colors[2], marker=markers[2], label=r"$\overline{\sigma}_{\sf WSC, 2}^{\mathrm{FE}}$")
-ax[0].plot(t,sig_II_wsc / 1000, ":",
-           color=colors[3], marker=markers[3], label=r"$\overline{\sigma}_{\sf WSC, 2}^{\mathrm{NTFA}}$")
-ax[0].plot(t, fe_sig_I_wsc / 1000, "-",
-           color=colors[4], marker=markers[4], label=r"$\overline{\sigma}_{\sf WSC, 1}^{\mathrm{FE}}$")
-ax[0].plot(t, sig_I_wsc / 1000, ":",
-           color=colors[5], marker=markers[5], label=r"$\overline{\sigma}_{\sf WSC, 1}^{\mathrm{NTFA}}$")
-ax[0].plot(t, fe_sig_III_cu / 1000, "-",
-           color=colors[6], marker=markers[6], label=r"$\overline{\sigma}_{\sf Cu, 3}^{\mathrm{FE}}$")
-ax[0].plot(t, sig_III_cu / 1000, ":",
-           color=colors[7], marker=markers[7], label=r"$\overline{\sigma}_{\sf Cu, 3}^{\mathrm{NTFA}}$")
-ax[0].plot(t, fe_sig_II_cu / 1000, "-",
+fig, ax = plt.subplots(1, 2, figsize=(plot_width, 3.5))
+ax[0].plot(t, fe_sig_I_ftc / 1000, "-", # fe_sig_III_ftc
+           color=colors[0], marker=markers[0], label=r"$\overline{\sigma}_{\sf FTC, 1}^{\mathrm{FE}}$")
+ax[0].plot(t, sig_I_ftc / 1000, ":", # sig_III_ftc
+           color=colors[1], marker=markers[1], label=r"$\overline{\sigma}_{\sf FTC, 1}^{\mathrm{NTFA}}$")
+ax[0].plot(t, fe_sig_II_ftc / 1000, "-", # fe_sig_II_ftc
+           color=colors[2], marker=markers[2], label=r"$\overline{\sigma}_{\sf FTC, 2}^{\mathrm{FE}}$")
+ax[0].plot(t,sig_II_ftc / 1000, ":", # sig_II_ftc
+           color=colors[3], marker=markers[3], label=r"$\overline{\sigma}_{\sf FTC, 2}^{\mathrm{NTFA}}$")
+ax[0].plot(t, fe_sig_III_ftc / 1000, "-", # fe_sig_I_ftc
+           color=colors[4], marker=markers[4], label=r"$\overline{\sigma}_{\sf FTC, 3}^{\mathrm{FE}}$")
+ax[0].plot(t, sig_III_ftc / 1000, ":", # sig_I_ftc
+           color=colors[5], marker=markers[5], label=r"$\overline{\sigma}_{\sf FTC, 3}^{\mathrm{NTFA}}$")
+ax[0].plot(t, fe_sig_I_cu / 1000, "-", # fe_sig_III_cu
+           color=colors[6], marker=markers[6], label=r"$\overline{\sigma}_{\sf Cu, 1}^{\mathrm{FE}}$")
+ax[0].plot(t, sig_I_cu / 1000, ":", # sig_III_cu
+           color=colors[7], marker=markers[7], label=r"$\overline{\sigma}_{\sf Cu, 1}^{\mathrm{NTFA}}$")
+ax[0].plot(t, fe_sig_II_cu / 1000, "-", # fe_sig_II_cu
            color=colors[8], marker=markers[8], label=r"$\overline{\sigma}_{\sf Cu, 2}^{\mathrm{FE}}$")
-ax[0].plot(t, sig_II_cu / 1000, ":",
+ax[0].plot(t, sig_II_cu / 1000, ":", # sig_II_cu
            color=colors[9], marker=markers[9], label=r"$\overline{\sigma}_{\sf Cu, 2}^{\mathrm{NTFA}}$")
-ax[0].plot(t, fe_sig_I_cu / 1000, "-",
-           color=colors[10], marker=markers[10], label=r"$\overline{\sigma}_{\sf Cu, 1}^{\mathrm{FE}}$")
-ax[0].plot(t, sig_I_cu / 1000, ":",
-           color=colors[11], marker=markers[11], label=r"$\overline{\sigma}_{\sf Cu, 1}^{\mathrm{NTFA}}$")
-ax[0].legend(ncol=1)  # loc='center right')
+ax[0].plot(t, fe_sig_III_cu / 1000, "-", # fe_sig_I_cu
+           color=colors[10], marker=markers[10], label=r"$\overline{\sigma}_{\sf Cu, 3}^{\mathrm{FE}}$")
+ax[0].plot(t, sig_III_cu / 1000, ":", # sig_I_cu
+           color=colors[11], marker=markers[11], label=r"$\overline{\sigma}_{\sf Cu, 3}^{\mathrm{NTFA}}$")
+#ax[0].legend(ncol=1)  # loc='center right')
 ax[0].grid()
 ax[0].set_xlabel(r"$t$ [s]")
 ax[0].set_ylabel(r"Principal normal stress [MPa]")
 ax[0].plot((1, 1), (-200, 900), lw=2, color="gray")
-ax[0].text(1.05, 300, "unload & cool down")
+ax[0].text(1.05, 500, "unload & cool down")
 ax[0].annotate(
     "",
     xy=(1.25, 400),
@@ -1077,13 +1082,14 @@ ax[0].annotate(
         facecolor="black", shrink=0.0, width=2, headwidth=12, headlength=12
     ),
 )
+fig.legend(ncol=6, loc="lower left", bbox_to_anchor=(0, -0.15, 1, 1))
 
 sig_y = np.zeros_like(t)
 for i, T in enumerate(theta):
     sig_y[i] = my_sig_y(T, qbar[i])
 
 ax[1].plot((1, 1), (-100, 900), lw=2, color="gray")
-ax[1].text(1.05, 300, "unload & cool down")
+ax[1].text(1.05, 500, "unload & cool down")
 ax[1].annotate(
     "",
     xy=(1.25, 400),
@@ -1095,19 +1101,17 @@ ax[1].annotate(
 # ax[1].plot(t, sig_h_cu/1000, '-', color='red', label=r"$\overline{\sigma}_{\sf Cu, h}$")
 ax[1].plot(t, sig_eq_cu / 1000, "-",
            color=colors[0], label=r"$\overline{\sigma}_{\sf Cu, eq}$")
-# ax[1].plot(t, sig_h_wsc/1000, '-', color='blue', label=r"$\overline{\sigma}_{\sf WSC, h}$")
-ax[1].plot(t, sig_eq_wsc / 1000, "-",
-           color=colors[1], label=r"$\overline{\sigma}_{\sf WSC, eq}$")
+# ax[1].plot(t, sig_h_ftc/1000, '-', color='blue', label=r"$\overline{\sigma}_{\sf FTC, h}$")
+ax[1].plot(t, sig_eq_ftc / 1000, "-",
+           color=colors[1], label=r"$\overline{\sigma}_{\sf FTC, eq}$")
 ax[1].plot(t, sig_y / 1000, "-",
-           color="black", label=r"$\sigma_{\sf y}(\overline{Q})$")
+           color=colors[3], label=r"$\sigma_{\sf y}(\overline{Q})$")
 ax[1].legend(ncol=1, loc="upper right")
 ax[1].grid()
 ax[1].set_xlabel(r"$t$ [s]")
-ax[1].set_ylabel(r"Equivalent stress and yield stress [MPa]")
+ax[1].set_ylabel(r"Equivalent stress, yield stress [MPa]")
 fig.tight_layout()
-fig.savefig(
-    os.path.join(data_path, "figures", "notchtest_fine_sigeq_ntfa.pdf"), format="pdf"
-)
+fig.savefig(os.path.join(data_path, "figures", "notchtest_fine_sigeq_ntfa.pdf"), format="pdf", bbox_inches="tight")
 
 # %%
 force = []

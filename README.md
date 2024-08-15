@@ -9,9 +9,17 @@
 [![PyPI](https://img.shields.io/pypi/v/thermontfa)](https://test.pypi.org/project/thermontfa/)
 
 
-This repository contains a material routine written in *Python* for the thermo-elasto-plastic Nonuniform Transformation Field Analysis (**ThermoNTFA**) published in ...
+This repository contains a material routine written in *Python* for the thermo-elasto-plastic Nonuniform Transformation Field Analysis (**ThermoNTFA**) submitted to _Computer Methods in Applied Mechanics and Engineering_:
 
-TODO: abstract
+Fritzen, Felix and Herb, Julius and Sharba, Shadi, Thermo-Plastic Nonuniform Transformation Field Analysis for Eigenstress Analysis of Materials Undergoing Laser Melt Injection. Available at SSRN: <https://ssrn.com/abstract=4926472>
+
+## Abstract
+
+In engineering applications, surface modifications of materials can greatly influence the lifetime of parts and structures. For instance, laser melt injection (LMI) of ceramic particles into a metallic substrate can greatly improve abrasive resistance. The LMI process is challenging to model due to the rapid temperature changes, which induce high mechanical stresses. Ultimately, this leads to plastification and residual eigenstresses in particles and matrix. These depend on the process parameters. In order to predict these stresses, we propose a major extension of the Nonuniform Transformation Field Analysis that enables the method to cope with strongly varying thermo-elastic material parameters over a large temperature range (here: 300 to 1300K). The newly proposed $\theta$-NTFA method combines the NTFA with a Galerkin projection to solve for the self-equilibrated fields needed to gain the NTFA system matrices. For that, we exploit our recent thermo-elastic reduced order model [1] and extend it to allow for arbitrary polarization strains.  An efficient implementation and a rigorous separation of the derivation of the reduced order model is proposed. The new $\theta$-NTFA is then validated for various thermo-mechanical loadings and in thermo-mechanical two-scale simulations.
+
+[1] S. Sharba, J. Herb, F. Fritzen, Reduced order homogenization of thermoelastic materials with strong temperature
+dependence and comparison to a machine-learned model, Archive of Applied Mechanics 93 (7) (2023) 2855–2876.
+doi: [10.1007/s00419-023-02411-6](https://doi.org/10.1007/s00419-023-02411-6)
 
 ## Documentation
 

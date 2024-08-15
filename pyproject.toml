@@ -17,7 +17,7 @@ classifiers = [
     "License :: OSI Approved :: MIT License",
     "Operating System :: OS Independent",
 ]
-license = {text = "MIT License"}
+license = {text = "CC-BY-4.0"}
 requires-python = ">=3.10"
 keywords = ["NTFA", "MOR", "mechanics", "composite materials", "temperature-dependence", "multi-scale", "plasticity"]
 dependencies = [
