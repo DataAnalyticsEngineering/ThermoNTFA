@@ -19,6 +19,9 @@
 # > Felix Fritzen is funded by the German Research Foundation (DFG) --
 # > 390740016 (EXC-2075); 406068690 (FR2702/8-1); 517847245 (FR2702/10-1).
 #
+# This notebook contains the temperature-dependent material parameters of copper (Cu) and
+# fused tungsten carbide (FTC) that are used in the examples of our CMAME article.
+#
 # ## Imports
 
 # %%
@@ -44,7 +47,7 @@ P1 = IxI / 3.0
 P2 = I4 - P1
 
 # %% [markdown]
-# ## Temperature-dependent material parameters of copper phase (phase no. 0)
+# ## Temperature-dependent material parameters of copper (Cu) phase (phase no. 0)
 
 # %%
 poisson_ratio_cu = lambda x: 3.40000e-01 * x**0
@@ -73,7 +76,7 @@ stiffness_cu = lambda x: bulk_modulus_cu(x) * IxI + 2.0 * shear_modulus_cu(x) * 
 # %%
 
 # %% [markdown]
-# ## Temperature-dependent material parameters of wsc phase (phase no. 1)
+# ## Temperature-dependent material parameters of wsc/FTC phase (phase no. 1)
 
 # %%
 poisson_ratio_wsc = lambda x: 2.80000e-01 * x**0

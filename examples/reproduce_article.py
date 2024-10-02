@@ -34,6 +34,8 @@
 # > Felix Fritzen is funded by the German Research Foundation (DFG) --
 # > 390740016 (EXC-2075); 406068690 (FR2702/8-1); 517847245 (FR2702/10-1).
 #
+# This notebooks reproduces some results and plots from the examples of our CMAME article.
+#
 # ## Imports:
 
 # %%
@@ -102,9 +104,7 @@ def rel_error(A, A_ref, r_min=None):
 # - This also happens inside of the ThermoNTFA class during initialization
 
 # %%
-mode_fn = os.path.join(
-    data_path, "ntfa_raw", "rve_thermoplastic_6loadings_10samples.h5"
-)
+mode_fn = os.path.join(data_path, "rve", "rve_thermoplastic_6loadings_10samples.h5")
 A_bar = TabularInterpolation.from_h5(
     mode_fn,
     "/ms_9p/dset0_ntfa/temperatures",

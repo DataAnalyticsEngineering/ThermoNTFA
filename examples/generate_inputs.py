@@ -42,7 +42,7 @@ data_path = "../data"
 
 # %%
 file_name = os.path.join(
-    data_path, "validation", "simple_3d_rve_B1-B6_16x16x16_100samples_fix.h5"
+    data_path, "ntfa_raw", "rve_thermoplastic_6loadings_10samples.h5"
 )
 group_name = "/ms_9p/dset0_sim"
 suffix = "_fix16_N24_100s"

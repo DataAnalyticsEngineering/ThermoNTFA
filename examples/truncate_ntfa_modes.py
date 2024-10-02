@@ -21,6 +21,8 @@
 # > Felix Fritzen is funded by the German Research Foundation (DFG) --
 # > 390740016 (EXC-2075); 406068690 (FR2702/8-1); 517847245 (FR2702/10-1).
 #
+# This notebook exemplifies how the NTFA modes can be truncated after computation.
+#
 # ## Imports
 
 # %%
@@ -33,7 +35,7 @@ from material_parameters import *
 data_path = "../data"
 
 # %%
-fname = os.path.join(data_path, "ntfa_raw", "rve_thermoplastic_6loadings_10samples.h5")
+fname = os.path.join(data_path, "rve", "rve_thermoplastic_6loadings_10samples.h5")
 basename = "/ms_9p/dset0_ntfa/"
 
 F = h5py.File(fname, "r")
