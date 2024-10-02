@@ -103,6 +103,7 @@
 Bundestag.</p>
 <p>Felix Fritzen is funded by the German Research Foundation (DFG) – 390740016 (EXC-2075); 406068690 (FR2702/8-1); 517847245 (FR2702/10-1).</p>
 </div></blockquote>
+<p>This notebook exemplifies how the NTFA modes can be truncated after computation.</p>
 <section id="Imports">
 <h2>Imports<a class="headerlink" href="#Imports" title="Link to this heading"></a></h2>
 <div class="nbinput nblast docutils container">
@@ -123,7 +124,7 @@ Bundestag.</p>
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fname</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">data_path</span><span class="p">,</span> <span class="s2">&quot;ntfa_raw&quot;</span><span class="p">,</span> <span class="s2">&quot;rve_thermoplastic_6loadings_10samples.h5&quot;</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fname</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">data_path</span><span class="p">,</span> <span class="s2">&quot;rve&quot;</span><span class="p">,</span> <span class="s2">&quot;rve_thermoplastic_6loadings_10samples.h5&quot;</span><span class="p">)</span>
 <span class="n">basename</span> <span class="o">=</span> <span class="s2">&quot;/ms_9p/dset0_ntfa/&quot;</span>
 
 <span class="n">F</span> <span class="o">=</span> <span class="n">h5py</span><span class="o">.</span><span class="n">File</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">)</span>
