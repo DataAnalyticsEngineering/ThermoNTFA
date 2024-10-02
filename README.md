@@ -137,8 +137,8 @@ Affiliation: [Data Analytics in Engineering, University of Stuttgart](http://www
 
 [license-shield]: https://img.shields.io/github/license/DataAnalyticsEngineering/ThermoNTFA.svg
 [license-url]: https://github.com/DataAnalyticsEngineering/ThermoNTFA/blob/main/LICENSE
-[doi-shield]: https://img.shields.io/badge/doi-10.18419%2Fdarus--4446-d45815.svg
-[doi-url]: https://doi.org/10.18419/darus-4446
+[doi-shield]: https://img.shields.io/badge/doi-10.18419%2Fdarus--4509-d45815.svg
+[doi-url]: https://doi.org/10.18419/darus-4509
 [arxiv-shield]: https://img.shields.io/badge/SSRN-4926472-b31b1b.svg
 [arxiv-url]: https://papers.ssrn.com/sol3/papers.cfm?abstract_id=4926472
 [docs-url]: https://DataAnalyticsEngineering.github.io/ThermoNTFA
