@@ -106,11 +106,11 @@ pip install -e .[dev]
 
 ### Requirements
 
-- Python 3.9 or later
+- Python 3.10 or later
 - `numpy` and `h5py` (installed as part of the `thermontfa` PIP package)
-- Supplemental data: [![Identifier](https://img.shields.io/badge/doi-10.18419%2Fdarus--4446-d45815.svg)](https://doi.org/10.18419/darus-4446)
+- Supplemental data: [![Identifier](https://img.shields.io/badge/doi-10.18419%2Fdarus--4509-d45815.svg)](https://doi.org/10.18419/darus-4509)
 
-<!--All necessary data can be downloaded from [DaRUS](https://darus.uni-stuttgart.de/) using the script [`download_data.sh`](download_data.sh).-->
+All necessary data can be downloaded from [DaRUS](https://darus.uni-stuttgart.de/) using the script [`download_data.sh`](download_data.sh).
 
 ## Manuscript
 
