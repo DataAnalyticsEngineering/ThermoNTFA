@@ -33,9 +33,7 @@ from material_parameters import *
 data_path = "../data"
 
 # %%
-fname = os.path.join(
-    data_path, "validation", "simple_3d_rve_B1-B6_16x16x16_10samples_fix.h5"
-)
+fname = os.path.join(data_path, "ntfa_raw", "rve_thermoplastic_6loadings_10samples.h5")
 basename = "/ms_9p/dset0_ntfa/"
 
 F = h5py.File(fname, "r")
@@ -103,9 +101,6 @@ A = A_bar[0]
 XX = A.T @ np.linalg.pinv(A @ A.T) @ A
 print(XX)
 
-# %% [markdown]
-#
-
 # %%
 # print(( vol_frac[1]*A1[0,:,:7]+vol_frac[0]*A0[0,:,:7]) )
 x = C_bar[0, :, :].flatten()
@@ -119,20 +114,14 @@ alpha = 37 / 64
 print("c_Bar:")
 print(C_bar[0, :, :])
 
-# %% [markdown]
-#
-
 # %%
 xx = alpha * x0 + (1 - alpha) * x1
 # print(xx.reshape((6,6))-C_bar[0,:,:])
 print("error:", xx / np.linalg.norm(x))
 
-# %% [markdown]
-#
-
 # %%
 # print((C_bar[0,:,:]), tau_theta[0,:])
-fname = f"data_new/ms9p_fix_ntfa16_B1-6_10s_N{Nmax}.h5"
+fname = os.path.join(data_path, "ntfa", f"ntfa_6loadings_10samples_N{Nmax}.h5")
 F = h5py.File(fname, "w")
 F.create_dataset("SIG_phases", data=sig_ph)
 F.create_dataset("C_phases", data=C_ph)
@@ -149,3 +138,5 @@ F.close()
 eps_th_500 = np.linalg.solve(C_bar[20, :, :], tau_theta[20, :])
 print(eps_th_500)
 print(tau_theta)
+
+# %%
