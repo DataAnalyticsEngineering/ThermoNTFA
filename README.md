@@ -1,12 +1,16 @@
 # ThermoNTFA
 
 <!-- The badges we want to display -->
+[![arXiv][arxiv-shield]][arxiv-url]
+[![DOI][doi-shield]][doi-url]
+[![Documentation Status][docs-shield]][docs-url]
 [![pytest](https://github.com/DataAnalyticsEngineering/ThermoNTFA/actions/workflows/ci.yml/badge.svg)](https://github.com/DataAnalyticsEngineering/ThermoNTFA/actions/workflows/ci.yml)
 [![flake8](https://img.shields.io/badge/flake8-checked-blue.svg)](https://flake8.pycqa.org/)
 [![black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](./LICENSE.md)
 [![Python](https://img.shields.io/badge/python-3.11-purple.svg)](https://www.python.org/)
 [![PyPI](https://img.shields.io/pypi/v/thermontfa)](https://test.pypi.org/project/thermontfa/)
+<!--[![MIT License][license-shield]][license-url]-->
+<!--[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](./LICENSE.md)-->
 
 
 This repository contains a material routine written in *Python* for the thermo-elasto-plastic Nonuniform Transformation Field Analysis (**ThermoNTFA**) submitted to _Computer Methods in Applied Mechanics and Engineering_:
@@ -23,9 +27,7 @@ doi: [10.1007/s00419-023-02411-6](https://doi.org/10.1007/s00419-023-02411-6)
 
 ## Documentation
 
-TODO: deployment of documentation via DAE Github organization
-
-The documentation of this software, including examples on how to use **ThermoNTFA**, can be found under [Documentation](https://juliusgh.github.io/ThermoNTFA).<!--(https://DataAnalyticsEngineering.github.io/ThermoNTFA/).-->
+The documentation of this software, including examples on how to use **ThermoNTFA**, can be found under [Documentation](https://DataAnalyticsEngineering.github.io/ThermoNTFA/).
 
 ## Features
 
@@ -104,24 +106,15 @@ pip install -e .[dev]
 
 ### Requirements
 
-TODO: update dependencies
-
-TODO: upload dataset to Darus
-
-TODO: provide functionality for download from Darus
-
 - Python 3.9 or later
 - `numpy` and `h5py` (installed as part of the `thermontfa` PIP package)
-- Input
-  dataset: [![Identifier](https://img.shields.io/badge/doi-10.18419%2Fdarus--2822-d45815.svg)](https://doi.org/10.18419/darus-2822)
+- Supplemental data: [![Identifier](https://img.shields.io/badge/doi-10.18419%2Fdarus--4446-d45815.svg)](https://doi.org/10.18419/darus-4446)
 
-All necessary data can be downloaded from [DaRUS](https://darus.uni-stuttgart.de/) using the script [`download_data.sh`](download_data.sh).
+<!--All necessary data can be downloaded from [DaRUS](https://darus.uni-stuttgart.de/) using the script [`download_data.sh`](download_data.sh).-->
 
 ## Manuscript
 
-TODO
-
-by Felix Fritzen, Julius Herb and Shadi Sharba.
+Fritzen, Felix and Herb, Julius and Sharba, Shadi, Thermo-Plastic Nonuniform Transformation Field Analysis for Eigenstress Analysis of Materials Undergoing Laser Melt Injection. Available at SSRN: https://ssrn.com/abstract=4926472
 
 Affiliation: [Data Analytics in Engineering, University of Stuttgart](http://www.mib.uni-stuttgart.de/dae)
 
@@ -138,4 +131,15 @@ Affiliation: [Data Analytics in Engineering, University of Stuttgart](http://www
   Germany’s Excellence Strategy - EXC 2075 – 390740016. Felix Fritzen is funded by Deutsche Forschungsgemeinschaft (DFG, German
   Research Foundation) within the Heisenberg program DFG-FR2702/8 - 406068690 and DFG-FR2702/10 - 517847245.
 
+- Contributions of Julius Herb are partially funded by the Ministry of Science, Research and the Arts (MWK) Baden-Württemberg, Germany, within the Artificial Intelligence Software Academy (AISA).
+
 - The authors acknowledge the support by the Stuttgart Center for Simulation Science (SimTech).
+
+[license-shield]: https://img.shields.io/github/license/DataAnalyticsEngineering/ThermoNTFA.svg
+[license-url]: https://github.com/DataAnalyticsEngineering/ThermoNTFA/blob/main/LICENSE
+[doi-shield]: https://img.shields.io/badge/doi-10.18419%2Fdarus--4446-d45815.svg
+[doi-url]: https://doi.org/10.18419/darus-4446
+[arxiv-shield]: https://img.shields.io/badge/SSRN-4926472-b31b1b.svg
+[arxiv-url]: https://papers.ssrn.com/sol3/papers.cfm?abstract_id=4926472
+[docs-url]: https://DataAnalyticsEngineering.github.io/ThermoNTFA
+[docs-shield]: https://img.shields.io/badge/docs-online-blue.svg
