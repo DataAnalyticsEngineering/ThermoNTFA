@@ -8,7 +8,7 @@
 [![flake8](https://img.shields.io/badge/flake8-checked-blue.svg)](https://flake8.pycqa.org/)
 [![black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 [![Python](https://img.shields.io/badge/python-3.11-purple.svg)](https://www.python.org/)
-[![PyPI](https://img.shields.io/pypi/v/thermontfa)](https://test.pypi.org/project/thermontfa/)
+[![PyPI](https://img.shields.io/pypi/v/thermontfa)](https://pypi.org/project/thermontfa/)
 <!--[![MIT License][license-shield]][license-url]-->
 <!--[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](./LICENSE.md)-->
 
