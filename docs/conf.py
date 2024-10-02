@@ -22,6 +22,7 @@ extensions = [
     "myst_parser",
     "sphinx.ext.autodoc",
     "sphinx.ext.autosectionlabel",
+    "sphinx.ext.extlinks",
     "nbsphinx",
     "sphinx_gallery.load_style",
 ]
