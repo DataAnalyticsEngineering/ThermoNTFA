@@ -22,7 +22,7 @@ The new $\theta$-NTFA is then validated for various thermo-mechanical loadings a
 
 [1] S. Sharba, J. Herb, F. Fritzen, Reduced order homogenization of thermoelastic materials with strong temperature
 dependence and comparison to a machine-learned model, Archive of Applied Mechanics 93 (7) (2023) 2855–2876.
-doi: `10.1007/s00419-023-02411-6<https://doi.org/10.1007/s00419-023-02411-6>`_
+doi: `10.1007/s00419-023-02411-6 <https://doi.org/10.1007/s00419-023-02411-6>`_
 
 Features
 ^^^^^^^^
