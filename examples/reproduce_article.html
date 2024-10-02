@@ -58,15 +58,13 @@
 <li class="toctree-l1 current"><a class="reference internal" href="../examples.html">Examples</a><ul class="current">
 <li class="toctree-l2 current"><a class="current reference internal" href="#">Thermo-mechanical NTFA - results of the CMAME article</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#Imports:">Imports:</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#Mode-study">Mode study</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#Training-reproduction-tests">Training reproduction tests</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#Analysis-of-the-training-directions-of-the-temperature-range">Analysis of the training directions of the temperature range</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#Training-reproduction-tests">Training reproduction tests</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="#Load-data-from-hdf5-files">Load data from hdf5 files</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#analysis-of-the-training-directions-of-the-temperature-range-1">Analysis of the training directions of the temperature range</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#Analysis-of-the-training-directions-of-the-temperature-range">Analysis of the training directions of the temperature range</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#Relative-error-in-sig_bar-for-300K,-633.3K-and-1300-K">Relative error in sig_bar for 300K, 633.3K and 1300 K</a></li>
 </ul>
 </li>
-<li class="toctree-l3"><a class="reference internal" href="#id2">Training reproduction tests</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id1">Training reproduction tests</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="#Relative-error-in-sig_bar-for-300-and-1300-K">Relative error in sig_bar for 300 and 1300 K</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#Plot-the-for-loadcase-no.-2-relevant-curves">Plot the for loadcase no. 2 relevant curves</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#3D-Plots">3D Plots</a></li>
@@ -81,7 +79,7 @@
 <li class="toctree-l3"><a class="reference internal" href="#Twoscale-simulation">Twoscale simulation</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="#Load-results-of-simulation-on-the-macroscale-with-NTFA-material-model">Load results of simulation on the macroscale with NTFA material model</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#Use-temperature-and-strain-as-boundary-conditions-for-FE-simulation-on-the-microscale">Use temperature and strain as boundary conditions for FE simulation on the microscale</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#id3">Load results from FE simulation on the microscale</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id2">Load results from FE simulation on the microscale</a></li>
 </ul>
 </li>
 </ul>
@@ -251,14 +249,9 @@ Bundestag.</p>
 </div>
 </div>
 </section>
-<section id="Mode-study">
-<h2>Mode study<a class="headerlink" href="#Mode-study" title="Link to this heading"></a></h2>
-</section>
 <section id="Training-reproduction-tests">
 <h2>Training reproduction tests<a class="headerlink" href="#Training-reproduction-tests" title="Link to this heading"></a></h2>
-</section>
-<section id="Analysis-of-the-training-directions-of-the-temperature-range">
-<h2>Analysis of the training directions of the temperature range<a class="headerlink" href="#Analysis-of-the-training-directions-of-the-temperature-range" title="Link to this heading"></a></h2>
+<p>Analysis of the training directions of the temperature range</p>
 <section id="Load-data-from-hdf5-files">
 <h3>Load data from hdf5 files<a class="headerlink" href="#Load-data-from-hdf5-files" title="Link to this heading"></a></h3>
 <ul class="simple">
@@ -266,13 +259,6 @@ Bundestag.</p>
 <li><p>show select stress-strain curves</p></li>
 <li><p>results are generated based on <code class="docutils literal notranslate"><span class="pre">generate_inputs.py</span></code> and external C/C++ UMAT</p></li>
 </ul>
-</section>
-<section id="analysis-of-the-training-directions-of-the-temperature-range-1">
-<span id="id1"></span><h3>Analysis of the training directions of the temperature range<a class="headerlink" href="#analysis-of-the-training-directions-of-the-temperature-range-1" title="Link to this heading"></a></h3>
-<p>First figure: comparison of <span class="math notranslate nohighlight">\(\theta\)</span>-NTFA and FEM for training scenarios</p>
-<p>loadcases: 0, 2, 5</p>
-<p>temperatures: 0, 3, 9 (0, 33, -1)</p>
-<p>N_modes: 12, 18, 24</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
 </pre></div>
@@ -345,6 +331,13 @@ Bundestag.</p>
 </pre></div></div>
 </div>
 </section>
+<section id="Analysis-of-the-training-directions-of-the-temperature-range">
+<h3>Analysis of the training directions of the temperature range<a class="headerlink" href="#Analysis-of-the-training-directions-of-the-temperature-range" title="Link to this heading"></a></h3>
+<p>First figure: comparison of <span class="math notranslate nohighlight">\(\theta\)</span>-NTFA and FEM for training scenarios</p>
+<p>loadcases: 0, 2, 5</p>
+<p>temperatures: 0, 3, 9 (0, 33, -1)</p>
+<p>N_modes: 12, 18, 24</p>
+</section>
 <section id="Relative-error-in-sig_bar-for-300K,-633.3K-and-1300-K">
 <h3>Relative error in sig_bar for 300K, 633.3K and 1300 K<a class="headerlink" href="#Relative-error-in-sig_bar-for-300K,-633.3K-and-1300-K" title="Link to this heading"></a></h3>
 <div class="nbinput docutils container">
@@ -404,8 +397,8 @@ Bundestag.</p>
 </div>
 </section>
 </section>
-<section id="id2">
-<h2>Training reproduction tests<a class="headerlink" href="#id2" title="Link to this heading"></a></h2>
+<section id="id1">
+<h2>Training reproduction tests<a class="headerlink" href="#id1" title="Link to this heading"></a></h2>
 <p>Analysis of the training directions of the temperature range</p>
 <p>Load data from hdf5 file - compare efficiency of the interpolation over the temperature - show select stress-strain curves - results are generated based on <code class="docutils literal notranslate"><span class="pre">generate_inputs.py</span></code> and external C/C++ UMAT</p>
 <div class="nbinput nblast docutils container">
@@ -1402,8 +1395,8 @@ element closest to [5., 0., 2.5]: 10819 with element center [      4.42       -0
 </div>
 </div>
 </section>
-<section id="id3">
-<h3>Load results from FE simulation on the microscale<a class="headerlink" href="#id3" title="Link to this heading"></a></h3>
+<section id="id2">
+<h3>Load results from FE simulation on the microscale<a class="headerlink" href="#id2" title="Link to this heading"></a></h3>
 <p>The in-house FE simulation software stores the simulation results (homogenized overall stress <code class="docutils literal notranslate"><span class="pre">sig</span></code>, homogenized stress in cu phase <code class="docutils literal notranslate"><span class="pre">sig_cu</span></code>, homogenized stress in ftc phase <code class="docutils literal notranslate"><span class="pre">sig_ftc</span></code>, and homogenized hardening variable <code class="docutils literal notranslate"><span class="pre">qbar</span></code>) on the microscale in a new HDF5 (<code class="docutils literal notranslate"><span class="pre">.h5</span></code>) file. These results serve as validation data for the two-scale simulation at the specific integration point of the macroscale simulation.</p>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[20]:
