@@ -152,26 +152,14 @@ for A in [A_bar, A_cu, A_ftc]:
     A.dim = A.data.shape
 
 # %% [markdown]
-# ## Mode study
-#
 # ## Training reproduction tests
 #
-# ## Analysis of the training directions of the temperature range
+# Analysis of the training directions of the temperature range
 #
 # ### Load data from hdf5 files
 # - compare efficiency of the interpolation over the temperature
 # - show select stress-strain curves
 # - results are generated based on `generate_inputs.py` and external C/C++ UMAT
-#
-# ### Analysis of the training directions of the temperature range
-#
-# First figure: comparison of $\theta$-NTFA and FEM for training scenarios
-#
-# loadcases: 0, 2, 5
-#
-# temperatures: 0, 3, 9  (0, 33, -1)
-#
-# N_modes: 12, 18, 24
 
 # %%
 data_sig_ntfa = np.zeros((3, 3, 3, 11, 6))
@@ -227,6 +215,16 @@ for i, N_modes in enumerate((12, 18, 24)):
     data_sig_fans[2, 2, i, :, :] = fans_sig[-1, 5, :, :]
 
 # %% [markdown]
+# ### Analysis of the training directions of the temperature range
+#
+# First figure: comparison of $\theta$-NTFA and FEM for training scenarios
+#
+# loadcases: 0, 2, 5
+#
+# temperatures: 0, 3, 9  (0, 33, -1)
+#
+# N_modes: 12, 18, 24
+#
 # ### Relative error in sig_bar for 300K, 633.3K and 1300 K
 
 # %%

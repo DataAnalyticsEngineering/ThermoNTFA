@@ -4,8 +4,8 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "thermontfa"
-version = "0.0.1"
-description = ""
+version = "0.1.0"
+description = "This repository contains a material routine written in Python for the thermo-elasto-plastic Nonuniform Transformation Field Analysis (ThermoNTFA)"
 authors = [
     {name="Felix Fritzen", email="fritzen@simtech.uni-stuttgart.de"},
     {name="Julius Herb", email="julius.herb@mib.uni-stuttgart.de"},

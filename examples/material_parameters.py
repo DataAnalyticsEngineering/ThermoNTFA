@@ -73,8 +73,6 @@ bulk_modulus_cu = lambda x: elastic_modulus_cu(x) / (
 )
 stiffness_cu = lambda x: bulk_modulus_cu(x) * IxI + 2.0 * shear_modulus_cu(x) * P2
 
-# %%
-
 # %% [markdown]
 # ## Temperature-dependent material parameters of wsc/FTC phase (phase no. 1)
 
@@ -278,7 +276,7 @@ if __name__ == "__main__":
     gca1.legend(loc="upper left", facecolor=(0.9, 0.9, 0.9, 0.6), edgecolor="black")
     gca2.legend(loc="center right", facecolor=(0.9, 0.9, 0.9, 0.6), edgecolor="black")
     plt.tight_layout(pad=0.025)
-    plt.savefig(os.path.join(data_path, "results", f"{fig_name}.pdf"))
+    plt.savefig(os.path.join(data_path, "figures", f"{fig_name}.pdf"))
     plt.show()
 
 # %% [markdown]
@@ -372,7 +370,7 @@ if __name__ == "__main__":
     gca1.grid(ls="--", color="gray", linewidth=0.5)
     gca1.legend(loc="upper right", facecolor=(0.9, 0.9, 0.9, 0.6), edgecolor="black")
     plt.tight_layout(pad=0.025)
-    plt.savefig(os.path.join(data_path, "results", f"{fig_name}.pdf"))
+    plt.savefig(os.path.join(data_path, "figures", f"{fig_name}.pdf"))
     plt.show()
 
 # %%
