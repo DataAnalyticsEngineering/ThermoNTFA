@@ -13,9 +13,9 @@
 <!--[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](./LICENSE.md)-->
 
 
-This repository contains a material routine written in *Python* for the thermo-elasto-plastic Nonuniform Transformation Field Analysis (**ThermoNTFA**) submitted to _Computer Methods in Applied Mechanics and Engineering_:
+This repository contains a material routine written in *Python* for the thermo-elasto-plastic Nonuniform Transformation Field Analysis (**ThermoNTFA**) published in _Computer Methods in Applied Mechanics and Engineering_:
 
-Fritzen, Felix and Herb, Julius and Sharba, Shadi, Thermo-Plastic Nonuniform Transformation Field Analysis for Eigenstress Analysis of Materials Undergoing Laser Melt Injection. Available at SSRN: <https://ssrn.com/abstract=4926472>
+Fritzen, Felix and Herb, Julius and Sharba, Shadi, Thermo-Plastic Nonuniform Transformation Field Analysis for Eigenstress Analysis of Materials Undergoing Laser Melt Injection. Computer Methods in Applied Mechanics and Engineering (2024). DOI: [10.1016/j.cma.2024.117487](https://doi.org/10.1016/j.cma.2024.117487)
 
 ## Abstract
 
@@ -114,7 +114,7 @@ All necessary data can be downloaded from [DaRUS](https://darus.uni-stuttgart.de
 
 ## Manuscript
 
-Fritzen, Felix and Herb, Julius and Sharba, Shadi, Thermo-Plastic Nonuniform Transformation Field Analysis for Eigenstress Analysis of Materials Undergoing Laser Melt Injection. Available at SSRN: https://ssrn.com/abstract=4926472
+Fritzen, Felix and Herb, Julius and Sharba, Shadi, Thermo-Plastic Nonuniform Transformation Field Analysis for Eigenstress Analysis of Materials Undergoing Laser Melt Injection. Computer Methods in Applied Mechanics and Engineering (2024). DOI: [10.1016/j.cma.2024.117487](https://doi.org/10.1016/j.cma.2024.117487)
 
 Affiliation: [Data Analytics in Engineering, University of Stuttgart](http://www.mib.uni-stuttgart.de/dae)
 
