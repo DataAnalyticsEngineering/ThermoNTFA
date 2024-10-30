@@ -1,8 +1,8 @@
 # ThermoNTFA
 
 <!-- The badges we want to display -->
-[![arXiv][arxiv-shield]][arxiv-url]
-[![DOI][doi-shield]][doi-url]
+[![DOI][doi-shield]][arxiv-url]
+[![Data][doi-shield]][doi-url]
 [![Documentation Status][docs-shield]][docs-url]
 [![pytest](https://github.com/DataAnalyticsEngineering/ThermoNTFA/actions/workflows/ci.yml/badge.svg)](https://github.com/DataAnalyticsEngineering/ThermoNTFA/actions/workflows/ci.yml)
 [![flake8](https://img.shields.io/badge/flake8-checked-blue.svg)](https://flake8.pycqa.org/)
@@ -140,6 +140,6 @@ Affiliation: [Data Analytics in Engineering, University of Stuttgart](http://www
 [doi-shield]: https://img.shields.io/badge/doi-10.18419%2Fdarus--4509-d45815.svg
 [doi-url]: https://doi.org/10.18419/darus-4509
 [arxiv-shield]: https://img.shields.io/badge/SSRN-4926472-b31b1b.svg
-[arxiv-url]: https://papers.ssrn.com/sol3/papers.cfm?abstract_id=4926472
+[arxiv-url]: https://doi.org/10.1016/j.cma.2024.117487
 [docs-url]: https://DataAnalyticsEngineering.github.io/ThermoNTFA
 [docs-shield]: https://img.shields.io/badge/docs-online-blue.svg
