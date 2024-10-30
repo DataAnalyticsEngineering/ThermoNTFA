@@ -1,7 +1,7 @@
 # ThermoNTFA
 
 <!-- The badges we want to display -->
-[![DOI][doi-shield]][arxiv-url]
+[![DOI][arxiv-shield]][arxiv-url]
 [![Data][doi-shield]][doi-url]
 [![Documentation Status][docs-shield]][docs-url]
 [![pytest](https://github.com/DataAnalyticsEngineering/ThermoNTFA/actions/workflows/ci.yml/badge.svg)](https://github.com/DataAnalyticsEngineering/ThermoNTFA/actions/workflows/ci.yml)
