@@ -5,7 +5,7 @@
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Thermo-mechanical NTFA - results of the CMAME article &mdash; ThermoNTFA 1.0 documentation</title>
-      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=19f00094" />
       <link rel="stylesheet" type="text/css" href="../_static/sg_gallery.css?v=61a4c737" />
       <link rel="stylesheet" type="text/css" href="../_static/nbsphinx-code-cells.css?v=2aa19091" />
@@ -134,16 +134,16 @@ Bundestag.</p>
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">os</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
 
-<span class="kn">import</span> <span class="nn">h5py</span>
-<span class="kn">import</span> <span class="nn">matplotlib</span>
-<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
-<span class="kn">from</span> <span class="nn">matplotlib</span> <span class="kn">import</span> <span class="n">cm</span>
-<span class="kn">from</span> <span class="nn">matplotlib.colors</span> <span class="kn">import</span> <span class="n">LightSource</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">h5py</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">matplotlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">cm</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">matplotlib.colors</span><span class="w"> </span><span class="kn">import</span> <span class="n">LightSource</span>
 
-<span class="kn">from</span> <span class="nn">material_parameters</span> <span class="kn">import</span> <span class="o">*</span>
-<span class="kn">from</span> <span class="nn">thermontfa</span> <span class="kn">import</span> <span class="n">TabularInterpolation</span><span class="p">,</span> <span class="n">ThermoMechNTFA</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">material_parameters</span><span class="w"> </span><span class="kn">import</span> <span class="o">*</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">thermontfa</span><span class="w"> </span><span class="kn">import</span> <span class="n">TabularInterpolation</span><span class="p">,</span> <span class="n">ThermoMechNTFA</span>
 
 
 <span class="n">plt</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s2">&quot;figure.dpi&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">400</span>
@@ -169,7 +169,7 @@ Bundestag.</p>
 <span class="n">data_path</span> <span class="o">=</span> <span class="s2">&quot;../data&quot;</span>
 
 
-<span class="k">def</span> <span class="nf">Vec2Tensor</span><span class="p">(</span><span class="n">vec</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">Vec2Tensor</span><span class="p">(</span><span class="n">vec</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Convert a 6-vector (in Mandel notation) into a sym. 3x3 Matrix&quot;&quot;&quot;</span>
     <span class="n">A</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">))</span>
     <span class="n">A</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">vec</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
@@ -184,7 +184,7 @@ Bundestag.</p>
     <span class="k">return</span> <span class="n">A</span>
 
 
-<span class="k">def</span> <span class="nf">rel_error</span><span class="p">(</span><span class="n">A</span><span class="p">,</span> <span class="n">A_ref</span><span class="p">,</span> <span class="n">r_min</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">rel_error</span><span class="p">(</span><span class="n">A</span><span class="p">,</span> <span class="n">A_ref</span><span class="p">,</span> <span class="n">r_min</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
     <span class="k">if</span> <span class="n">r_min</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">A</span> <span class="o">-</span> <span class="n">A_ref</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">A_ref</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
@@ -194,7 +194,11 @@ Bundestag.</p>
 </pre></div>
 </div>
 </div>
-<p><strong>Load the NTFA data</strong> - Read the tabularized data for all operators individually - This also happens inside of the ThermoNTFA class during initialization</p>
+<p><strong>Load the NTFA data</strong></p>
+<ul class="simple">
+<li><p>Read the tabularized data for all operators individually</p></li>
+<li><p>This also happens inside of the ThermoNTFA class during initialization</p></li>
+</ul>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
 </pre></div>
@@ -400,7 +404,12 @@ Bundestag.</p>
 <section id="id1">
 <h2>Training reproduction tests<a class="headerlink" href="#id1" title="Link to this heading"></a></h2>
 <p>Analysis of the training directions of the temperature range</p>
-<p>Load data from hdf5 file - compare efficiency of the interpolation over the temperature - show select stress-strain curves - results are generated based on <code class="docutils literal notranslate"><span class="pre">generate_inputs.py</span></code> and external C/C++ UMAT</p>
+<p>Load data from hdf5 file</p>
+<ul class="simple">
+<li><p>compare efficiency of the interpolation over the temperature</p></li>
+<li><p>show select stress-strain curves</p></li>
+<li><p>results are generated based on <code class="docutils literal notranslate"><span class="pre">generate_inputs.py</span></code> and external C/C++ UMAT</p></li>
+</ul>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
 </pre></div>
@@ -1084,7 +1093,7 @@ q_ini:  0.01685502141630085 [   0.00138    0.00138    0.00139  -0.000249   -0.00
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">rel_error</span><span class="p">(</span><span class="n">A</span><span class="p">,</span> <span class="n">A_ref</span><span class="p">,</span> <span class="n">r_min</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">rel_error</span><span class="p">(</span><span class="n">A</span><span class="p">,</span> <span class="n">A_ref</span><span class="p">,</span> <span class="n">r_min</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
     <span class="k">if</span> <span class="n">r_min</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">A</span> <span class="o">-</span> <span class="n">A_ref</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">A_ref</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
@@ -1093,7 +1102,7 @@ q_ini:  0.01685502141630085 [   0.00138    0.00138    0.00139  -0.000249   -0.00
         <span class="p">)</span>
 
 
-<span class="k">def</span> <span class="nf">rel_error_fixed</span><span class="p">(</span><span class="n">A</span><span class="p">,</span> <span class="n">A_ref</span><span class="p">,</span> <span class="n">r</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">rel_error_fixed</span><span class="p">(</span><span class="n">A</span><span class="p">,</span> <span class="n">A_ref</span><span class="p">,</span> <span class="n">r</span><span class="p">):</span>
     <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">A</span> <span class="o">-</span> <span class="n">A_ref</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span> <span class="o">/</span> <span class="n">r</span>
 
 
@@ -1297,7 +1306,13 @@ q_ini:  0.01685502141630085 [   0.00138    0.00138    0.00139  -0.000249   -0.00
 </section>
 <section id="Twoscale-simulation">
 <h2>Twoscale simulation<a class="headerlink" href="#Twoscale-simulation" title="Link to this heading"></a></h2>
-<p>Analysis of the two-scale simulation - determine an element in the notch - extract the strain, temperature, stress, qbar, xi, sig_cu, sig_ftc history - pass the strain, temperature history to FANS as BC - Compare the results</p>
+<p>Analysis of the two-scale simulation</p>
+<ul class="simple">
+<li><p>determine an element in the notch</p></li>
+<li><p>extract the strain, temperature, stress, qbar, xi, sig_cu, sig_ftc history</p></li>
+<li><p>pass the strain, temperature history to FANS as BC</p></li>
+<li><p>Compare the results</p></li>
+</ul>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[17]:
 </pre></div>
