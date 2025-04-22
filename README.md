@@ -137,8 +137,6 @@ Affiliation: [Data Analytics in Engineering, University of Stuttgart](http://www
 
 - The authors acknowledge the support by the Stuttgart Center for Simulation Science (SimTech).
 
-- This work is supported by the consortium NFDI-MatWerk, funded by the Deutsche Forschungsgemeinschaft (DFG, German Research Foundation) under the National Research Data Infrastructure – NFDI 38/1 – project number 460247524.
-
 [license-shield]: https://img.shields.io/github/license/DataAnalyticsEngineering/ThermoNTFA.svg
 [license-url]: https://github.com/DataAnalyticsEngineering/ThermoNTFA/blob/main/LICENSE
 [doi-shield]: https://img.shields.io/badge/doi-10.18419%2Fdarus--4509-d45815.svg
