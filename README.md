@@ -127,6 +127,8 @@ Affiliation: [Data Analytics in Engineering, University of Stuttgart](http://www
   authors gratefully acknowledge the collaboration with the members of the project affiliated committee regarding the support of
   knowledge, material and equipment over the course of the research.
 
+- This work is supported by the consortium NFDI-MatWerk, funded by the Deutsche Forschungsgemeinschaft (DFG, German Research Foundation) under the National Research Data Infrastructure – NFDI 38/1 – project number 460247524.
+
 - Contributions by Felix Fritzen are partially funded by Deutsche Forschungsgemeinschaft (DFG, German Research Foundation) under
   Germany’s Excellence Strategy - EXC 2075 – 390740016. Felix Fritzen is funded by Deutsche Forschungsgemeinschaft (DFG, German
   Research Foundation) within the Heisenberg program DFG-FR2702/8 - 406068690 and DFG-FR2702/10 - 517847245.
